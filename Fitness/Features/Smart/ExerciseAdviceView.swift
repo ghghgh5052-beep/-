@@ -83,7 +83,15 @@ import SwiftData
         }
         .scrollDismissesKeyboard(.immediately)
         .navigationTitle("اقتراح الأوزان والتكرارات").navigationBarTitleDisplayMode(.inline)
-        .toolbar { ToolbarItem(placement: .cancellationAction) { Button("إغلاق") { dismiss() } } }
+        .toolbar {
+            ToolbarItem(placement: .cancellationAction) { Button("إغلاق") { dismiss() } }
+            ToolbarItemGroup(placement: .keyboard) {
+                Spacer()
+                Button("تم") {
+                    UIApplication.shared.sendAction(#selector(UIResponder.resignFirstResponder), to: nil, from: nil, for: nil)
+                }.accessibilityIdentifier("advice.keyboard.done")
+            }
+        }
         .task { load() }
         .arabicError($errorMessage)
     }

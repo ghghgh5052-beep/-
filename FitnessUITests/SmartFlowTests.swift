@@ -46,6 +46,9 @@ final class SmartFlowTests: XCTestCase {
         capture(app, name: "Arabic honest weight advice without prior history")
         let adviceWeight = app.textFields["advice.weight"]
         adviceWeight.tap(); adviceWeight.typeText("5")
+        let keyboardDone = app.buttons["advice.keyboard.done"]
+        XCTAssertTrue(keyboardDone.waitForExistence(timeout: 5))
+        keyboardDone.tap()
         let apply = app.buttons["advice.apply"]
         reveal(apply, in: app)
         XCTAssertTrue(apply.isEnabled)
