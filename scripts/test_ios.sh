@@ -15,5 +15,6 @@ xcodebuild -project "$ROOT/Wateera.xcodeproj" -scheme Wateera -configuration Deb
   -destination "$DESTINATION" -parallel-testing-enabled NO \
   -resultBundlePath "$OUTPUT/Tests.xcresult" \
   CODE_SIGNING_ALLOWED=NO CODE_SIGNING_REQUIRED=NO CODE_SIGN_IDENTITY= \
+  COPY_PHASE_STRIP=NO ONLY_ACTIVE_ARCH=YES \
   SWIFT_TREAT_WARNINGS_AS_ERRORS=YES GCC_TREAT_WARNINGS_AS_ERRORS=YES \
   test 2>&1 | tee "$OUTPUT/test.log"

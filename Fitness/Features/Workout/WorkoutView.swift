@@ -337,10 +337,10 @@ import UIKit
             NavigationStack {
                 Form {
                     Section("ملاحظات التمرين") { TextField("ملاحظاتك لهذه الجلسة", text: $exercise.notes, axis: .vertical).lineLimit(4...10) }
-                    Section("الراحة والمجموعات") {
+                    Section {
                         Stepper("الراحة: \(ArabicFormat.duration(TimeInterval(exercise.restSeconds), arabic: settings.useArabicDigits))", value: $exercise.restSeconds, in: 0...900, step: 15)
                         TextField("اسم السوبرست أو الدائرة", text: $exercise.groupID)
-                    } footer: { Text("استخدم الاسم نفسه في التمارين المرتبطة؛ يُعرض الاسم أثناء التسجيل والترتيب.") }
+                    } header: { Text("الراحة والمجموعات") } footer: { Text("استخدم الاسم نفسه في التمارين المرتبطة؛ يُعرض الاسم أثناء التسجيل والترتيب.") }
                 }.navigationTitle(exercise.name).navigationBarTitleDisplayMode(.inline)
                     .toolbar { ToolbarItem(placement: .confirmationAction) { Button("تم") { save(); showingDetails = false } } }
                     .onChange(of: exercise.notes) { _, _ in save() }
@@ -437,13 +437,13 @@ import UIKit
                             ForEach(SetKindLabels.values, id: \.self) { Text(SetKindLabels.name($0)).tag($0) }
                         }.disabled(set.isCompleted)
                     }
-                    Section("الجهد المدرك (اختياري)") {
+                    Section {
                         Toggle("تسجيل مستوى الجهد", isOn: Binding(get: { set.rpe != nil }, set: { set.rpe = $0 ? 8 : nil; save() }))
                             .disabled(set.isCompleted)
                         if set.rpe != nil {
                             Stepper("\(ArabicFormat.number(set.rpe ?? 8, arabic: settings.useArabicDigits)) من \(ArabicFormat.integer(10, arabic: settings.useArabicDigits))", value: Binding(get: { set.rpe ?? 8 }, set: { set.rpe = $0; save() }), in: 1...10, step: 0.5).disabled(set.isCompleted)
                         }
-                    } footer: { Text("عشرة تعني أقصى جهد، وثمانية تعني أنك قادر على تكرارين إضافيين تقريبًا.") }
+                    } header: { Text("الجهد المدرك (اختياري)") } footer: { Text("عشرة تعني أقصى جهد، وثمانية تعني أنك قادر على تكرارين إضافيين تقريبًا.") }
                     if set.isCompleted { Text("ألغِ إنجاز الجولة لتعديل قيمها.").font(.caption).foregroundStyle(.secondary) }
                     Section {
                         Button("حذف الجولة", role: .destructive) {
@@ -747,7 +747,7 @@ private enum SetKindLabels {
                     }
                 } else {
                     Section("الإعداد") { calculatorField("خطوة زيادة الوزن", value: $increment, identifier: "calculator.increment") }
-                    Section("جولات الإحماء المقترحة") {
+                    Section {
                         if warmups.isEmpty { Text("ارفع الوزن المستهدف عن وزن البار، وأدخل خطوة زيادة أكبر من صفر.").foregroundStyle(.secondary) }
                         ForEach(warmups) { set in
                             HStack {
@@ -759,7 +759,7 @@ private enum SetKindLabels {
                         if let onApply, !warmups.isEmpty {
                             Button { onApply(warmups); dismiss() } label: { Label("إضافة الإحماء إلى التمرين", systemImage: "plus.circle.fill") }
                         }
-                    } footer: { Text("هذه نقطة بداية قابلة للتعديل. لا يُحتسب الإحماء في الأرقام الشخصية.") }
+                    } header: { Text("جولات الإحماء المقترحة") } footer: { Text("هذه نقطة بداية قابلة للتعديل. لا يُحتسب الإحماء في الأرقام الشخصية.") }
                 }
             }
             .navigationTitle("حاسبات التمرين").navigationBarTitleDisplayMode(.inline)

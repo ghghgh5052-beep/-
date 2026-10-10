@@ -453,14 +453,14 @@ private struct PlanTemplate: Identifiable {
                     TextField("اسم الخطة", text: $name).accessibilityIdentifier("plan.name")
                     TextField("ملاحظات الخطة", text: $notes, axis: .vertical).lineLimit(3...6)
                 }
-                Section("برنامج متعدد الأسابيع") {
+                Section {
                     DatePicker("تاريخ بداية البرنامج", selection: $programStart, displayedComponents: .date)
                     Stepper("\(ArabicFormat.integer(cycleWeeks, arabic: settings.useArabicDigits)) أسابيع", value: $cycleWeeks, in: 1...16)
                     Picker("أسبوع تخفيف", selection: $deloadEvery) {
                         Text("بدون تكرار تلقائي").tag(0)
                         ForEach(2...8, id: \.self) { value in Text("كل \(ArabicFormat.integer(value, arabic: settings.useArabicDigits)) أسابيع").tag(value) }
                     }
-                } footer: {
+                } header: { Text("برنامج متعدد الأسابيع") } footer: {
                     Text("عند إضافة أسابيع، تُنسخ أيام الأسبوع الأول لتبدأ منها ثم تعدّلها. أسبوع التخفيف إشارة في جدولك؛ تحدد الأوزان بنفسك.")
                 }
             }
