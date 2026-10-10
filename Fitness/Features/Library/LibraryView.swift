@@ -171,6 +171,7 @@ import SwiftData
                         dismiss()
                     } label: { ExerciseLibraryRow(exercise: exercise).foregroundStyle(.primary) }
                     .frame(minHeight: 44)
+                    .accessibilityIdentifier("exercise.picker.\(exercise.id.uuidString)")
                 }
             }
             .navigationTitle("اختيار تمرين")

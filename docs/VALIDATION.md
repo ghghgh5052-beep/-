@@ -1,5 +1,13 @@
 # Validation record
 
+## Session deletion update (1.2.1 / build 4)
+
+The source adds completed-session deletion from the summary or RTL history swipe, and active/paused-session discard. One saved operation removes UUID-linked sets and movements and rebuilds PR history from surviving sessions. Errors roll back the deletion; unrelated edits are saved first. Smart-training history, progress queries and widget snapshots use the remaining sessions. Discard stops rest notifications and the live activity. No schema or entitlement change is required.
+
+Seven added unit tests cover targeted deletion, surviving PR promotion, empty history, duplicate IDs/idempotence, disk-save failure rollback, active/paused cleanup and persistent-store reopening. Two added UI tests cover logged paused discard and RTL swipe confirmation; the existing main flow now deletes its logged session and verifies progress returns to zero. Native results for this revision must be checked in the matching CI artifact; the previous release's results below do not verify this update.
+
+Deletion applies to app data. An exported Apple Health copy and previously exported backup files remain; the UI explicitly identifies the Health copy. Importing an older backup can restore a deleted session. Signed-iPhone confirmation and two-device CloudKit deletion propagation remain device acceptance checks.
+
 Date: 2026-10-10 (Asia/Riyadh). Authoring host: Windows. Source is connected to `https://github.com/ghghgh5052-beep/-`; native builds run on GitHub's macOS 15 runner with Xcode 16.4.
 
 ## Completed locally

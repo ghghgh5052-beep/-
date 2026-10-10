@@ -195,6 +195,25 @@ final class MainFlowTests: XCTestCase {
         XCTAssertTrue(completed.exists)
         XCTAssertTrue(completed.label.contains("١") || completed.label.contains("1"))
         capture(app, name: "Arabic workout progress")
+        app.tabBars.buttons["التمرين"].tap()
+        let history = app.buttons.matching(NSPredicate(format: "identifier BEGINSWITH %@", "workout.history.")).firstMatch
+        for _ in 0..<5 where !history.isHittable { app.swipeUp() }
+        XCTAssertTrue(history.waitForExistence(timeout: 5)); history.tap()
+        let delete = app.buttons["workout.summary.delete"]
+        for _ in 0..<8 where !delete.isHittable { app.swipeUp() }
+        XCTAssertTrue(delete.isHittable); delete.tap()
+        capture(app, name: "Arabic completed session deletion confirmation")
+        app.alerts.buttons["تراجع"].tap()
+        XCTAssertTrue(app.buttons["workout.summary.done"].exists)
+        delete.tap()
+        app.alerts.buttons["workout.delete.confirm"].tap()
+        XCTAssertTrue(app.staticTexts["تاريخك يبدأ من هنا"].waitForExistence(timeout: 10))
+        XCTAssertFalse(history.exists)
+        app.tabBars.buttons["تقدّمي"].tap()
+        XCTAssertTrue(completed.waitForExistence(timeout: 5))
+        XCTAssertTrue(completed.label.contains("٠") || completed.label.contains("0"))
+        XCTAssertTrue(app.staticTexts["كل مجموعة تصنع فرقًا"].exists)
+        capture(app, name: "Arabic progress after deleting the only logged session")
     }
 
     @MainActor private func capture(_ app: XCUIApplication, name: String) {

@@ -183,9 +183,10 @@ enum PRService {
     /// Rebuild from completed sessions so incomplete workouts and warm-up sets never create permanent PRs.
     /// Stable IDs retain sync identity and make rebuilding after import or deletion idempotent.
     @discardableResult
-    static func rebuild(context: ModelContext, formula: OneRepMaxFormula = .epley) throws -> Int {
+    static func rebuild(context: ModelContext, formula: OneRepMaxFormula = .epley,
+                        excludingSessionIDs: Set<UUID> = [], saveChanges: Bool = true) throws -> Int {
         let completed = Dictionary(try context.fetch(FetchDescriptor<WorkoutSession>())
-            .filter { $0.statusRaw == "completed" }.map { ($0.id, $0) }, uniquingKeysWith: { first, second in
+            .filter { $0.statusRaw == "completed" && !excludingSessionIDs.contains($0.id) }.map { ($0.id, $0) }, uniquingKeysWith: { first, second in
                 first.updatedAt >= second.updatedAt ? first : second
             })
         let exercises = try context.fetch(FetchDescriptor<SessionExercise>()).filter { completed[$0.sessionID] != nil }
@@ -232,7 +233,7 @@ enum PRService {
             }
         }
         for obsolete in existing where !retained.contains(obsolete.id) { context.delete(obsolete) }
-        if context.hasChanges { try context.save() }
+        if saveChanges && context.hasChanges { try context.save() }
         return retained.count
     }
 

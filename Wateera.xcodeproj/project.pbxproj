@@ -39,6 +39,12 @@
 			);
 			"runOnlyForDeploymentPostprocessing" = 0;
 		};
+		"05054E38746275849F66E080" = {
+			"isa" = "PBXFileReference";
+			"lastKnownFileType" = "sourcecode.swift";
+			"path" = "FitnessTests/SessionDeletionTests.swift";
+			"sourceTree" = "<group>";
+		};
 		"0514190CFE0886DBA806DC45" = {
 			"isa" = "PBXFileReference";
 			"lastKnownFileType" = "sourcecode.swift";
@@ -144,6 +150,7 @@
 				"984EC7B8F8FA90EEDB716DA3",
 				"1DBB5FE401445F547C7E8976",
 				"B5DD6CE095C80D53296CFC6C",
+				"ABF9500C42FB789326475A05",
 				"CDC98DEFE7075F7C8AFA4C95",
 				"59B5E00533FAA4704A66AE80",
 				"1E7EEC9B8188AE678C84CCEE",
@@ -329,6 +336,14 @@
 			"defaultConfigurationIsVisible" = 0;
 			"defaultConfigurationName" = "Release";
 		};
+		"2B8FBEE9FAE200E7EB94E0FB" = {
+			"isa" = "PBXBuildFile";
+			"fileRef" = "55DE824D6B4556E816C97994";
+		};
+		"2F61EF5D79CC97ADC360AE43" = {
+			"isa" = "PBXBuildFile";
+			"fileRef" = "AB2FE8479448CFB6EF8472D8";
+		};
 		"3127F2DF7C5FA22F8A6DC6DC" = {
 			"isa" = "PBXFileReference";
 			"lastKnownFileType" = "sourcecode.swift";
@@ -346,6 +361,7 @@
 			"buildActionMask" = 2147483647;
 			"files" = (
 				"D024F448A414587D82E64D30",
+				"2B8FBEE9FAE200E7EB94E0FB",
 				"9D8C4CB4448B1E250AA7FF45",
 			);
 			"runOnlyForDeploymentPostprocessing" = 0;
@@ -466,6 +482,12 @@
 			"isa" = "PBXFileReference";
 			"lastKnownFileType" = "sourcecode.swift";
 			"path" = "Fitness/Features/Workout/WorkoutView.swift";
+			"sourceTree" = "<group>";
+		};
+		"55DE824D6B4556E816C97994" = {
+			"isa" = "PBXFileReference";
+			"lastKnownFileType" = "sourcecode.swift";
+			"path" = "FitnessUITests/SessionDeletionFlowTests.swift";
 			"sourceTree" = "<group>";
 		};
 		"564B9226C170CA11CDCB3B33" = {
@@ -644,6 +666,7 @@
 				"136F613483BD7B3AC1F30B9E",
 				"916DEEB44AB78546B40402A0",
 				"AF483BA74508E3879D6C9A5E",
+				"2F61EF5D79CC97ADC360AE43",
 				"A91B1D7C162064ABFF8E84C1",
 				"D64C8595B84FF07B0CCBEC50",
 				"1FF230346C0F2B2926D612DE",
@@ -908,6 +931,7 @@
 				"A17894E9718EA370ED10C0F4",
 				"38CA885666E316E20EBB009B",
 				"B443ED7EFF83950FFD2D826D",
+				"AB2FE8479448CFB6EF8472D8",
 				"6F21F4047E5A9711F638FDB9",
 				"D0CA5E5250F4ADE5942186D6",
 				"1BFFF990FA8A25246CE4EAE5",
@@ -919,17 +943,29 @@
 				"3127F2DF7C5FA22F8A6DC6DC",
 				"8EE21803167E9353254B4070",
 				"494CD3D7C8C54C5634F92E71",
+				"05054E38746275849F66E080",
 				"7C59A5F5235F288C7F384420",
 				"88E2942AE42FCDDE1F30EA67",
 				"3253D4FDF9CE1DC0B67CDFB1",
 				"ED1BA5967B62DCD25D79B387",
 				"5B0C0032240DCE747BD4ACBF",
+				"55DE824D6B4556E816C97994",
 				"A71A5FAA8BF8CD18E840AB35",
 				"1483C3F706351F056B0209B1",
 				"985BDAB13FCED7157EEAECC5",
 				"6F7199ED7B63CDA338A0FB82",
 			);
 			"sourceTree" = "<group>";
+		};
+		"AB2FE8479448CFB6EF8472D8" = {
+			"isa" = "PBXFileReference";
+			"lastKnownFileType" = "sourcecode.swift";
+			"path" = "Fitness/Services/SessionDeletionService.swift";
+			"sourceTree" = "<group>";
+		};
+		"ABF9500C42FB789326475A05" = {
+			"isa" = "PBXBuildFile";
+			"fileRef" = "05054E38746275849F66E080";
 		};
 		"AF12F66AF7C58687522157C6" = {
 			"isa" = "PBXBuildFile";

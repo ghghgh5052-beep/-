@@ -12,6 +12,8 @@ import UIKit
     @State private var historySession: WorkoutSession?
     @State private var showingCalculator = false
     @State private var showingSmartWorkout = false
+    @State private var deletingHistorySession: WorkoutSession?
+    @State private var confirmingHistoryDelete = false
 
     private var activeSession: WorkoutSession? {
         sessions.first { $0.id == coordinator.activeSessionID && $0.statusRaw != "completed" }
@@ -70,6 +72,13 @@ import UIKit
                                             Text(ArabicFormat.duration(session.activeDuration(), arabic: settings.useArabicDigits)).font(.subheadline.monospacedDigit()).foregroundStyle(.secondary)
                                         }.padding(.vertical, 5)
                                     }
+                                    .accessibilityIdentifier("workout.history.\(session.id.uuidString)")
+                                    .swipeActions(edge: .trailing, allowsFullSwipe: false) {
+                                        Button("حذف", role: .destructive) {
+                                            deletingHistorySession = session
+                                            confirmingHistoryDelete = true
+                                        }.accessibilityLabel("حذف جلسة \(session.title)")
+                                    }
                                 }
                             }
                         } else {
@@ -89,6 +98,16 @@ import UIKit
             .sheet(item: $historySession) { session in WorkoutSummaryView(session: session) }
             .sheet(isPresented: $showingCalculator) { WorkoutCalculatorSheet() }
             .sheet(isPresented: $showingSmartWorkout) { NavigationStack { SmartWorkoutView() } }
+            .alert("حذف الجلسة؟", isPresented: $confirmingHistoryDelete) {
+                Button("حذف الجلسة", role: .destructive) {
+                    guard let id = deletingHistorySession?.id else { return }
+                    deletingHistorySession = nil
+                    Task { await coordinator.deleteSession(id: id, context: context) }
+                }.accessibilityIdentifier("workout.delete.confirm")
+                Button("تراجع", role: .cancel) { deletingHistorySession = nil }
+            } message: {
+                Text(SessionDeletionCopy.message(healthExported: deletingHistorySession?.healthExported == true))
+            }
             .onChange(of: coordinator.activeSessionID) { previous, current in
                 if current == nil, let previous, let ended = sessions.first(where: { $0.id == previous && $0.statusRaw == "completed" }) { historySession = ended }
             }
@@ -113,6 +132,7 @@ import UIKit
     @State private var showingCalculator = false
     @State private var showingNotes = false
     @State private var confirmingFinish = false
+    @State private var confirmingDiscard = false
     @State private var errorMessage: String?
 
     private var items: [SessionExercise] { sessionExercises.filter { $0.sessionID == session.id }.sorted { $0.order < $1.order } }
@@ -143,6 +163,9 @@ import UIKit
                 Button { confirmingFinish = true } label: { Label("إنهاء وحفظ التمرين", systemImage: "checkmark.flag.fill").frame(maxWidth: .infinity, minHeight: 38) }
                     .buttonStyle(.borderedProminent).disabled(coordinator.isBusy).accessibilityIdentifier("workout.finish")
                 Text("يُحفظ كل تغيير تلقائيًا على جهازك.").font(.caption).foregroundStyle(.secondary).frame(maxWidth: .infinity)
+                Button(role: .destructive) { confirmingDiscard = true } label: {
+                    Label("إلغاء التمرين دون حفظ", systemImage: "trash").frame(maxWidth: .infinity, minHeight: 44)
+                }.buttonStyle(.bordered).disabled(coordinator.isBusy).accessibilityIdentifier("workout.discard")
             }.padding()
         }
         .background(Color(uiColor: .systemGroupedBackground))
@@ -182,6 +205,15 @@ import UIKit
                 .onChange(of: session.title) { _, _ in save() }
                 .onChange(of: session.notes) { _, _ in save() }
             }
+        }
+        .alert("إلغاء التمرين دون حفظ؟", isPresented: $confirmingDiscard) {
+            Button("إلغاء دون حفظ", role: .destructive) {
+                let id = session.id
+                Task { await coordinator.deleteSession(id: id, context: context) }
+            }.accessibilityIdentifier("workout.discard.confirm")
+            Button("متابعة التمرين", role: .cancel) {}
+        } message: {
+            Text("ستُحذف هذه الجلسة وكل جولاتها، ولن تظهر في تاريخك أو تُحتسب في تقدمك. لا يمكن التراجع عن الحذف.")
         }
         .alert("إنهاء التمرين؟", isPresented: $confirmingFinish) {
             Button("إنهاء وحفظ") { Task { await coordinator.finish(context: context) } }
@@ -669,7 +701,10 @@ private enum SetKindLabels {
 
 @MainActor private struct WorkoutSummaryView: View {
     @Environment(\.dismiss) private var dismiss
+    @Environment(\.modelContext) private var context
     @Environment(AppSettings.self) private var settings
+    @Environment(WorkoutCoordinator.self) private var coordinator
+    @State private var confirmingDelete = false
     let session: WorkoutSession
     @Query private var exercises: [SessionExercise]
     @Query private var sets: [LoggedSet]
@@ -722,10 +757,31 @@ private enum SetKindLabels {
                     }
                 }
                 if !session.notes.isEmpty { Section("ملاحظات الجلسة") { Text(session.notes) } }
+                Section {
+                    Button(role: .destructive) { confirmingDelete = true } label: {
+                        Label("حذف الجلسة", systemImage: "trash").frame(minHeight: 44)
+                    }.disabled(coordinator.isBusy).accessibilityIdentifier("workout.summary.delete")
+                } footer: {
+                    Text("حذف الجلسة يزيل جولاتها من تاريخك وحسابات تقدمك.")
+                }
             }
             .navigationTitle("ملخص التمرين").navigationBarTitleDisplayMode(.inline)
             .toolbar { ToolbarItem(placement: .confirmationAction) { Button("تم") { dismiss() }.bold().accessibilityIdentifier("workout.summary.done") } }
+            .alert("حذف الجلسة؟", isPresented: $confirmingDelete) {
+                Button("حذف الجلسة", role: .destructive) {
+                    let id = session.id
+                    Task { if await coordinator.deleteSession(id: id, context: context) { dismiss() } }
+                }.accessibilityIdentifier("workout.delete.confirm")
+                Button("تراجع", role: .cancel) {}
+            } message: { Text(SessionDeletionCopy.message(healthExported: session.healthExported)) }
         }
+    }
+}
+
+private enum SessionDeletionCopy {
+    static func message(healthExported: Bool) -> String {
+        let message = "ستُحذف الجلسة وكل جولاتها، وتُحدّث الأرقام الشخصية والاقتراحات من الجلسات المتبقية. لا يمكن التراجع عن الحذف."
+        return healthExported ? message + " سبق تصدير هذه الجلسة إلى تطبيق الصحة؛ احذف نسختها من هناك أيضًا." : message
     }
 }
 

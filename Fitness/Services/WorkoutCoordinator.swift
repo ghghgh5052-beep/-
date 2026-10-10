@@ -256,6 +256,29 @@ final class WorkoutCoordinator {
         }
     }
 
+    @discardableResult
+    func deleteSession(id: UUID, context: ModelContext) async -> Bool {
+        guard !isBusy else { return false }
+        isBusy = true
+        defer { isBusy = false }
+        do {
+            try SessionDeletionService.delete(sessionID: id, context: context)
+            if activeSessionID == id {
+                activeSessionID = nil
+                clockTask?.cancel()
+                clockTask = nil
+                cancelRest()
+                await LiveActivityService.shared.endAll()
+            }
+            WidgetSnapshotService.refresh(context: context, settings: settings)
+            errorMessage = nil
+            return true
+        } catch {
+            errorMessage = "تعذر حذف الجلسة. ما زالت بياناتها محفوظة؛ أعد المحاولة."
+            return false
+        }
+    }
+
     func complete(set: LoggedSet, exercise: SessionExercise, context: ModelContext) {
         guard let session = activeSession(context: context), session.statusRaw == "active",
               exercise.sessionID == session.id, set.sessionExerciseID == exercise.id else {
