@@ -160,11 +160,24 @@ final class MainFlowTests: XCTestCase {
         weight.tap()
         weight.typeText("20")
         XCTAssertTrue(["20", "٢٠"].contains(weight.value as? String ?? ""), "Entered weight must replace the previous value")
+        let hideKeyboard = app.buttons["إخفاء لوحة المفاتيح"]
+        if hideKeyboard.isHittable { hideKeyboard.tap() }
         let complete = app.buttons.matching(identifier: "set.complete.0").firstMatch
         XCTAssertTrue(complete.exists); complete.tap()
-        // An interruption monitor is processed on the next application interaction.
-        app.tap()
+        // Handle the system alert directly: replaying a generic application tap can open
+        // the exercise guide after the rest timer changes the workout's layout.
+        let permission = XCUIApplication(bundleIdentifier: "com.apple.springboard").alerts.firstMatch
+        if permission.waitForExistence(timeout: 5) {
+            let allow = ["السماح", "Allow", "حسنًا", "OK"].map { permission.buttons[$0] }.first { $0.exists }
+            XCTAssertNotNil(allow, "The notification permission must expose an allow action")
+            allow?.tap()
+            let dismissed = XCTNSPredicateExpectation(predicate: NSPredicate { _, _ in !permission.exists }, object: nil)
+            XCTAssertEqual(XCTWaiter.wait(for: [dismissed], timeout: 5), .completed)
+        }
         if app.alerts.buttons["حسنًا"].exists { app.alerts.buttons["حسنًا"].tap() }
+        XCTAssertTrue(complete.label.contains("إلغاء إنجاز الجولة"), "The logged set must remain completed after notification permission")
+        XCTAssertFalse(app.buttons["exercise.guide.done"].exists, "Permission handling must keep the workout visible")
+        capture(app, name: "Arabic completed set and rest timer")
         let finish = app.buttons["workout.finish"]
         for _ in 0..<5 where !finish.isHittable { app.swipeUp() }
         XCTAssertTrue(finish.exists); finish.tap()
