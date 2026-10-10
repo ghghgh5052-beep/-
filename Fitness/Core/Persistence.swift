@@ -68,7 +68,7 @@ enum PersistenceController {
             let container = try ModelContainer(for: schema, migrationPlan: FitnessMigrationPlan.self,
                                                configurations: [configuration])
             let warning = useCloudKit
-                ? "مزامنة آي كلاود غير متاحة مع التوقيع الحالي أو إعداداته. يمكنك استخدام التطبيق وحفظ بياناتك على هذا الجهاز."
+                ? "مزامنة آي كلاود غير متاحة الآن. بياناتك محفوظة على هذا الجهاز."
                 : nil
             return PersistenceResult(container: container, syncMode: .local, warning: warning,
                                      diagnostic: cloudFailure.map { String(describing: $0) })

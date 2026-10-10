@@ -13,6 +13,16 @@ final class MainFlowTests: XCTestCase {
         if onboarding.waitForExistence(timeout: 3) { onboarding.tap() }
         XCTAssertTrue(app.tabBars.buttons["خططي"].waitForExistence(timeout: 15))
         XCTAssertTrue(app.staticTexts["startup.warning"].waitForExistence(timeout: 5))
+        let title = app.navigationBars["التمرين"].staticTexts["التمرين"].firstMatch
+        let warning = app.staticTexts["startup.warning"]
+        let dismissWarning = app.buttons["إخفاء التنبيه"]
+        XCTAssertTrue(title.waitForExistence(timeout: 5))
+        XCTAssertTrue(dismissWarning.exists)
+        let layout = XCTNSPredicateExpectation(predicate: NSPredicate { _, _ in
+            title.frame.minY >= max(warning.frame.maxY, dismissWarning.frame.maxY) + 4
+        }, object: nil)
+        XCTAssertEqual(XCTWaiter.wait(for: [layout], timeout: 5), .completed,
+                       "The startup notice must not overlap the navigation title")
         capture(app, name: "Arabic local startup without signed integrations")
         app.terminate()
         app.launch()

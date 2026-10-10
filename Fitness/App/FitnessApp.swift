@@ -76,21 +76,25 @@ import Observation
     private var protected: Bool { settings.lockEnabled && !lock.isUnlocked }
     var body: some View {
         ZStack {
-            TabView(selection: $tab) {
-                WorkoutView().tabItem { Label("التمرين", systemImage: "dumbbell.fill") }.tag(0)
-                PlansView().tabItem { Label("خططي", systemImage: "calendar") }.tag(1)
-                LibraryView().tabItem { Label("المكتبة", systemImage: "square.grid.2x2") }.tag(2)
-                ProgressDashboardView().tabItem { Label("تقدّمي", systemImage: "chart.xyaxis.line") }.tag(3)
-                SettingsView().tabItem { Label("الإعدادات", systemImage: "gearshape") }.tag(4)
-            }.onChange(of: workout.activeSessionID) { _, id in if id != nil { tab = 0 } }
-                .safeAreaInset(edge: .top) {
-                    if let warning, !warningDismissed {
-                        HStack { Text(warning).font(.caption).accessibilityIdentifier("startup.warning"); Button("إخفاء", systemImage: "xmark") { warningDismissed = true } }
-                            .padding().background(.orange.opacity(0.15))
+            VStack(spacing: 0) {
+                if let warning, !warningDismissed {
+                    HStack(spacing: 8) {
+                        Text(warning).font(.caption).fixedSize(horizontal: false, vertical: true)
+                            .accessibilityIdentifier("startup.warning")
+                        Button { warningDismissed = true } label: {
+                            Image(systemName: "xmark").frame(width: 44, height: 44)
+                        }.accessibilityLabel("إخفاء التنبيه")
                     }
+                    .padding(.horizontal, 12).padding(.vertical, 4).background(.orange.opacity(0.15))
                 }
-                .disabled(protected)
-                .accessibilityHidden(protected)
+                TabView(selection: $tab) {
+                    WorkoutView().tabItem { Label("التمرين", systemImage: "dumbbell.fill") }.tag(0)
+                    PlansView().tabItem { Label("خططي", systemImage: "calendar") }.tag(1)
+                    LibraryView().tabItem { Label("المكتبة", systemImage: "square.grid.2x2") }.tag(2)
+                    ProgressDashboardView().tabItem { Label("تقدّمي", systemImage: "chart.xyaxis.line") }.tag(3)
+                    SettingsView().tabItem { Label("الإعدادات", systemImage: "gearshape") }.tag(4)
+                }.onChange(of: workout.activeSessionID) { _, id in if id != nil { tab = 0 } }
+            }.disabled(protected).accessibilityHidden(protected)
             if protected {
                 VStack(spacing: 20) {
                     Image(systemName: "lock.shield").font(.system(size: 52)).foregroundStyle(settings.color)
