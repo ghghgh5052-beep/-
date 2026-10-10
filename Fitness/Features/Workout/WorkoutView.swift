@@ -77,7 +77,7 @@ import UIKit
                                         Button("حذف", role: .destructive) {
                                             deletingHistorySession = session
                                             confirmingHistoryDelete = true
-                                        }.accessibilityLabel("حذف جلسة \(session.title)")
+                                        }.disabled(coordinator.isBusy).accessibilityLabel("حذف جلسة \(session.title)")
                                     }
                                 }
                             }
@@ -165,7 +165,7 @@ import UIKit
                 Text("يُحفظ كل تغيير تلقائيًا على جهازك.").font(.caption).foregroundStyle(.secondary).frame(maxWidth: .infinity)
                 Button(role: .destructive) { confirmingDiscard = true } label: {
                     Label("إلغاء التمرين دون حفظ", systemImage: "trash").frame(maxWidth: .infinity, minHeight: 44)
-                }.buttonStyle(.bordered).disabled(coordinator.isBusy).accessibilityIdentifier("workout.discard")
+                }.buttonStyle(.bordered).tint(.red).disabled(coordinator.isBusy).accessibilityIdentifier("workout.discard")
             }.padding()
         }
         .background(Color(uiColor: .systemGroupedBackground))
@@ -705,6 +705,7 @@ private enum SetKindLabels {
     @Environment(AppSettings.self) private var settings
     @Environment(WorkoutCoordinator.self) private var coordinator
     @State private var confirmingDelete = false
+    @State private var deletionError: String?
     let session: WorkoutSession
     @Query private var exercises: [SessionExercise]
     @Query private var sets: [LoggedSet]
@@ -758,6 +759,7 @@ private enum SetKindLabels {
                 }
                 if !session.notes.isEmpty { Section("ملاحظات الجلسة") { Text(session.notes) } }
                 Section {
+                    if let deletionError { Text(deletionError).foregroundStyle(.red).accessibilityIdentifier("workout.summary.deleteError") }
                     Button(role: .destructive) { confirmingDelete = true } label: {
                         Label("حذف الجلسة", systemImage: "trash").frame(minHeight: 44)
                     }.disabled(coordinator.isBusy).accessibilityIdentifier("workout.summary.delete")
@@ -770,7 +772,14 @@ private enum SetKindLabels {
             .alert("حذف الجلسة؟", isPresented: $confirmingDelete) {
                 Button("حذف الجلسة", role: .destructive) {
                     let id = session.id
-                    Task { if await coordinator.deleteSession(id: id, context: context) { dismiss() } }
+                    Task {
+                        if await coordinator.deleteSession(id: id, context: context) { dismiss() }
+                        else {
+                            deletionError = coordinator.errorMessage ?? "تعذر حذف الجلسة. أعد المحاولة."
+                            // A sheet must show its own error instead of relying on an alert behind it.
+                            coordinator.errorMessage = nil
+                        }
+                    }
                 }.accessibilityIdentifier("workout.delete.confirm")
                 Button("تراجع", role: .cancel) {}
             } message: { Text(SessionDeletionCopy.message(healthExported: session.healthExported)) }
