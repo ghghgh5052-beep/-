@@ -15,4 +15,7 @@ for runtime, devices in data['devices'].items():
         if device.get('isAvailable') and 'iPhone' in device['name']:
             candidates.append((version,device['name'],device['udid']))
 if not candidates: raise SystemExit('No available iOS 18.5 iPhone simulator for Xcode 16.4. Install it in Xcode Settings > Platforms, or set IOS_SIMULATOR_DESTINATION explicitly.')
+if len(sys.argv) > 2 and sys.argv[2] == 'large':
+    candidates = [candidate for candidate in candidates if 'Pro Max' in candidate[1] or 'Plus' in candidate[1]]
+    if not candidates: raise SystemExit('No available large iPhone simulator. Install iPhone 16 Pro Max in Xcode.')
 print(max(candidates)[2])

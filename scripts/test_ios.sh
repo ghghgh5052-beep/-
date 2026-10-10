@@ -11,10 +11,14 @@ else
   DESTINATION="platform=iOS Simulator,id=$DEVICE_ID"
 fi
 python3 "$ROOT/scripts/validate_project.py"
+TEST_SELECTION=(-only-testing:FitnessTests -only-testing:FitnessUITests)
+if [[ "${UI_TESTS_ONLY:-0}" == "1" ]]; then
+  TEST_SELECTION=(-only-testing:FitnessUITests)
+fi
 xcodebuild -project "$ROOT/Wateera.xcodeproj" -scheme Wateera -configuration Debug \
   -destination "$DESTINATION" -parallel-testing-enabled NO \
   -resultBundlePath "$OUTPUT/Tests.xcresult" \
   CODE_SIGNING_ALLOWED=NO CODE_SIGNING_REQUIRED=NO CODE_SIGN_IDENTITY= \
   COPY_PHASE_STRIP=NO ONLY_ACTIVE_ARCH=YES \
   SWIFT_TREAT_WARNINGS_AS_ERRORS=YES GCC_TREAT_WARNINGS_AS_ERRORS=YES \
-  test 2>&1 | tee "$OUTPUT/test.log"
+  "${TEST_SELECTION[@]}" test 2>&1 | tee "$OUTPUT/test.log"

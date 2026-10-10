@@ -121,7 +121,11 @@ import Observation
                     }
                     catch { startupError = "تعذر دمج بعض بيانات المزامنة. يمكنك إعادة فتح التطبيق للمحاولة." }
                 }
-                if AppRuntime.isTesting { onboardingComplete = true; settings.lockEnabled = false; settings.photoLockEnabled = false }
+                if AppRuntime.isTesting {
+                    onboardingComplete = true; settings.lockEnabled = false; settings.photoLockEnabled = false
+                    if let theme = ProcessInfo.processInfo.environment["FITNESS_TEST_THEME"] { settings.theme = theme }
+                    if ProcessInfo.processInfo.environment["FITNESS_TEST_DIGITS"] == "western" { settings.useArabicDigits = false }
+                }
                 _ = WidgetSnapshotService.refresh(context: context, settings: settings)
                 Task { if let reminders = try? context.fetch(FetchDescriptor<WorkoutReminder>()) { await NotificationService.shared.reschedule(reminders: reminders, requestPermission: false) } }
                 consumeShortcut()

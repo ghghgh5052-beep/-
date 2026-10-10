@@ -207,19 +207,18 @@ import UIKit
             }
             if dynamicTypeSize.isAccessibilitySize {
                 VStack(spacing: 12) { summaryStats }
-            } else { ViewThatFits(in: .horizontal) {
+            } else {
                 HStack(spacing: 12) { summaryStats }
-                VStack(spacing: 12) { summaryStats }
-            } }
+            }
         }
     }
 
     @ViewBuilder private var summaryStats: some View {
         TimelineView(.periodic(from: .now, by: 1)) { timeline in
-            StatCard(title: "المدة", value: ArabicFormat.duration(session.activeDuration(at: timeline.date), arabic: settings.useArabicDigits), symbol: "clock")
+            StatCard(title: "المدة", value: ArabicFormat.duration(session.activeDuration(at: timeline.date), arabic: settings.useArabicDigits), symbol: "clock", compact: !dynamicTypeSize.isAccessibilitySize)
         }
-        StatCard(title: "جولات مكتملة", value: ArabicFormat.integer(completedSets.count, arabic: settings.useArabicDigits), symbol: "checkmark.circle")
-        StatCard(title: "حجم التدريب", value: ArabicFormat.weight(WorkoutMath.volume(sets: completedSets.filter { $0.kindRaw != "warmup" }), settings: settings), symbol: "scalemass")
+        StatCard(title: "جولات مكتملة", value: ArabicFormat.integer(completedSets.count, arabic: settings.useArabicDigits), symbol: "checkmark.circle", compact: !dynamicTypeSize.isAccessibilitySize)
+        StatCard(title: "حجم التدريب", value: ArabicFormat.weight(WorkoutMath.volume(sets: completedSets.filter { $0.kindRaw != "warmup" }), settings: settings), symbol: "scalemass", compact: !dynamicTypeSize.isAccessibilitySize)
     }
 
     private var restTimer: some View {

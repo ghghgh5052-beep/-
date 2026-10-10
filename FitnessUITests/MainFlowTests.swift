@@ -8,6 +8,8 @@ final class MainFlowTests: XCTestCase {
         let app = XCUIApplication()
         app.launchArguments = ["-ui-testing", "-AppleLanguages", "(ar)", "-AppleLocale", "ar_SA"]
         app.launchEnvironment["FITNESS_TESTING"] = "1"
+        app.launchEnvironment["FITNESS_TEST_THEME"] = ProcessInfo.processInfo.environment["UI_TEST_THEME"] ?? "system"
+        app.launchEnvironment["FITNESS_TEST_DIGITS"] = ProcessInfo.processInfo.environment["UI_TEST_DIGITS"] ?? "arabic"
         addUIInterruptionMonitor(withDescription: "Local notification permission") { alert in
             for label in ["السماح", "Allow", "حسنًا", "OK"] where alert.buttons[label].exists { alert.buttons[label].tap(); return true }
             return false

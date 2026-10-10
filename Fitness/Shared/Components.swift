@@ -4,13 +4,17 @@ import SwiftUI
     let title: String
     let value: String
     let symbol: String
+    var compact = false
     var body: some View {
-        VStack(alignment: .leading, spacing: 10) {
-            Label(title, systemImage: symbol).font(.subheadline).foregroundStyle(.secondary)
-            Text(value).font(.title2.bold()).minimumScaleFactor(0.65).lineLimit(2)
+        VStack(alignment: .leading, spacing: compact ? 8 : 10) {
+            Label(title, systemImage: symbol)
+                .font(compact ? .caption : .subheadline).foregroundStyle(.secondary)
+                .lineLimit(compact ? 2 : nil)
+                .frame(minHeight: compact ? 28 : nil, alignment: .leading)
+            Text(value).font(compact ? .headline : .title2.bold()).minimumScaleFactor(0.65).lineLimit(2)
         }
         .frame(maxWidth: .infinity, alignment: .leading)
-        .padding(16)
+        .padding(compact ? 10 : 16)
         .background(.quaternary.opacity(0.5), in: RoundedRectangle(cornerRadius: 20))
         .accessibilityElement(children: .combine)
     }

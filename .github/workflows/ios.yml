@@ -21,14 +21,20 @@ jobs:
           python3 scripts/tooling_tests.py
       - name: Run unit and main flow UI tests
         run: bash scripts/test_ios.sh
+      - name: Run main flow on large iPhone in dark mode with Western digits
+        run: |
+          DEVICE_ID="$(python3 scripts/select_simulator.py build/tests/devices.json large)"
+          IOS_SIMULATOR_DESTINATION="platform=iOS Simulator,id=$DEVICE_ID" TEST_OUTPUT_DIR="$PWD/build/tests-large" UI_TESTS_ONLY=1 TEST_RUNNER_UI_TEST_THEME=dark TEST_RUNNER_UI_TEST_DIGITS=western bash scripts/test_ios.sh
       - name: Export readable test diagnostics
         if: always()
         run: |
-          if [ -d build/tests/Tests.xcresult ]; then
-            xcrun xcresulttool get test-results summary --path build/tests/Tests.xcresult > build/tests/summary.json
-            xcrun xcresulttool get build-results --path build/tests/Tests.xcresult > build/tests/build-results.json
-            xcrun xcresulttool export attachments --path build/tests/Tests.xcresult --output-path build/tests/attachments
-          fi
+          for OUTPUT in build/tests build/tests-large; do
+            if [ -d "$OUTPUT/Tests.xcresult" ]; then
+              xcrun xcresulttool get test-results summary --path "$OUTPUT/Tests.xcresult" > "$OUTPUT/summary.json"
+              xcrun xcresulttool get build-results --path "$OUTPUT/Tests.xcresult" > "$OUTPUT/build-results.json"
+              xcrun xcresulttool export attachments --path "$OUTPUT/Tests.xcresult" --output-path "$OUTPUT/attachments"
+            fi
+          done
       - name: Archive and package without signing
         run: bash scripts/build_unsigned_ipa.sh
       - name: Upload unsigned IPA and signing manifest
@@ -52,4 +58,5 @@ jobs:
           retention-days: 14
           path: |
             build/tests/
+            build/tests-large/
             build/archive.log
