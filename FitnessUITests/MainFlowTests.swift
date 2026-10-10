@@ -37,7 +37,9 @@ final class MainFlowTests: XCTestCase {
         let weight = app.textFields.matching(identifier: "set.weight.0").firstMatch
         XCTAssertTrue(weight.waitForExistence(timeout: 5))
         capture(app, name: "Arabic workout logging")
-        weight.tap(); weight.typeText("20")
+        weight.tap()
+        let currentWeight = weight.value as? String ?? ""
+        weight.typeText(String(repeating: XCUIKeyboardKey.delete.rawValue, count: currentWeight.count) + "20")
         let complete = app.buttons.matching(identifier: "set.complete.0").firstMatch
         XCTAssertTrue(complete.exists); complete.tap()
         // An interruption monitor is processed on the next application interaction.
@@ -48,6 +50,10 @@ final class MainFlowTests: XCTestCase {
         XCTAssertTrue(finish.exists); finish.tap()
         let confirm = app.buttons["إنهاء وحفظ"]
         if confirm.waitForExistence(timeout: 2) { confirm.tap() }
+        let summaryDone = app.buttons["workout.summary.done"]
+        XCTAssertTrue(summaryDone.waitForExistence(timeout: 10))
+        capture(app, name: "Arabic saved workout summary")
+        summaryDone.tap()
         app.tabBars.buttons["تقدّمي"].tap()
         XCTAssertTrue(app.otherElements["progress.screen"].waitForExistence(timeout: 10) || app.navigationBars["تقدّمك"].exists)
         let completed = app.descendants(matching: .any).matching(identifier: "progress.completed").firstMatch

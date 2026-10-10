@@ -689,7 +689,7 @@ private enum SetKindLabels {
                 if !session.notes.isEmpty { Section("ملاحظات الجلسة") { Text(session.notes) } }
             }
             .navigationTitle("ملخص التمرين").navigationBarTitleDisplayMode(.inline)
-            .toolbar { ToolbarItem(placement: .confirmationAction) { Button("تم") { dismiss() }.bold() } }
+            .toolbar { ToolbarItem(placement: .confirmationAction) { Button("تم") { dismiss() }.bold().accessibilityIdentifier("workout.summary.done") } }
         }
     }
 }
