@@ -32,7 +32,7 @@ import SwiftData
                         .fixedSize(horizontal: false, vertical: true)
                 }.padding(.vertical, 6)
             }
-            Section("تفضيلات التدريب") {
+            Section {
                 Picker("الهدف", selection: $preferences.goal) {
                     ForEach(TrainingGoal.allCases, id: \.self) { Text($0.arabicName).tag($0) }
                 }.accessibilityIdentifier("smart.goal")
@@ -58,7 +58,7 @@ import SwiftData
                         Text(ArabicFormat.weight($0, settings: settings)).tag($0)
                     }
                 }.accessibilityIdentifier("smart.increment")
-            } footer: {
+            } header: { Text("تفضيلات التدريب") } footer: {
                 Text("اختر الزيادة الفعلية المتاحة لأوزانك. الوقت تقديري ويشمل الإحماء والراحة، وقد يختلف مع سرعة التنفيذ.")
             }
             Section {
@@ -317,7 +317,7 @@ private struct PrescriptionSelection: Identifiable {
 
     var body: some View {
         Form {
-            Section(prescription.name) {
+            Section {
                 Stepper("الجولات: " + ArabicFormat.integer(sets, arabic: settings.useArabicDigits), value: $sets, in: 1...10)
                     .accessibilityIdentifier("smart.editor.sets")
                 HStack {
@@ -334,7 +334,7 @@ private struct PrescriptionSelection: Identifiable {
                         Text(ArabicFormat.integer($0, arabic: settings.useArabicDigits) + " ثانية").tag($0)
                     }
                 }
-            } footer: {
+            } header: { Text(prescription.name) } footer: {
                 Text("اترك الوزن فارغًا لاختياره أثناء التمرين. هذه التعديلات تخص هذا الاقتراح فقط.")
             }
         }.navigationTitle("تعديل الاقتراح").navigationBarTitleDisplayMode(.inline)
