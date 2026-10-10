@@ -1,0 +1,47 @@
+name: iOS tests and unsigned IPA
+on:
+  push:
+  workflow_dispatch:
+permissions:
+  contents: read
+concurrency:
+  group: ios-${{ github.ref }}
+  cancel-in-progress: true
+jobs:
+  test-and-package:
+    runs-on: macos-15
+    timeout-minutes: 45
+    steps:
+      - uses: actions/checkout@v4
+      - name: Select Xcode 16.4
+        run: sudo xcode-select -s /Applications/Xcode_16.4.app/Contents/Developer
+      - name: Validate the committed project
+        run: |
+          python3 scripts/validate_project.py
+          python3 scripts/tooling_tests.py
+      - name: Run unit and main flow UI tests
+        run: bash scripts/test_ios.sh
+      - name: Archive and package without signing
+        run: bash scripts/build_unsigned_ipa.sh
+      - name: Upload unsigned IPA and signing manifest
+        uses: actions/upload-artifact@v4
+        with:
+          name: Wateera-unsigned-${{ github.sha }}
+          if-no-files-found: error
+          retention-days: 30
+          path: |
+            build/Wateera-unsigned.ipa
+            build/Wateera-unsigned.ipa.sha256
+            build/source-commit.txt
+            build/xcode-version.txt
+            build/signing/
+      - name: Upload test results and build logs
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: Wateera-diagnostics-${{ github.sha }}
+          if-no-files-found: ignore
+          retention-days: 14
+          path: |
+            build/tests/
+            build/archive.log

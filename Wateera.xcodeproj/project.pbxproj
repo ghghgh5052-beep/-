@@ -1,0 +1,1023 @@
+// !$*UTF8*$!
+{
+	"archiveVersion" = 1;
+	"classes" = {
+	};
+	"objectVersion" = 56;
+	"objects" = {
+		"00B9B19DBCB312B5363AC683" = {
+			"isa" = "PBXBuildFile";
+			"fileRef" = "DB59185D4CB3DA43395B5006";
+		};
+		"01FCECD1A9942D74984614CF" = {
+			"isa" = "PBXBuildFile";
+			"fileRef" = "7C14CE1335DA8BC756A6D586";
+		};
+		"020ACE96B1E6FE33223B230A" = {
+			"isa" = "PBXResourcesBuildPhase";
+			"buildActionMask" = 2147483647;
+			"files" = (
+			);
+			"runOnlyForDeploymentPostprocessing" = 0;
+		};
+		"02BBF35FC65F5B767C0E0636" = {
+			"isa" = "PBXBuildFile";
+			"fileRef" = "07474934634FF715CA7535A4";
+		};
+		"04308E09A2F00249BCFF9D1F" = {
+			"isa" = "PBXSourcesBuildPhase";
+			"buildActionMask" = 2147483647;
+			"files" = (
+				"F602DC732A863DFC29D43495",
+				"090B18B1974DB9C4C9E024E8",
+			);
+			"runOnlyForDeploymentPostprocessing" = 0;
+		};
+		"0514190CFE0886DBA806DC45" = {
+			"isa" = "PBXFileReference";
+			"lastKnownFileType" = "sourcecode.swift";
+			"path" = "Fitness/Features/Library/LibraryView.swift";
+			"sourceTree" = "<group>";
+		};
+		"065614E70541840AAB6BAD10" = {
+			"isa" = "XCBuildConfiguration";
+			"baseConfigurationReference" = "587BC806C8F58721B021912A";
+			"buildSettings" = {
+				"PRODUCT_NAME" = "$(TARGET_NAME)";
+				"SDKROOT" = "iphoneos";
+				"SUPPORTED_PLATFORMS" = "iphoneos iphonesimulator";
+				"SUPPORTS_MACCATALYST" = "NO";
+				"SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD" = "NO";
+				"GENERATE_INFOPLIST_FILE" = "YES";
+				"LD_RUNPATH_SEARCH_PATHS" = "$(inherited) @executable_path/Frameworks";
+				"PRODUCT_BUNDLE_IDENTIFIER" = "$(BUNDLE_IDENTIFIER).tests";
+				"CODE_SIGN_ENTITLEMENTS" = "Config/FitnessTests.entitlements";
+				"SKIP_INSTALL" = "YES";
+				"TEST_HOST" = "$(BUILT_PRODUCTS_DIR)/Fitness.app/Fitness";
+				"BUNDLE_LOADER" = "$(TEST_HOST)";
+			};
+			"name" = "Release";
+		};
+		"06EA0BEE744FBD4B9CEE34BF" = {
+			"isa" = "PBXContainerItemProxy";
+			"containerPortal" = "244210E48437B6556980A702";
+			"proxyType" = 1;
+			"remoteGlobalIDString" = "1699864EFA20327B49193EB6";
+			"remoteInfo" = "FitnessWidgets";
+		};
+		"07474934634FF715CA7535A4" = {
+			"isa" = "PBXFileReference";
+			"lastKnownFileType" = "text.xml";
+			"path" = "Fitness/Resources/PrivacyInfo.xcprivacy";
+			"sourceTree" = "<group>";
+		};
+		"07CC04704987DAEA61B4AA8A" = {
+			"isa" = "PBXFileReference";
+			"explicitFileType" = "wrapper.cfbundle";
+			"includeInIndex" = 0;
+			"path" = "FitnessUITests.xctest";
+			"sourceTree" = "BUILT_PRODUCTS_DIR";
+		};
+		"0883AAE4D46827E570032B05" = {
+			"isa" = "PBXBuildFile";
+			"fileRef" = "0514190CFE0886DBA806DC45";
+		};
+		"090B18B1974DB9C4C9E024E8" = {
+			"isa" = "PBXBuildFile";
+			"fileRef" = "F08BF740DFA7D0514C7E31DA";
+		};
+		"0990F8EE9A0EA70E29692D1C" = {
+			"isa" = "PBXBuildFile";
+			"fileRef" = "2540876D4A952E3A0939E511";
+		};
+		"0B4CB22FFD4047865B526E16" = {
+			"isa" = "PBXBuildFile";
+			"fileRef" = "38C5343769F448EBA64C70E7";
+		};
+		"0BD6A8F04BC512EC179399C1" = {
+			"isa" = "PBXBuildFile";
+			"fileRef" = "0CD24045BF24CB63E945FD24";
+		};
+		"0BEA16C4C39E21BC49A7BD3A" = {
+			"isa" = "PBXBuildFile";
+			"fileRef" = "D75CC73EE8F13ECA77A6CDED";
+		};
+		"0CD24045BF24CB63E945FD24" = {
+			"isa" = "PBXFileReference";
+			"lastKnownFileType" = "sourcecode.swift";
+			"path" = "Fitness/Core/Catalog.swift";
+			"sourceTree" = "<group>";
+		};
+		"0CF687998310C9D99CAC77E9" = {
+			"isa" = "PBXNativeTarget";
+			"buildConfigurationList" = "2A078FD04D77D66C6C2C400B";
+			"buildPhases" = (
+				"0FC0BA5D8FDCBD5CC40C2CB7",
+				"020ACE96B1E6FE33223B230A",
+				"C15862DB1263E4EFD6411BAA",
+			);
+			"buildRules" = (
+			);
+			"dependencies" = (
+				"923941DD7493740E640A59F9",
+			);
+			"name" = "FitnessTests";
+			"productName" = "FitnessTests";
+			"productReference" = "74AC70F4700729D69F65A50F";
+			"productType" = "com.apple.product-type.bundle.unit-test";
+		};
+		"0FC0BA5D8FDCBD5CC40C2CB7" = {
+			"isa" = "PBXSourcesBuildPhase";
+			"buildActionMask" = 2147483647;
+			"files" = (
+				"7CBDCCDB2D31C4EF0A6F7642",
+				"984EC7B8F8FA90EEDB716DA3",
+				"B5DD6CE095C80D53296CFC6C",
+			);
+			"runOnlyForDeploymentPostprocessing" = 0;
+		};
+		"10D7C9A75F81669C99179D04" = {
+			"isa" = "PBXNativeTarget";
+			"buildConfigurationList" = "DF3E9AFFFA4B5ED4AE64D25F";
+			"buildPhases" = (
+				"3226FB6650AF78A415EF5278",
+				"4416F70C8101D6BE0ACE657F",
+				"AF71454F9F68463445415525",
+			);
+			"buildRules" = (
+			);
+			"dependencies" = (
+				"1F2146A8339CB7582679C8D2",
+			);
+			"name" = "FitnessUITests";
+			"productName" = "FitnessUITests";
+			"productReference" = "07CC04704987DAEA61B4AA8A";
+			"productType" = "com.apple.product-type.bundle.ui-testing";
+		};
+		"136F613483BD7B3AC1F30B9E" = {
+			"isa" = "PBXBuildFile";
+			"fileRef" = "A17894E9718EA370ED10C0F4";
+		};
+		"1483C3F706351F056B0209B1" = {
+			"isa" = "PBXFileReference";
+			"lastKnownFileType" = "sourcecode.swift";
+			"path" = "FitnessWidgets/FitnessWidgets.swift";
+			"sourceTree" = "<group>";
+		};
+		"1699864EFA20327B49193EB6" = {
+			"isa" = "PBXNativeTarget";
+			"buildConfigurationList" = "25ACA40CA1C45D51A8C03B20";
+			"buildPhases" = (
+				"04308E09A2F00249BCFF9D1F",
+				"C85474DFCA9ED8CBEE4BB6BA",
+				"FD9C9A91039FACC98A74F9B4",
+			);
+			"buildRules" = (
+			);
+			"dependencies" = (
+			);
+			"name" = "FitnessWidgets";
+			"productName" = "FitnessWidgets";
+			"productReference" = "342CD7427D0DACB39ACFDAB6";
+			"productType" = "com.apple.product-type.app-extension";
+		};
+		"18A938EB1F17E355D063A29B" = {
+			"isa" = "PBXBuildFile";
+			"fileRef" = "53F97FB6B28D89D0DF108AA0";
+		};
+		"1922B098E983995960BE56B0" = {
+			"isa" = "XCConfigurationList";
+			"buildConfigurations" = (
+				"FDD3EA28A0B1309668A442B2",
+				"8DB23D5B0AA80A48AA651830",
+			);
+			"defaultConfigurationIsVisible" = 0;
+			"defaultConfigurationName" = "Release";
+		};
+		"1A7070D46DAB7A6A7BB6D326" = {
+			"isa" = "PBXFileReference";
+			"lastKnownFileType" = "sourcecode.swift";
+			"path" = "Fitness/Core/CSVService.swift";
+			"sourceTree" = "<group>";
+		};
+		"1BFFF990FA8A25246CE4EAE5" = {
+			"isa" = "PBXFileReference";
+			"lastKnownFileType" = "sourcecode.swift";
+			"path" = "Fitness/Services/WidgetSnapshotService.swift";
+			"sourceTree" = "<group>";
+		};
+		"1F2146A8339CB7582679C8D2" = {
+			"isa" = "PBXTargetDependency";
+			"target" = "D8701D5EA7B64691847615F1";
+			"targetProxy" = "D97A08B1A1307F8C038ADACC";
+		};
+		"1FE4289D6104DF89DCACA003" = {
+			"isa" = "PBXFileReference";
+			"lastKnownFileType" = "text.plist.entitlements";
+			"path" = "Config/Fitness.entitlements";
+			"sourceTree" = "<group>";
+		};
+		"1FF230346C0F2B2926D612DE" = {
+			"isa" = "PBXBuildFile";
+			"fileRef" = "1BFFF990FA8A25246CE4EAE5";
+		};
+		"2053571DDF5315FCF7E094BE" = {
+			"isa" = "XCBuildConfiguration";
+			"baseConfigurationReference" = "587BC806C8F58721B021912A";
+			"buildSettings" = {
+				"PRODUCT_NAME" = "$(TARGET_NAME)";
+				"SDKROOT" = "iphoneos";
+				"SUPPORTED_PLATFORMS" = "iphoneos iphonesimulator";
+				"SUPPORTS_MACCATALYST" = "NO";
+				"SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD" = "NO";
+				"GENERATE_INFOPLIST_FILE" = "YES";
+				"LD_RUNPATH_SEARCH_PATHS" = "$(inherited) @executable_path/Frameworks";
+				"PRODUCT_BUNDLE_IDENTIFIER" = "$(BUNDLE_IDENTIFIER).uitests";
+				"CODE_SIGN_ENTITLEMENTS" = "Config/FitnessUITests.entitlements";
+				"SKIP_INSTALL" = "YES";
+				"TEST_TARGET_NAME" = "Fitness";
+			};
+			"name" = "Debug";
+		};
+		"244210E48437B6556980A702" = {
+			"isa" = "PBXProject";
+			"attributes" = {
+				"BuildIndependentTargetsInParallel" = "YES";
+				"LastUpgradeCheck" = "1600";
+				"TargetAttributes" = {
+					"D8701D5EA7B64691847615F1" = {
+						"CreatedOnToolsVersion" = "16.0";
+					};
+					"1699864EFA20327B49193EB6" = {
+						"CreatedOnToolsVersion" = "16.0";
+					};
+					"0CF687998310C9D99CAC77E9" = {
+						"CreatedOnToolsVersion" = "16.0";
+					};
+					"10D7C9A75F81669C99179D04" = {
+						"CreatedOnToolsVersion" = "16.0";
+					};
+				};
+			};
+			"buildConfigurationList" = "1922B098E983995960BE56B0";
+			"compatibilityVersion" = "Xcode 14.0";
+			"developmentRegion" = "ar";
+			"hasScannedForEncodings" = 0;
+			"knownRegions" = (
+				"ar",
+				"Base",
+			);
+			"mainGroup" = "AA0596BBDB4DCC95D5D4F10C";
+			"productRefGroup" = "6F7199ED7B63CDA338A0FB82";
+			"projectDirPath" = "";
+			"projectRoot" = "";
+			"targets" = (
+				"D8701D5EA7B64691847615F1",
+				"1699864EFA20327B49193EB6",
+				"0CF687998310C9D99CAC77E9",
+				"10D7C9A75F81669C99179D04",
+			);
+		};
+		"2540876D4A952E3A0939E511" = {
+			"isa" = "PBXFileReference";
+			"lastKnownFileType" = "sourcecode.swift";
+			"path" = "Fitness/Features/Progress/GoalsView.swift";
+			"sourceTree" = "<group>";
+		};
+		"25ACA40CA1C45D51A8C03B20" = {
+			"isa" = "XCConfigurationList";
+			"buildConfigurations" = (
+				"93E1669807B27A21875915A7",
+				"98AF88CE12A70DF41A34B466",
+			);
+			"defaultConfigurationIsVisible" = 0;
+			"defaultConfigurationName" = "Release";
+		};
+		"2A078FD04D77D66C6C2C400B" = {
+			"isa" = "XCConfigurationList";
+			"buildConfigurations" = (
+				"572BB6D3EEF2ACD6B0A76AF7",
+				"065614E70541840AAB6BAD10",
+			);
+			"defaultConfigurationIsVisible" = 0;
+			"defaultConfigurationName" = "Release";
+		};
+		"3127F2DF7C5FA22F8A6DC6DC" = {
+			"isa" = "PBXFileReference";
+			"lastKnownFileType" = "sourcecode.swift";
+			"path" = "FitnessTests/CalculationTests.swift";
+			"sourceTree" = "<group>";
+		};
+		"31D8E6147E52899B87674B84" = {
+			"isa" = "PBXFileReference";
+			"lastKnownFileType" = "folder.assetcatalog";
+			"path" = "Fitness/Resources/Assets.xcassets";
+			"sourceTree" = "<group>";
+		};
+		"3226FB6650AF78A415EF5278" = {
+			"isa" = "PBXSourcesBuildPhase";
+			"buildActionMask" = 2147483647;
+			"files" = (
+				"D024F448A414587D82E64D30",
+			);
+			"runOnlyForDeploymentPostprocessing" = 0;
+		};
+		"342CD7427D0DACB39ACFDAB6" = {
+			"isa" = "PBXFileReference";
+			"explicitFileType" = "wrapper.app-extension";
+			"includeInIndex" = 0;
+			"path" = "FitnessWidgets.appex";
+			"sourceTree" = "BUILT_PRODUCTS_DIR";
+		};
+		"36011C4B8A9C32130DE11409" = {
+			"isa" = "XCBuildConfiguration";
+			"baseConfigurationReference" = "587BC806C8F58721B021912A";
+			"buildSettings" = {
+				"PRODUCT_NAME" = "$(TARGET_NAME)";
+				"SDKROOT" = "iphoneos";
+				"SUPPORTED_PLATFORMS" = "iphoneos iphonesimulator";
+				"SUPPORTS_MACCATALYST" = "NO";
+				"SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD" = "NO";
+				"GENERATE_INFOPLIST_FILE" = "YES";
+				"LD_RUNPATH_SEARCH_PATHS" = "$(inherited) @executable_path/Frameworks";
+				"PRODUCT_BUNDLE_IDENTIFIER" = "$(BUNDLE_IDENTIFIER).uitests";
+				"CODE_SIGN_ENTITLEMENTS" = "Config/FitnessUITests.entitlements";
+				"SKIP_INSTALL" = "YES";
+				"TEST_TARGET_NAME" = "Fitness";
+			};
+			"name" = "Release";
+		};
+		"381F31954856152A1D13261F" = {
+			"isa" = "PBXFileReference";
+			"lastKnownFileType" = "text.plist.entitlements";
+			"path" = "Config/FitnessUITests.entitlements";
+			"sourceTree" = "<group>";
+		};
+		"38C5343769F448EBA64C70E7" = {
+			"isa" = "PBXFileReference";
+			"lastKnownFileType" = "sourcecode.swift";
+			"path" = "Fitness/Core/Persistence.swift";
+			"sourceTree" = "<group>";
+		};
+		"38CA885666E316E20EBB009B" = {
+			"isa" = "PBXFileReference";
+			"lastKnownFileType" = "sourcecode.swift";
+			"path" = "Fitness/Services/LiveActivityService.swift";
+			"sourceTree" = "<group>";
+		};
+		"39628AFE920C9FB6E71C3606" = {
+			"isa" = "PBXFileReference";
+			"lastKnownFileType" = "sourcecode.swift";
+			"path" = "FitnessTests/BackupTests.swift";
+			"sourceTree" = "<group>";
+		};
+		"41477369EB116BB930ACE1F3" = {
+			"isa" = "PBXBuildFile";
+			"fileRef" = "F08BF740DFA7D0514C7E31DA";
+		};
+		"4416F70C8101D6BE0ACE657F" = {
+			"isa" = "PBXResourcesBuildPhase";
+			"buildActionMask" = 2147483647;
+			"files" = (
+			);
+			"runOnlyForDeploymentPostprocessing" = 0;
+		};
+		"44AFCD9AEB6D473DE997612B" = {
+			"isa" = "PBXFileReference";
+			"lastKnownFileType" = "sourcecode.swift";
+			"path" = "Fitness/Features/Settings/SettingsView.swift";
+			"sourceTree" = "<group>";
+		};
+		"4558D607D3D924E1AF35A415" = {
+			"isa" = "XCConfigurationList";
+			"buildConfigurations" = (
+				"87A53662CE330BC84DB05B6E",
+				"ECC462B31299AF0B7697FCC0",
+			);
+			"defaultConfigurationIsVisible" = 0;
+			"defaultConfigurationName" = "Release";
+		};
+		"494CD3D7C8C54C5634F92E71" = {
+			"isa" = "PBXFileReference";
+			"lastKnownFileType" = "sourcecode.swift";
+			"path" = "FitnessTests/PersistenceTests.swift";
+			"sourceTree" = "<group>";
+		};
+		"49D455C8BD15EFEBF9BB6E30" = {
+			"isa" = "PBXBuildFile";
+			"fileRef" = "342CD7427D0DACB39ACFDAB6";
+			"settings" = {
+				"ATTRIBUTES" = (
+					"RemoveHeadersOnCopy",
+				);
+			};
+		};
+		"53F97FB6B28D89D0DF108AA0" = {
+			"isa" = "PBXFileReference";
+			"lastKnownFileType" = "sourcecode.swift";
+			"path" = "Fitness/Features/Workout/WorkoutView.swift";
+			"sourceTree" = "<group>";
+		};
+		"564B9226C170CA11CDCB3B33" = {
+			"isa" = "PBXTargetDependency";
+			"target" = "1699864EFA20327B49193EB6";
+			"targetProxy" = "06EA0BEE744FBD4B9CEE34BF";
+		};
+		"572BB6D3EEF2ACD6B0A76AF7" = {
+			"isa" = "XCBuildConfiguration";
+			"baseConfigurationReference" = "587BC806C8F58721B021912A";
+			"buildSettings" = {
+				"PRODUCT_NAME" = "$(TARGET_NAME)";
+				"SDKROOT" = "iphoneos";
+				"SUPPORTED_PLATFORMS" = "iphoneos iphonesimulator";
+				"SUPPORTS_MACCATALYST" = "NO";
+				"SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD" = "NO";
+				"GENERATE_INFOPLIST_FILE" = "YES";
+				"LD_RUNPATH_SEARCH_PATHS" = "$(inherited) @executable_path/Frameworks";
+				"PRODUCT_BUNDLE_IDENTIFIER" = "$(BUNDLE_IDENTIFIER).tests";
+				"CODE_SIGN_ENTITLEMENTS" = "Config/FitnessTests.entitlements";
+				"SKIP_INSTALL" = "YES";
+				"TEST_HOST" = "$(BUILT_PRODUCTS_DIR)/Fitness.app/Fitness";
+				"BUNDLE_LOADER" = "$(TEST_HOST)";
+			};
+			"name" = "Debug";
+		};
+		"587BC806C8F58721B021912A" = {
+			"isa" = "PBXFileReference";
+			"lastKnownFileType" = "text.xcconfig";
+			"path" = "Config/Identifiers.xcconfig";
+			"sourceTree" = "<group>";
+		};
+		"5B0C0032240DCE747BD4ACBF" = {
+			"isa" = "PBXFileReference";
+			"lastKnownFileType" = "sourcecode.swift";
+			"path" = "FitnessUITests/MainFlowTests.swift";
+			"sourceTree" = "<group>";
+		};
+		"5B5992C7010691EB6092FB40" = {
+			"isa" = "PBXBuildFile";
+			"fileRef" = "BAB069C21F8537E12785765D";
+		};
+		"5D3A34575B9BA145E2F50E95" = {
+			"isa" = "PBXFileReference";
+			"lastKnownFileType" = "text.plist.xml";
+			"path" = "Fitness/Resources/Info.plist";
+			"sourceTree" = "<group>";
+		};
+		"5E9530042CD26E17A92712FE" = {
+			"isa" = "PBXFileReference";
+			"lastKnownFileType" = "sourcecode.swift";
+			"path" = "Fitness/Core/Calculations.swift";
+			"sourceTree" = "<group>";
+		};
+		"678904EE2BE2D5FDA4CAF6B4" = {
+			"isa" = "PBXBuildFile";
+			"fileRef" = "C38E18CC299D72A52C979381";
+		};
+		"6A8510CBE8A3263662C505C7" = {
+			"isa" = "PBXBuildFile";
+			"fileRef" = "9E5748D5F8047FB167FDAB1F";
+		};
+		"6CC7BC08993DD9AA20C57F6F" = {
+			"isa" = "PBXFileReference";
+			"lastKnownFileType" = "sourcecode.swift";
+			"path" = "Fitness/Services/AppLockService.swift";
+			"sourceTree" = "<group>";
+		};
+		"6F30B9597462BC97F7C3AE8D" = {
+			"isa" = "PBXFileReference";
+			"lastKnownFileType" = "sourcecode.swift";
+			"path" = "Fitness/Features/Settings/BackupView.swift";
+			"sourceTree" = "<group>";
+		};
+		"6F7199ED7B63CDA338A0FB82" = {
+			"isa" = "PBXGroup";
+			"children" = (
+				"8C7330CACFE886B4029CFAE4",
+				"342CD7427D0DACB39ACFDAB6",
+				"74AC70F4700729D69F65A50F",
+				"07CC04704987DAEA61B4AA8A",
+			);
+			"name" = "Products";
+			"sourceTree" = "<group>";
+		};
+		"6F72EEEF00E6B77B2C910A10" = {
+			"isa" = "PBXBuildFile";
+			"fileRef" = "96140E02CA932CF7740B03F5";
+		};
+		"70FE23A687B6DD4F2C8BCC6E" = {
+			"isa" = "PBXBuildFile";
+			"fileRef" = "44AFCD9AEB6D473DE997612B";
+		};
+		"74AC70F4700729D69F65A50F" = {
+			"isa" = "PBXFileReference";
+			"explicitFileType" = "wrapper.cfbundle";
+			"includeInIndex" = 0;
+			"path" = "FitnessTests.xctest";
+			"sourceTree" = "BUILT_PRODUCTS_DIR";
+		};
+		"79F6DC424ECD6C90A518EEB0" = {
+			"isa" = "PBXFileReference";
+			"lastKnownFileType" = "sourcecode.swift";
+			"path" = "Fitness/Core/Models.swift";
+			"sourceTree" = "<group>";
+		};
+		"7C14CE1335DA8BC756A6D586" = {
+			"isa" = "PBXFileReference";
+			"lastKnownFileType" = "sourcecode.swift";
+			"path" = "Fitness/Services/WorkoutCoordinator.swift";
+			"sourceTree" = "<group>";
+		};
+		"7CBDCCDB2D31C4EF0A6F7642" = {
+			"isa" = "PBXBuildFile";
+			"fileRef" = "39628AFE920C9FB6E71C3606";
+		};
+		"81A54C3FBF2192C096AD6447" = {
+			"isa" = "PBXSourcesBuildPhase";
+			"buildActionMask" = 2147483647;
+			"files" = (
+				"678904EE2BE2D5FDA4CAF6B4",
+				"C2FD5191A103CB85A50A4306",
+				"5B5992C7010691EB6092FB40",
+				"00B9B19DBCB312B5363AC683",
+				"C5D7FA9F9EF52A11525CDE18",
+				"EEDFD399863E81F0BB28B9DC",
+				"EC87155D8378A230BBC35666",
+				"0BD6A8F04BC512EC179399C1",
+				"EECFB3FA6DCFAF66F0866C62",
+				"0B4CB22FFD4047865B526E16",
+				"0883AAE4D46827E570032B05",
+				"D537458C0EAA773DBD2BE962",
+				"FFE2F64CA25C16FD7C84D3F8",
+				"0990F8EE9A0EA70E29692D1C",
+				"6F72EEEF00E6B77B2C910A10",
+				"0BEA16C4C39E21BC49A7BD3A",
+				"8D183511F5B6CD570034102E",
+				"70FE23A687B6DD4F2C8BCC6E",
+				"18A938EB1F17E355D063A29B",
+				"9BF33274A547910014EDFA52",
+				"136F613483BD7B3AC1F30B9E",
+				"916DEEB44AB78546B40402A0",
+				"AF483BA74508E3879D6C9A5E",
+				"D64C8595B84FF07B0CCBEC50",
+				"1FF230346C0F2B2926D612DE",
+				"01FCECD1A9942D74984614CF",
+				"6A8510CBE8A3263662C505C7",
+				"41477369EB116BB930ACE1F3",
+			);
+			"runOnlyForDeploymentPostprocessing" = 0;
+		};
+		"8336626A588BFF7E48225BCB" = {
+			"isa" = "PBXCopyFilesBuildPhase";
+			"buildActionMask" = 2147483647;
+			"dstPath" = "";
+			"dstSubfolderSpec" = 13;
+			"files" = (
+				"49D455C8BD15EFEBF9BB6E30",
+			);
+			"name" = "Embed App Extensions";
+			"runOnlyForDeploymentPostprocessing" = 0;
+		};
+		"87A53662CE330BC84DB05B6E" = {
+			"isa" = "XCBuildConfiguration";
+			"baseConfigurationReference" = "587BC806C8F58721B021912A";
+			"buildSettings" = {
+				"PRODUCT_NAME" = "$(TARGET_NAME)";
+				"SDKROOT" = "iphoneos";
+				"SUPPORTED_PLATFORMS" = "iphoneos iphonesimulator";
+				"SUPPORTS_MACCATALYST" = "NO";
+				"SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD" = "NO";
+				"GENERATE_INFOPLIST_FILE" = "NO";
+				"LD_RUNPATH_SEARCH_PATHS" = "$(inherited) @executable_path/Frameworks";
+				"PRODUCT_BUNDLE_IDENTIFIER" = "$(BUNDLE_IDENTIFIER)";
+				"PRODUCT_MODULE_NAME" = "Fitness";
+				"INFOPLIST_FILE" = "Fitness/Resources/Info.plist";
+				"CODE_SIGN_ENTITLEMENTS" = "Config/Fitness.entitlements";
+				"ASSETCATALOG_COMPILER_APPICON_NAME" = "AppIcon";
+				"ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME" = "AccentColor";
+				"SKIP_INSTALL" = "NO";
+			};
+			"name" = "Debug";
+		};
+		"8C7330CACFE886B4029CFAE4" = {
+			"isa" = "PBXFileReference";
+			"explicitFileType" = "wrapper.application";
+			"includeInIndex" = 0;
+			"path" = "Fitness.app";
+			"sourceTree" = "BUILT_PRODUCTS_DIR";
+		};
+		"8CF60E86EE39E39493D41271" = {
+			"isa" = "PBXFileReference";
+			"lastKnownFileType" = "text.plist.entitlements";
+			"path" = "Config/FitnessWidgets.entitlements";
+			"sourceTree" = "<group>";
+		};
+		"8D183511F5B6CD570034102E" = {
+			"isa" = "PBXBuildFile";
+			"fileRef" = "6F30B9597462BC97F7C3AE8D";
+		};
+		"8DB23D5B0AA80A48AA651830" = {
+			"isa" = "XCBuildConfiguration";
+			"baseConfigurationReference" = "587BC806C8F58721B021912A";
+			"buildSettings" = {
+				"ALWAYS_SEARCH_USER_PATHS" = "NO";
+				"CLANG_WARN_DOCUMENTATION_COMMENTS" = "YES";
+				"CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER" = "YES";
+				"GCC_WARN_64_TO_32_BIT_CONVERSION" = "YES";
+				"GCC_WARN_UNDECLARED_SELECTOR" = "YES";
+				"GCC_WARN_UNUSED_FUNCTION" = "YES";
+				"GCC_WARN_UNUSED_VARIABLE" = "YES";
+				"SWIFT_OPTIMIZATION_LEVEL" = "-O";
+				"DEBUG_INFORMATION_FORMAT" = "dwarf-with-dsym";
+				"SWIFT_ACTIVE_COMPILATION_CONDITIONS" = "";
+				"ENABLE_TESTABILITY" = "NO";
+			};
+			"name" = "Release";
+		};
+		"9009B3B6440D8F62069B6C8D" = {
+			"isa" = "PBXBuildFile";
+			"fileRef" = "31D8E6147E52899B87674B84";
+		};
+		"916DEEB44AB78546B40402A0" = {
+			"isa" = "PBXBuildFile";
+			"fileRef" = "38CA885666E316E20EBB009B";
+		};
+		"923941DD7493740E640A59F9" = {
+			"isa" = "PBXTargetDependency";
+			"target" = "D8701D5EA7B64691847615F1";
+			"targetProxy" = "98DCFE2F1E0891E3EE59E06E";
+		};
+		"93E1669807B27A21875915A7" = {
+			"isa" = "XCBuildConfiguration";
+			"baseConfigurationReference" = "587BC806C8F58721B021912A";
+			"buildSettings" = {
+				"PRODUCT_NAME" = "$(TARGET_NAME)";
+				"SDKROOT" = "iphoneos";
+				"SUPPORTED_PLATFORMS" = "iphoneos iphonesimulator";
+				"SUPPORTS_MACCATALYST" = "NO";
+				"SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD" = "NO";
+				"GENERATE_INFOPLIST_FILE" = "NO";
+				"LD_RUNPATH_SEARCH_PATHS" = "$(inherited) @executable_path/Frameworks @executable_path/../../Frameworks";
+				"PRODUCT_BUNDLE_IDENTIFIER" = "$(WIDGET_BUNDLE_IDENTIFIER)";
+				"PRODUCT_MODULE_NAME" = "FitnessWidgets";
+				"INFOPLIST_FILE" = "FitnessWidgets/Info.plist";
+				"CODE_SIGN_ENTITLEMENTS" = "Config/FitnessWidgets.entitlements";
+				"APPLICATION_EXTENSION_API_ONLY" = "YES";
+				"SKIP_INSTALL" = "YES";
+			};
+			"name" = "Debug";
+		};
+		"96140E02CA932CF7740B03F5" = {
+			"isa" = "PBXFileReference";
+			"lastKnownFileType" = "sourcecode.swift";
+			"path" = "Fitness/Features/Progress/ProgressPhotosView.swift";
+			"sourceTree" = "<group>";
+		};
+		"978A309BE4D34A226976F113" = {
+			"isa" = "PBXFileReference";
+			"lastKnownFileType" = "sourcecode.swift";
+			"path" = "Fitness/App/WorkoutIntents.swift";
+			"sourceTree" = "<group>";
+		};
+		"984EC7B8F8FA90EEDB716DA3" = {
+			"isa" = "PBXBuildFile";
+			"fileRef" = "3127F2DF7C5FA22F8A6DC6DC";
+		};
+		"985BDAB13FCED7157EEAECC5" = {
+			"isa" = "PBXFileReference";
+			"lastKnownFileType" = "text.plist.xml";
+			"path" = "FitnessWidgets/Info.plist";
+			"sourceTree" = "<group>";
+		};
+		"98AF88CE12A70DF41A34B466" = {
+			"isa" = "XCBuildConfiguration";
+			"baseConfigurationReference" = "587BC806C8F58721B021912A";
+			"buildSettings" = {
+				"PRODUCT_NAME" = "$(TARGET_NAME)";
+				"SDKROOT" = "iphoneos";
+				"SUPPORTED_PLATFORMS" = "iphoneos iphonesimulator";
+				"SUPPORTS_MACCATALYST" = "NO";
+				"SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD" = "NO";
+				"GENERATE_INFOPLIST_FILE" = "NO";
+				"LD_RUNPATH_SEARCH_PATHS" = "$(inherited) @executable_path/Frameworks @executable_path/../../Frameworks";
+				"PRODUCT_BUNDLE_IDENTIFIER" = "$(WIDGET_BUNDLE_IDENTIFIER)";
+				"PRODUCT_MODULE_NAME" = "FitnessWidgets";
+				"INFOPLIST_FILE" = "FitnessWidgets/Info.plist";
+				"CODE_SIGN_ENTITLEMENTS" = "Config/FitnessWidgets.entitlements";
+				"APPLICATION_EXTENSION_API_ONLY" = "YES";
+				"SKIP_INSTALL" = "YES";
+			};
+			"name" = "Release";
+		};
+		"98DCFE2F1E0891E3EE59E06E" = {
+			"isa" = "PBXContainerItemProxy";
+			"containerPortal" = "244210E48437B6556980A702";
+			"proxyType" = 1;
+			"remoteGlobalIDString" = "D8701D5EA7B64691847615F1";
+			"remoteInfo" = "Fitness";
+		};
+		"9BF33274A547910014EDFA52" = {
+			"isa" = "PBXBuildFile";
+			"fileRef" = "6CC7BC08993DD9AA20C57F6F";
+		};
+		"9E5748D5F8047FB167FDAB1F" = {
+			"isa" = "PBXFileReference";
+			"lastKnownFileType" = "sourcecode.swift";
+			"path" = "Fitness/Shared/Components.swift";
+			"sourceTree" = "<group>";
+		};
+		"A17894E9718EA370ED10C0F4" = {
+			"isa" = "PBXFileReference";
+			"lastKnownFileType" = "sourcecode.swift";
+			"path" = "Fitness/Services/HealthService.swift";
+			"sourceTree" = "<group>";
+		};
+		"AA0596BBDB4DCC95D5D4F10C" = {
+			"isa" = "PBXGroup";
+			"children" = (
+				"1FE4289D6104DF89DCACA003",
+				"FE3EC1D93220AF81B80CA654",
+				"381F31954856152A1D13261F",
+				"8CF60E86EE39E39493D41271",
+				"587BC806C8F58721B021912A",
+				"C38E18CC299D72A52C979381",
+				"978A309BE4D34A226976F113",
+				"BAB069C21F8537E12785765D",
+				"DB59185D4CB3DA43395B5006",
+				"FA633610CE0A78012732B83A",
+				"1A7070D46DAB7A6A7BB6D326",
+				"5E9530042CD26E17A92712FE",
+				"0CD24045BF24CB63E945FD24",
+				"79F6DC424ECD6C90A518EEB0",
+				"38C5343769F448EBA64C70E7",
+				"0514190CFE0886DBA806DC45",
+				"D8EB72A485BEA14308803FDD",
+				"FC991FC71C663E216C16C3FE",
+				"2540876D4A952E3A0939E511",
+				"96140E02CA932CF7740B03F5",
+				"D75CC73EE8F13ECA77A6CDED",
+				"6F30B9597462BC97F7C3AE8D",
+				"44AFCD9AEB6D473DE997612B",
+				"53F97FB6B28D89D0DF108AA0",
+				"31D8E6147E52899B87674B84",
+				"5D3A34575B9BA145E2F50E95",
+				"07474934634FF715CA7535A4",
+				"6CC7BC08993DD9AA20C57F6F",
+				"A17894E9718EA370ED10C0F4",
+				"38CA885666E316E20EBB009B",
+				"B443ED7EFF83950FFD2D826D",
+				"D0CA5E5250F4ADE5942186D6",
+				"1BFFF990FA8A25246CE4EAE5",
+				"7C14CE1335DA8BC756A6D586",
+				"9E5748D5F8047FB167FDAB1F",
+				"F08BF740DFA7D0514C7E31DA",
+				"39628AFE920C9FB6E71C3606",
+				"3127F2DF7C5FA22F8A6DC6DC",
+				"494CD3D7C8C54C5634F92E71",
+				"5B0C0032240DCE747BD4ACBF",
+				"1483C3F706351F056B0209B1",
+				"985BDAB13FCED7157EEAECC5",
+				"6F7199ED7B63CDA338A0FB82",
+			);
+			"sourceTree" = "<group>";
+		};
+		"AF483BA74508E3879D6C9A5E" = {
+			"isa" = "PBXBuildFile";
+			"fileRef" = "B443ED7EFF83950FFD2D826D";
+		};
+		"AF71454F9F68463445415525" = {
+			"isa" = "PBXFrameworksBuildPhase";
+			"buildActionMask" = 2147483647;
+			"files" = (
+			);
+			"runOnlyForDeploymentPostprocessing" = 0;
+		};
+		"B443ED7EFF83950FFD2D826D" = {
+			"isa" = "PBXFileReference";
+			"lastKnownFileType" = "sourcecode.swift";
+			"path" = "Fitness/Services/NotificationService.swift";
+			"sourceTree" = "<group>";
+		};
+		"B5DD6CE095C80D53296CFC6C" = {
+			"isa" = "PBXBuildFile";
+			"fileRef" = "494CD3D7C8C54C5634F92E71";
+		};
+		"BAB069C21F8537E12785765D" = {
+			"isa" = "PBXFileReference";
+			"lastKnownFileType" = "sourcecode.swift";
+			"path" = "Fitness/Core/AppSettings.swift";
+			"sourceTree" = "<group>";
+		};
+		"C15862DB1263E4EFD6411BAA" = {
+			"isa" = "PBXFrameworksBuildPhase";
+			"buildActionMask" = 2147483647;
+			"files" = (
+			);
+			"runOnlyForDeploymentPostprocessing" = 0;
+		};
+		"C1831888895C1730947BFC4F" = {
+			"isa" = "PBXResourcesBuildPhase";
+			"buildActionMask" = 2147483647;
+			"files" = (
+				"9009B3B6440D8F62069B6C8D",
+				"FDDBBF72A25490A26236692C",
+			);
+			"runOnlyForDeploymentPostprocessing" = 0;
+		};
+		"C2FD5191A103CB85A50A4306" = {
+			"isa" = "PBXBuildFile";
+			"fileRef" = "978A309BE4D34A226976F113";
+		};
+		"C38E18CC299D72A52C979381" = {
+			"isa" = "PBXFileReference";
+			"lastKnownFileType" = "sourcecode.swift";
+			"path" = "Fitness/App/FitnessApp.swift";
+			"sourceTree" = "<group>";
+		};
+		"C5D7FA9F9EF52A11525CDE18" = {
+			"isa" = "PBXBuildFile";
+			"fileRef" = "FA633610CE0A78012732B83A";
+		};
+		"C85474DFCA9ED8CBEE4BB6BA" = {
+			"isa" = "PBXResourcesBuildPhase";
+			"buildActionMask" = 2147483647;
+			"files" = (
+				"02BBF35FC65F5B767C0E0636",
+			);
+			"runOnlyForDeploymentPostprocessing" = 0;
+		};
+		"D024F448A414587D82E64D30" = {
+			"isa" = "PBXBuildFile";
+			"fileRef" = "5B0C0032240DCE747BD4ACBF";
+		};
+		"D0CA5E5250F4ADE5942186D6" = {
+			"isa" = "PBXFileReference";
+			"lastKnownFileType" = "sourcecode.swift";
+			"path" = "Fitness/Services/SyncStatusService.swift";
+			"sourceTree" = "<group>";
+		};
+		"D537458C0EAA773DBD2BE962" = {
+			"isa" = "PBXBuildFile";
+			"fileRef" = "D8EB72A485BEA14308803FDD";
+		};
+		"D64C8595B84FF07B0CCBEC50" = {
+			"isa" = "PBXBuildFile";
+			"fileRef" = "D0CA5E5250F4ADE5942186D6";
+		};
+		"D75CC73EE8F13ECA77A6CDED" = {
+			"isa" = "PBXFileReference";
+			"lastKnownFileType" = "sourcecode.swift";
+			"path" = "Fitness/Features/Progress/ProgressView.swift";
+			"sourceTree" = "<group>";
+		};
+		"D8701D5EA7B64691847615F1" = {
+			"isa" = "PBXNativeTarget";
+			"buildConfigurationList" = "4558D607D3D924E1AF35A415";
+			"buildPhases" = (
+				"81A54C3FBF2192C096AD6447",
+				"C1831888895C1730947BFC4F",
+				"FDCE9580D7356AC388168E37",
+				"8336626A588BFF7E48225BCB",
+			);
+			"buildRules" = (
+			);
+			"dependencies" = (
+				"564B9226C170CA11CDCB3B33",
+			);
+			"name" = "Fitness";
+			"productName" = "Fitness";
+			"productReference" = "8C7330CACFE886B4029CFAE4";
+			"productType" = "com.apple.product-type.application";
+		};
+		"D8EB72A485BEA14308803FDD" = {
+			"isa" = "PBXFileReference";
+			"lastKnownFileType" = "sourcecode.swift";
+			"path" = "Fitness/Features/Plans/PlansView.swift";
+			"sourceTree" = "<group>";
+		};
+		"D97A08B1A1307F8C038ADACC" = {
+			"isa" = "PBXContainerItemProxy";
+			"containerPortal" = "244210E48437B6556980A702";
+			"proxyType" = 1;
+			"remoteGlobalIDString" = "D8701D5EA7B64691847615F1";
+			"remoteInfo" = "Fitness";
+		};
+		"DB59185D4CB3DA43395B5006" = {
+			"isa" = "PBXFileReference";
+			"lastKnownFileType" = "sourcecode.swift";
+			"path" = "Fitness/Core/BackupRecords.swift";
+			"sourceTree" = "<group>";
+		};
+		"DF3E9AFFFA4B5ED4AE64D25F" = {
+			"isa" = "XCConfigurationList";
+			"buildConfigurations" = (
+				"2053571DDF5315FCF7E094BE",
+				"36011C4B8A9C32130DE11409",
+			);
+			"defaultConfigurationIsVisible" = 0;
+			"defaultConfigurationName" = "Release";
+		};
+		"EC87155D8378A230BBC35666" = {
+			"isa" = "PBXBuildFile";
+			"fileRef" = "5E9530042CD26E17A92712FE";
+		};
+		"ECC462B31299AF0B7697FCC0" = {
+			"isa" = "XCBuildConfiguration";
+			"baseConfigurationReference" = "587BC806C8F58721B021912A";
+			"buildSettings" = {
+				"PRODUCT_NAME" = "$(TARGET_NAME)";
+				"SDKROOT" = "iphoneos";
+				"SUPPORTED_PLATFORMS" = "iphoneos iphonesimulator";
+				"SUPPORTS_MACCATALYST" = "NO";
+				"SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD" = "NO";
+				"GENERATE_INFOPLIST_FILE" = "NO";
+				"LD_RUNPATH_SEARCH_PATHS" = "$(inherited) @executable_path/Frameworks";
+				"PRODUCT_BUNDLE_IDENTIFIER" = "$(BUNDLE_IDENTIFIER)";
+				"PRODUCT_MODULE_NAME" = "Fitness";
+				"INFOPLIST_FILE" = "Fitness/Resources/Info.plist";
+				"CODE_SIGN_ENTITLEMENTS" = "Config/Fitness.entitlements";
+				"ASSETCATALOG_COMPILER_APPICON_NAME" = "AppIcon";
+				"ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME" = "AccentColor";
+				"SKIP_INSTALL" = "NO";
+			};
+			"name" = "Release";
+		};
+		"EECFB3FA6DCFAF66F0866C62" = {
+			"isa" = "PBXBuildFile";
+			"fileRef" = "79F6DC424ECD6C90A518EEB0";
+		};
+		"EEDFD399863E81F0BB28B9DC" = {
+			"isa" = "PBXBuildFile";
+			"fileRef" = "1A7070D46DAB7A6A7BB6D326";
+		};
+		"F08BF740DFA7D0514C7E31DA" = {
+			"isa" = "PBXFileReference";
+			"lastKnownFileType" = "sourcecode.swift";
+			"path" = "Fitness/Shared/WorkoutActivityAttributes.swift";
+			"sourceTree" = "<group>";
+		};
+		"F602DC732A863DFC29D43495" = {
+			"isa" = "PBXBuildFile";
+			"fileRef" = "1483C3F706351F056B0209B1";
+		};
+		"FA633610CE0A78012732B83A" = {
+			"isa" = "PBXFileReference";
+			"lastKnownFileType" = "sourcecode.swift";
+			"path" = "Fitness/Core/BackupService.swift";
+			"sourceTree" = "<group>";
+		};
+		"FC991FC71C663E216C16C3FE" = {
+			"isa" = "PBXFileReference";
+			"lastKnownFileType" = "sourcecode.swift";
+			"path" = "Fitness/Features/Progress/BodyMetricsView.swift";
+			"sourceTree" = "<group>";
+		};
+		"FD9C9A91039FACC98A74F9B4" = {
+			"isa" = "PBXFrameworksBuildPhase";
+			"buildActionMask" = 2147483647;
+			"files" = (
+			);
+			"runOnlyForDeploymentPostprocessing" = 0;
+		};
+		"FDCE9580D7356AC388168E37" = {
+			"isa" = "PBXFrameworksBuildPhase";
+			"buildActionMask" = 2147483647;
+			"files" = (
+			);
+			"runOnlyForDeploymentPostprocessing" = 0;
+		};
+		"FDD3EA28A0B1309668A442B2" = {
+			"isa" = "XCBuildConfiguration";
+			"baseConfigurationReference" = "587BC806C8F58721B021912A";
+			"buildSettings" = {
+				"ALWAYS_SEARCH_USER_PATHS" = "NO";
+				"CLANG_WARN_DOCUMENTATION_COMMENTS" = "YES";
+				"CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER" = "YES";
+				"GCC_WARN_64_TO_32_BIT_CONVERSION" = "YES";
+				"GCC_WARN_UNDECLARED_SELECTOR" = "YES";
+				"GCC_WARN_UNUSED_FUNCTION" = "YES";
+				"GCC_WARN_UNUSED_VARIABLE" = "YES";
+				"SWIFT_OPTIMIZATION_LEVEL" = "-Onone";
+				"DEBUG_INFORMATION_FORMAT" = "dwarf";
+				"SWIFT_ACTIVE_COMPILATION_CONDITIONS" = "DEBUG";
+				"ENABLE_TESTABILITY" = "YES";
+			};
+			"name" = "Debug";
+		};
+		"FDDBBF72A25490A26236692C" = {
+			"isa" = "PBXBuildFile";
+			"fileRef" = "07474934634FF715CA7535A4";
+		};
+		"FE3EC1D93220AF81B80CA654" = {
+			"isa" = "PBXFileReference";
+			"lastKnownFileType" = "text.plist.entitlements";
+			"path" = "Config/FitnessTests.entitlements";
+			"sourceTree" = "<group>";
+		};
+		"FFE2F64CA25C16FD7C84D3F8" = {
+			"isa" = "PBXBuildFile";
+			"fileRef" = "FC991FC71C663E216C16C3FE";
+		};
+	};
+	"rootObject" = "244210E48437B6556980A702";
+}

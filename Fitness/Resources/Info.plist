@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0"><dict>
+    <key>CFBundleDevelopmentRegion</key><string>ar</string>
+    <key>CFBundleLocalizations</key><array><string>ar</string></array>
+    <key>CFBundleDisplayName</key><string>وتيرة</string>
+    <key>CFBundleExecutable</key><string>$(EXECUTABLE_NAME)</string>
+    <key>CFBundleIdentifier</key><string>$(PRODUCT_BUNDLE_IDENTIFIER)</string>
+    <key>CFBundleInfoDictionaryVersion</key><string>6.0</string>
+    <key>CFBundleName</key><string>$(PRODUCT_NAME)</string>
+    <key>CFBundlePackageType</key><string>APPL</string>
+    <key>CFBundleShortVersionString</key><string>$(MARKETING_VERSION)</string>
+    <key>CFBundleVersion</key><string>$(CURRENT_PROJECT_VERSION)</string>
+    <key>LSRequiresIPhoneOS</key><true/>
+    <key>UILaunchScreen</key><dict><key>UIColorName</key><string>LaunchBackground</string><key>UIImageName</key><string>LaunchMark</string></dict>
+    <key>UISupportedInterfaceOrientations</key><array><string>UIInterfaceOrientationPortrait</string></array>
+    <key>UIApplicationSceneManifest</key><dict><key>UIApplicationSupportsMultipleScenes</key><false/></dict>
+    <key>NSSupportsLiveActivities</key><true/>
+    <key>NSFaceIDUsageDescription</key><string>لفتح التطبيق وصور تقدمك الخاصة باستخدام بصمة الوجه عند تفعيل القفل.</string>
+    <key>NSHealthShareUsageDescription</key><string>لقراءة الوزن والخطوات وعرضها في سجل تقدمك، والتحقق من الجلسات المحفوظة لمنع تكرارها، بعد موافقتك.</string>
+    <key>NSHealthUpdateUsageDescription</key><string>لحفظ جلسات التمرين المكتملة في تطبيق الصحة بعد موافقتك.</string>
+    <key>UIBackgroundModes</key><array><string>remote-notification</string></array>
+    <key>SharedAppGroup</key><string>$(APP_GROUP_IDENTIFIER)</string>
+    <key>CloudKitContainerIdentifier</key><string>$(CLOUDKIT_CONTAINER_IDENTIFIER)</string>
+    <key>CloudSyncEnabled</key><true/>
+    <key>CFBundleURLTypes</key><array><dict><key>CFBundleURLName</key><string>$(BUNDLE_IDENTIFIER)</string><key>CFBundleURLSchemes</key><array><string>wateera</string></array></dict></array>
+</dict></plist>
