@@ -57,14 +57,16 @@ final class SessionDeletionFlowTests: XCTestCase {
         reveal(history, in: app)
         // SwiftUI trailing actions are revealed with a rightward swipe in RTL.
         history.swipeRight()
-        let remove = app.buttons["حذف جلسة تمرين حر"]
+        // SwiftUI inserts bidirectional isolation marks around interpolated Arabic titles.
+        let remove = app.buttons.matching(NSPredicate(format: "label CONTAINS %@ AND label CONTAINS %@",
+                                                      "حذف جلسة", "تمرين حر")).firstMatch
         XCTAssertTrue(remove.waitForExistence(timeout: 5)); remove.tap()
         capture(app, name: "Arabic RTL history swipe deletion confirmation")
         app.alerts.buttons["تراجع"].tap()
         XCTAssertTrue(history.exists)
-        history.tap()
-        let delete = app.buttons["workout.summary.delete"]
-        reveal(delete, in: app); delete.tap()
+        history.swipeLeft()
+        history.swipeRight()
+        XCTAssertTrue(remove.waitForExistence(timeout: 5)); remove.tap()
         app.alerts.buttons["workout.delete.confirm"].tap()
         XCTAssertTrue(app.staticTexts["تاريخك يبدأ من هنا"].waitForExistence(timeout: 10))
         XCTAssertFalse(history.exists)
