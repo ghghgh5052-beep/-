@@ -297,10 +297,40 @@ enum FitnessSchemaV2: VersionedSchema {
     }
 }
 
+/// V3 is additive: shipped V1/V2 entities remain unchanged and keep every UUID reference.
+enum FitnessSchemaV3: VersionedSchema {
+    static let versionIdentifier = Schema.Version(3, 0, 0)
+    static var models: [any PersistentModel.Type] {
+        FitnessSchemaV2.models + [TrainingProfile.self]
+    }
+
+    @Model final class TrainingProfile {
+        var id: UUID = UUID()
+        var key: String = "smart-training"
+        var goalRaw: String = "hypertrophy"
+        var levelRaw: String = "beginner"
+        var equipmentRaw: String = "bodyweight"
+        var durationMinutes: Int = 45
+        var incrementKg: Double = 2.5
+        var updatedAt: Date = Date()
+
+        init(id: UUID = UUID(), key: String = "smart-training", goalRaw: String = "hypertrophy",
+             levelRaw: String = "beginner", equipmentRaw: String = "bodyweight",
+             durationMinutes: Int = 45, incrementKg: Double = 2.5, updatedAt: Date = Date()) {
+            self.id = id; self.key = key; self.goalRaw = goalRaw; self.levelRaw = levelRaw
+            self.equipmentRaw = equipmentRaw; self.durationMinutes = durationMinutes
+            self.incrementKg = incrementKg; self.updatedAt = updatedAt
+        }
+    }
+}
+
 enum FitnessMigrationPlan: SchemaMigrationPlan {
-    static var schemas: [any VersionedSchema.Type] { [FitnessSchemaV1.self, FitnessSchemaV2.self] }
+    static var schemas: [any VersionedSchema.Type] {
+        [FitnessSchemaV1.self, FitnessSchemaV2.self, FitnessSchemaV3.self]
+    }
     static var stages: [MigrationStage] {
-        [.lightweight(fromVersion: FitnessSchemaV1.self, toVersion: FitnessSchemaV2.self)]
+        [.lightweight(fromVersion: FitnessSchemaV1.self, toVersion: FitnessSchemaV2.self),
+         .lightweight(fromVersion: FitnessSchemaV2.self, toVersion: FitnessSchemaV3.self)]
     }
 }
 
@@ -317,3 +347,4 @@ typealias FitnessGoal = FitnessSchemaV1.FitnessGoal
 typealias WorkoutReminder = FitnessSchemaV1.WorkoutReminder
 typealias PersonalRecord = FitnessSchemaV2.PersonalRecord
 typealias UserPreferences = FitnessSchemaV1.UserPreferences
+typealias TrainingProfile = FitnessSchemaV3.TrainingProfile

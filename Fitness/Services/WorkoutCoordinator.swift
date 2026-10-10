@@ -123,6 +123,80 @@ final class WorkoutCoordinator {
         }
     }
 
+    /// Previewing generates no workout records. Persist its accepted prescription atomically on Start.
+    func start(preview: SmartWorkoutPreview, context: ModelContext) {
+        guard !isBusy else { return }
+        self.context = context
+        do {
+            let existing = try context.fetch(FetchDescriptor<WorkoutSession>(
+                predicate: #Predicate { $0.statusRaw == "active" || $0.statusRaw == "paused" },
+                sortBy: [SortDescriptor(\.start, order: .reverse)]))
+            if let session = existing.first {
+                activeSessionID = session.id
+                startClock()
+                refreshActivity()
+                errorMessage = "لديك تمرين جارٍ. أكمله أولًا أو تابع من حيث توقفت."
+                return
+            }
+            guard !preview.exercises.isEmpty, preview.exercises.count <= 20,
+                  Set(preview.exercises.map(\.exerciseID)).count == preview.exercises.count,
+                  preview.exercises.allSatisfy({ $0.mode == .reps && (1...20).contains($0.sets)
+                    && (1...100).contains($0.reps) && (0...3600).contains($0.restSeconds)
+                    && ($0.weightKg.map { $0.isFinite && (0...2_000).contains($0) } ?? true)
+                    && (!SmartTrainingStore.requiresExternalLoad(exerciseID: $0.exerciseID)
+                        || $0.weightKg == nil || ($0.weightKg ?? 0) > 0) }) else {
+                errorMessage = "تعذر بدء هذه الجلسة المقترحة. عدّل الخيارات وأنشئ اقتراحًا جديدًا."
+                return
+            }
+            let definitions = try context.fetch(FetchDescriptor<Exercise>())
+            let byID = Dictionary(definitions.map { ($0.id, $0) }, uniquingKeysWith: {
+                $0.updatedAt >= $1.updatedAt ? $0 : $1
+            })
+            guard preview.exercises.allSatisfy({ item in
+                guard let definition = byID[item.exerciseID], !definition.isArchived, !definition.isCustom,
+                      let metadata = SmartExerciseMetadata.forBuiltInID(item.exerciseID) else { return false }
+                return metadata.mode == .reps
+            }) else {
+                errorMessage = "تغيرت مكتبة التمارين. أنشئ اقتراحًا جديدًا قبل البدء."
+                return
+            }
+            // Commit unrelated edits first so rollback only undoes this new session.
+            try context.save()
+            let previousAutosave = context.autosaveEnabled
+            context.autosaveEnabled = false
+            defer { context.autosaveEnabled = previousAutosave }
+            do {
+                let title = preview.titleArabic.trimmingCharacters(in: .whitespacesAndNewlines)
+                let session = WorkoutSession(title: title.isEmpty ? "جلسة مقترحة" : title,
+                    notes: "جلسة مقترحة من سجل تدريبك وخياراتك. الأوزان قابلة للتعديل.")
+                context.insert(session)
+                for (order, item) in preview.exercises.enumerated() {
+                    guard let definition = byID[item.exerciseID] else { continue }
+                    let note = [definition.notes, item.reason].filter { !$0.isEmpty }.joined(separator: "\n")
+                    let movement = SessionExercise(sessionID: session.id, exerciseID: definition.id,
+                        name: definition.name, order: order, notes: note, restSeconds: item.restSeconds)
+                    context.insert(movement)
+                    for index in 0..<item.sets {
+                        context.insert(LoggedSet(sessionExerciseID: movement.id, order: index,
+                            weightKg: item.weightKg ?? 0, reps: item.reps, kindRaw: "working"))
+                    }
+                }
+                try context.save()
+                activeSessionID = session.id
+                now = .now
+                errorMessage = nil
+                startClock()
+                refreshActivity()
+                WidgetSnapshotService.refresh(context: context, settings: settings)
+            } catch {
+                context.rollback()
+                throw error
+            }
+        } catch {
+            errorMessage = "تعذر حفظ الجلسة المقترحة. تحقق من مساحة الجهاز وحاول مرة أخرى."
+        }
+    }
+
     func resume(session: WorkoutSession, context: ModelContext) {
         guard session.statusRaw != "completed", !isBusy else { return }
         self.context = context

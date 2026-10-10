@@ -24,6 +24,12 @@
 			"isa" = "PBXBuildFile";
 			"fileRef" = "07474934634FF715CA7535A4";
 		};
+		"02EC1B65C2B2B7555A8E69CF" = {
+			"isa" = "PBXFileReference";
+			"lastKnownFileType" = "sourcecode.swift";
+			"path" = "Fitness/Features/Smart/SmartWorkoutView.swift";
+			"sourceTree" = "<group>";
+		};
 		"04308E09A2F00249BCFF9D1F" = {
 			"isa" = "PBXSourcesBuildPhase";
 			"buildActionMask" = 2147483647;
@@ -126,6 +132,10 @@
 			"productReference" = "74AC70F4700729D69F65A50F";
 			"productType" = "com.apple.product-type.bundle.unit-test";
 		};
+		"0CFB3C430B01AA0BEA13802C" = {
+			"isa" = "PBXBuildFile";
+			"fileRef" = "C7802CD21885F78131C8ED22";
+		};
 		"0FC0BA5D8FDCBD5CC40C2CB7" = {
 			"isa" = "PBXSourcesBuildPhase";
 			"buildActionMask" = 2147483647;
@@ -135,6 +145,9 @@
 				"1DBB5FE401445F547C7E8976",
 				"B5DD6CE095C80D53296CFC6C",
 				"CDC98DEFE7075F7C8AFA4C95",
+				"59B5E00533FAA4704A66AE80",
+				"1E7EEC9B8188AE678C84CCEE",
+				"8F8B8473C3D9AB4C45BF88BD",
 			);
 			"runOnlyForDeploymentPostprocessing" = 0;
 		};
@@ -211,6 +224,14 @@
 		"1DBB5FE401445F547C7E8976" = {
 			"isa" = "PBXBuildFile";
 			"fileRef" = "8EE21803167E9353254B4070";
+		};
+		"1E7EEC9B8188AE678C84CCEE" = {
+			"isa" = "PBXBuildFile";
+			"fileRef" = "3253D4FDF9CE1DC0B67CDFB1";
+		};
+		"1ED9ADE4FD094EBD49C9EA89" = {
+			"isa" = "PBXBuildFile";
+			"fileRef" = "9D5E9420696B537F02AD20B5";
 		};
 		"1F2146A8339CB7582679C8D2" = {
 			"isa" = "PBXTargetDependency";
@@ -325,8 +346,15 @@
 			"buildActionMask" = 2147483647;
 			"files" = (
 				"D024F448A414587D82E64D30",
+				"9D8C4CB4448B1E250AA7FF45",
 			);
 			"runOnlyForDeploymentPostprocessing" = 0;
+		};
+		"3253D4FDF9CE1DC0B67CDFB1" = {
+			"isa" = "PBXFileReference";
+			"lastKnownFileType" = "sourcecode.swift";
+			"path" = "FitnessTests/SmartPersistenceTests.swift";
+			"sourceTree" = "<group>";
 		};
 		"331F7E7A99539A441C118A4F" = {
 			"isa" = "PBXBuildFile";
@@ -385,6 +413,12 @@
 			"isa" = "PBXFileReference";
 			"lastKnownFileType" = "sourcecode.swift";
 			"path" = "Fitness/Core/ExerciseGuides.swift";
+			"sourceTree" = "<group>";
+		};
+		"3FEFE94428CA4EA6B06B374A" = {
+			"isa" = "PBXFileReference";
+			"lastKnownFileType" = "sourcecode.swift";
+			"path" = "Fitness/Core/SmartTraining.swift";
 			"sourceTree" = "<group>";
 		};
 		"41477369EB116BB930ACE1F3" = {
@@ -464,6 +498,10 @@
 			"path" = "Config/Identifiers.xcconfig";
 			"sourceTree" = "<group>";
 		};
+		"59B5E00533FAA4704A66AE80" = {
+			"isa" = "PBXBuildFile";
+			"fileRef" = "88E2942AE42FCDDE1F30EA67";
+		};
 		"5B0C0032240DCE747BD4ACBF" = {
 			"isa" = "PBXFileReference";
 			"lastKnownFileType" = "sourcecode.swift";
@@ -498,6 +536,12 @@
 			"isa" = "PBXFileReference";
 			"lastKnownFileType" = "sourcecode.swift";
 			"path" = "Fitness/Services/AppLockService.swift";
+			"sourceTree" = "<group>";
+		};
+		"6F21F4047E5A9711F638FDB9" = {
+			"isa" = "PBXFileReference";
+			"lastKnownFileType" = "sourcecode.swift";
+			"path" = "Fitness/Services/SmartTrainingStore.swift";
 			"sourceTree" = "<group>";
 		};
 		"6F30B9597462BC97F7C3AE8D" = {
@@ -542,6 +586,10 @@
 			"path" = "Fitness/Core/Models.swift";
 			"sourceTree" = "<group>";
 		};
+		"7B5E63657E7D9A15043D8F0E" = {
+			"isa" = "PBXBuildFile";
+			"fileRef" = "3FEFE94428CA4EA6B06B374A";
+		};
 		"7C14CE1335DA8BC756A6D586" = {
 			"isa" = "PBXFileReference";
 			"lastKnownFileType" = "sourcecode.swift";
@@ -557,6 +605,10 @@
 		"7CBDCCDB2D31C4EF0A6F7642" = {
 			"isa" = "PBXBuildFile";
 			"fileRef" = "39628AFE920C9FB6E71C3606";
+		};
+		"7D61A4B5532EE76BC3332D30" = {
+			"isa" = "PBXBuildFile";
+			"fileRef" = "02EC1B65C2B2B7555A8E69CF";
 		};
 		"81A54C3FBF2192C096AD6447" = {
 			"isa" = "PBXSourcesBuildPhase";
@@ -574,6 +626,7 @@
 				"EECFB3FA6DCFAF66F0866C62",
 				"0B4CB22FFD4047865B526E16",
 				"331F7E7A99539A441C118A4F",
+				"7B5E63657E7D9A15043D8F0E",
 				"0883AAE4D46827E570032B05",
 				"D537458C0EAA773DBD2BE962",
 				"FFE2F64CA25C16FD7C84D3F8",
@@ -583,11 +636,15 @@
 				"EA130D6319C884176F672524",
 				"8D183511F5B6CD570034102E",
 				"70FE23A687B6DD4F2C8BCC6E",
+				"0CFB3C430B01AA0BEA13802C",
+				"1ED9ADE4FD094EBD49C9EA89",
+				"7D61A4B5532EE76BC3332D30",
 				"18A938EB1F17E355D063A29B",
 				"9BF33274A547910014EDFA52",
 				"136F613483BD7B3AC1F30B9E",
 				"916DEEB44AB78546B40402A0",
 				"AF483BA74508E3879D6C9A5E",
+				"A91B1D7C162064ABFF8E84C1",
 				"D64C8595B84FF07B0CCBEC50",
 				"1FF230346C0F2B2926D612DE",
 				"01FCECD1A9942D74984614CF",
@@ -629,6 +686,12 @@
 			};
 			"name" = "Debug";
 		};
+		"88E2942AE42FCDDE1F30EA67" = {
+			"isa" = "PBXFileReference";
+			"lastKnownFileType" = "sourcecode.swift";
+			"path" = "FitnessTests/SmartAdjustmentTests.swift";
+			"sourceTree" = "<group>";
+		};
 		"8C7330CACFE886B4029CFAE4" = {
 			"isa" = "PBXFileReference";
 			"explicitFileType" = "wrapper.application";
@@ -669,6 +732,10 @@
 			"lastKnownFileType" = "sourcecode.swift";
 			"path" = "FitnessTests/ExerciseGuideTests.swift";
 			"sourceTree" = "<group>";
+		};
+		"8F8B8473C3D9AB4C45BF88BD" = {
+			"isa" = "PBXBuildFile";
+			"fileRef" = "ED1BA5967B62DCD25D79B387";
 		};
 		"9009B3B6440D8F62069B6C8D" = {
 			"isa" = "PBXBuildFile";
@@ -762,6 +829,16 @@
 			"isa" = "PBXBuildFile";
 			"fileRef" = "6CC7BC08993DD9AA20C57F6F";
 		};
+		"9D5E9420696B537F02AD20B5" = {
+			"isa" = "PBXFileReference";
+			"lastKnownFileType" = "sourcecode.swift";
+			"path" = "Fitness/Features/Smart/MuscleRecoveryView.swift";
+			"sourceTree" = "<group>";
+		};
+		"9D8C4CB4448B1E250AA7FF45" = {
+			"isa" = "PBXBuildFile";
+			"fileRef" = "A71A5FAA8BF8CD18E840AB35";
+		};
 		"9E5748D5F8047FB167FDAB1F" = {
 			"isa" = "PBXFileReference";
 			"lastKnownFileType" = "sourcecode.swift";
@@ -779,6 +856,16 @@
 			"lastKnownFileType" = "sourcecode.swift";
 			"path" = "Fitness/Services/HealthService.swift";
 			"sourceTree" = "<group>";
+		};
+		"A71A5FAA8BF8CD18E840AB35" = {
+			"isa" = "PBXFileReference";
+			"lastKnownFileType" = "sourcecode.swift";
+			"path" = "FitnessUITests/SmartFlowTests.swift";
+			"sourceTree" = "<group>";
+		};
+		"A91B1D7C162064ABFF8E84C1" = {
+			"isa" = "PBXBuildFile";
+			"fileRef" = "6F21F4047E5A9711F638FDB9";
 		};
 		"AA0596BBDB4DCC95D5D4F10C" = {
 			"isa" = "PBXGroup";
@@ -800,6 +887,7 @@
 				"79F6DC424ECD6C90A518EEB0",
 				"38C5343769F448EBA64C70E7",
 				"9E88AFB09EEBBBB308A98BFB",
+				"3FEFE94428CA4EA6B06B374A",
 				"0514190CFE0886DBA806DC45",
 				"D8EB72A485BEA14308803FDD",
 				"FC991FC71C663E216C16C3FE",
@@ -809,6 +897,9 @@
 				"E65AF423B244042ABE0D737B",
 				"6F30B9597462BC97F7C3AE8D",
 				"44AFCD9AEB6D473DE997612B",
+				"C7802CD21885F78131C8ED22",
+				"9D5E9420696B537F02AD20B5",
+				"02EC1B65C2B2B7555A8E69CF",
 				"53F97FB6B28D89D0DF108AA0",
 				"31D8E6147E52899B87674B84",
 				"5D3A34575B9BA145E2F50E95",
@@ -817,6 +908,7 @@
 				"A17894E9718EA370ED10C0F4",
 				"38CA885666E316E20EBB009B",
 				"B443ED7EFF83950FFD2D826D",
+				"6F21F4047E5A9711F638FDB9",
 				"D0CA5E5250F4ADE5942186D6",
 				"1BFFF990FA8A25246CE4EAE5",
 				"7C14CE1335DA8BC756A6D586",
@@ -828,7 +920,11 @@
 				"8EE21803167E9353254B4070",
 				"494CD3D7C8C54C5634F92E71",
 				"7C59A5F5235F288C7F384420",
+				"88E2942AE42FCDDE1F30EA67",
+				"3253D4FDF9CE1DC0B67CDFB1",
+				"ED1BA5967B62DCD25D79B387",
 				"5B0C0032240DCE747BD4ACBF",
+				"A71A5FAA8BF8CD18E840AB35",
 				"1483C3F706351F056B0209B1",
 				"985BDAB13FCED7157EEAECC5",
 				"6F7199ED7B63CDA338A0FB82",
@@ -895,6 +991,12 @@
 		"C5D7FA9F9EF52A11525CDE18" = {
 			"isa" = "PBXBuildFile";
 			"fileRef" = "FA633610CE0A78012732B83A";
+		};
+		"C7802CD21885F78131C8ED22" = {
+			"isa" = "PBXFileReference";
+			"lastKnownFileType" = "sourcecode.swift";
+			"path" = "Fitness/Features/Smart/ExerciseAdviceView.swift";
+			"sourceTree" = "<group>";
 		};
 		"C85474DFCA9ED8CBEE4BB6BA" = {
 			"isa" = "PBXResourcesBuildPhase";
@@ -1013,6 +1115,12 @@
 				"SKIP_INSTALL" = "NO";
 			};
 			"name" = "Release";
+		};
+		"ED1BA5967B62DCD25D79B387" = {
+			"isa" = "PBXFileReference";
+			"lastKnownFileType" = "sourcecode.swift";
+			"path" = "FitnessTests/SmartTrainingTests.swift";
+			"sourceTree" = "<group>";
 		};
 		"EECFB3FA6DCFAF66F0866C62" = {
 			"isa" = "PBXBuildFile";

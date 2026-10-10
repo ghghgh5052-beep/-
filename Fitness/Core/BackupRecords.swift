@@ -511,3 +511,39 @@ struct PersonalRecordRecord: Codable {
         return model
     }
 }
+
+struct TrainingProfileRecord: Codable {
+    var id: UUID
+    var key: String
+    var goalRaw: String
+    var levelRaw: String
+    var equipmentRaw: String
+    var durationMinutes: Int
+    var incrementKg: Double
+    var updatedAt: Date
+    init(_ model: TrainingProfile) {
+        id = model.id
+        key = model.key
+        goalRaw = model.goalRaw
+        levelRaw = model.levelRaw
+        equipmentRaw = model.equipmentRaw
+        durationMinutes = model.durationMinutes
+        incrementKg = model.incrementKg
+        updatedAt = model.updatedAt
+    }
+    func apply(to model: TrainingProfile) {
+        model.id = id
+        model.key = key
+        model.goalRaw = goalRaw
+        model.levelRaw = levelRaw
+        model.equipmentRaw = equipmentRaw
+        model.durationMinutes = durationMinutes
+        model.incrementKg = incrementKg
+        model.updatedAt = updatedAt
+    }
+    func makeModel() -> TrainingProfile {
+        let model = TrainingProfile()
+        apply(to: model)
+        return model
+    }
+}

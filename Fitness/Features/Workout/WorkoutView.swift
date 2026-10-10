@@ -11,6 +11,7 @@ import UIKit
     @Query private var days: [PlanDay]
     @State private var historySession: WorkoutSession?
     @State private var showingCalculator = false
+    @State private var showingSmartWorkout = false
 
     private var activeSession: WorkoutSession? {
         sessions.first { $0.id == coordinator.activeSessionID && $0.statusRaw != "completed" }
@@ -50,6 +51,9 @@ import UIKit
                                 Button { coordinator.start(day: nil, context: context) } label: {
                                     Label("ابدأ تمرينًا حرًا", systemImage: "plus").frame(maxWidth: .infinity, minHeight: 32)
                                 }.buttonStyle(.bordered).accessibilityIdentifier("workout.start")
+                                Button { showingSmartWorkout = true } label: {
+                                    Label("اقترح لي تمرينًا", systemImage: "sparkles").frame(maxWidth: .infinity, minHeight: 38)
+                                }.buttonStyle(.bordered).accessibilityIdentifier("workout.smart")
                             }.padding(.vertical, 8)
                         }
                         if sessions.contains(where: { $0.statusRaw == "completed" }) {
@@ -84,6 +88,7 @@ import UIKit
             }
             .sheet(item: $historySession) { session in WorkoutSummaryView(session: session) }
             .sheet(isPresented: $showingCalculator) { WorkoutCalculatorSheet() }
+            .sheet(isPresented: $showingSmartWorkout) { NavigationStack { SmartWorkoutView() } }
             .onChange(of: coordinator.activeSessionID) { previous, current in
                 if current == nil, let previous, let ended = sessions.first(where: { $0.id == previous && $0.statusRaw == "completed" }) { historySession = ended }
             }
@@ -285,6 +290,7 @@ import UIKit
     @State private var showingDetails = false
     @State private var showingWarmup = false
     @State private var showingGuide = false
+    @State private var showingAdvice = false
     @State private var confirmingRemove = false
     @State private var errorMessage: String?
 
@@ -308,9 +314,13 @@ import UIKit
                 Menu {
                     Button { showingDetails = true } label: { Label("الملاحظات والراحة", systemImage: "note.text") }
                     Button { showingWarmup = true } label: { Label("إضافة جولات إحماء", systemImage: "flame") }
+                    if SmartExerciseMetadata.forBuiltInID(exercise.exerciseID)?.mode == .reps {
+                        Button { showingAdvice = true } label: { Label("اقتراح الأوزان والتكرارات", systemImage: "sparkles") }
+                    }
                     Button { coordinator.startRest(seconds: exercise.restSeconds) } label: { Label("بدء الراحة", systemImage: "timer") }
                     Button(role: .destructive) { confirmingRemove = true } label: { Label("إزالة من الجلسة", systemImage: "trash") }
                 } label: { Image(systemName: "ellipsis").frame(minWidth: 44, minHeight: 44) }.disabled(paused).accessibilityLabel("خيارات \(exercise.name)")
+                    .accessibilityIdentifier("workout.exercise.options.\(exercise.exerciseID.uuidString)")
             }
             if ExerciseGuides.guide(for: exercise.exerciseID) != nil {
                 Button { showingGuide = true } label: {
@@ -348,6 +358,7 @@ import UIKit
                 ExerciseGuideSheet(guide: guide, exerciseName: exercise.name)
             }
         }
+        .sheet(isPresented: $showingAdvice) { NavigationStack { ExerciseAdviceView(exercise: exercise) } }
         .sheet(isPresented: $showingDetails) {
             NavigationStack {
                 Form {

@@ -21,7 +21,7 @@ enum PersistenceFailure: LocalizedError {
 
 @MainActor
 enum PersistenceController {
-    static var schema: Schema { Schema(versionedSchema: FitnessSchemaV2.self) }
+    static var schema: Schema { Schema(versionedSchema: FitnessSchemaV3.self) }
 
     static func makeContainer(useCloudKit: Bool = false, inMemory: Bool = false,
                               storeURL: URL? = nil,
@@ -137,6 +137,10 @@ enum PersistenceController {
             fingerprint([$0.id.uuidString, $0.exerciseID.uuidString, $0.sessionID?.uuidString ?? "",
                          $0.setID?.uuidString ?? "", $0.kindRaw, String($0.value), String($0.weightKg),
                          date($0.achievedAt), $0.formulaRaw])
+        }
+        removed += try deduplicate(context, type: TrainingProfile.self, key: { $0.key }, updated: { $0.updatedAt }) {
+            fingerprint([$0.id.uuidString, $0.key, $0.goalRaw, $0.levelRaw, $0.equipmentRaw,
+                         String($0.durationMinutes), String($0.incrementKg)])
         }
         // Concurrent selection of two distinct plans must still leave one active schedule.
         let activePlans = try context.fetch(FetchDescriptor<WorkoutPlan>()).filter { $0.isActive && !$0.isArchived }

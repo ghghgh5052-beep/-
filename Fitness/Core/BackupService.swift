@@ -12,7 +12,7 @@ struct BackupFile: FileDocument {
 }
 
 struct BackupEnvelope: Codable {
-    var formatVersion = 1
+    var formatVersion = 2
     var exportedAt = Date()
     var exercises: [ExerciseRecord]
     var plans: [WorkoutPlanRecord]
@@ -27,7 +27,36 @@ struct BackupEnvelope: Codable {
     var reminders: [WorkoutReminderRecord]
     var preferences: [UserPreferencesRecord]
     var records: [PersonalRecordRecord]
-    var totalCount: Int { exercises.count + plans.count + days.count + planExercises.count + sessions.count + sessionExercises.count + sets.count + metrics.count + photos.count + goals.count + reminders.count + preferences.count + records.count }
+    var trainingProfiles: [TrainingProfileRecord] = []
+    var totalCount: Int { exercises.count + plans.count + days.count + planExercises.count + sessions.count + sessionExercises.count + sets.count + metrics.count + photos.count + goals.count + reminders.count + preferences.count + records.count + trainingProfiles.count }
+
+    enum CodingKeys: String, CodingKey {
+        case formatVersion, exportedAt, exercises, plans, days, planExercises, sessions
+        case sessionExercises, sets, metrics, photos, goals, reminders, preferences, records, trainingProfiles
+    }
+}
+
+extension BackupEnvelope {
+    /// Earlier JSON backups have no trainingProfiles field; all their original arrays stay required.
+    init(from decoder: Decoder) throws {
+        let values = try decoder.container(keyedBy: CodingKeys.self)
+        self.init(formatVersion: try values.decode(Int.self, forKey: .formatVersion),
+            exportedAt: try values.decode(Date.self, forKey: .exportedAt),
+            exercises: try values.decode([ExerciseRecord].self, forKey: .exercises),
+            plans: try values.decode([WorkoutPlanRecord].self, forKey: .plans),
+            days: try values.decode([PlanDayRecord].self, forKey: .days),
+            planExercises: try values.decode([PlanExerciseRecord].self, forKey: .planExercises),
+            sessions: try values.decode([WorkoutSessionRecord].self, forKey: .sessions),
+            sessionExercises: try values.decode([SessionExerciseRecord].self, forKey: .sessionExercises),
+            sets: try values.decode([LoggedSetRecord].self, forKey: .sets),
+            metrics: try values.decode([BodyMetricRecord].self, forKey: .metrics),
+            photos: try values.decode([ProgressPhotoRecord].self, forKey: .photos),
+            goals: try values.decode([FitnessGoalRecord].self, forKey: .goals),
+            reminders: try values.decode([WorkoutReminderRecord].self, forKey: .reminders),
+            preferences: try values.decode([UserPreferencesRecord].self, forKey: .preferences),
+            records: try values.decode([PersonalRecordRecord].self, forKey: .records),
+            trainingProfiles: try values.decodeIfPresent([TrainingProfileRecord].self, forKey: .trainingProfiles) ?? [])
+    }
 }
 
 enum BackupError: Error, LocalizedError {
@@ -56,7 +85,8 @@ enum BackupError: Error, LocalizedError {
                        goals: try context.fetch(FetchDescriptor<FitnessGoal>()).map(FitnessGoalRecord.init),
                        reminders: try context.fetch(FetchDescriptor<WorkoutReminder>()).map(WorkoutReminderRecord.init),
                        preferences: try context.fetch(FetchDescriptor<UserPreferences>()).map(UserPreferencesRecord.init),
-                       records: try context.fetch(FetchDescriptor<PersonalRecord>()).map(PersonalRecordRecord.init))
+                       records: try context.fetch(FetchDescriptor<PersonalRecord>()).map(PersonalRecordRecord.init),
+                       trainingProfiles: try context.fetch(FetchDescriptor<TrainingProfile>()).map(TrainingProfileRecord.init))
     }
     static func encode(context: ModelContext) throws -> Data {
         try PersistenceController.reconcile(context: context)
@@ -81,13 +111,21 @@ enum BackupError: Error, LocalizedError {
         }
         let backup: BackupEnvelope
         do { backup = try decoder.decode(BackupEnvelope.self, from: data) } catch { throw BackupError.invalidFormat }
-        guard backup.formatVersion == 1, backup.totalCount < 2_000_000 else { throw BackupError.invalidFormat }
+        guard [1, 2].contains(backup.formatVersion), backup.totalCount < 2_000_000 else { throw BackupError.invalidFormat }
         try validate(backup)
         return backup
     }
     static func validate(_ backup: BackupEnvelope) throws {
+        guard [1, 2].contains(backup.formatVersion) else { throw BackupError.invalidFormat }
         func unique<R>(_ records: [R], _ id: KeyPath<R, UUID>) -> Bool { Set(records.map { $0[keyPath: id] }).count == records.count }
         guard unique(backup.exercises, \.id), unique(backup.plans, \.id), unique(backup.days, \.id), unique(backup.planExercises, \.id), unique(backup.sessions, \.id), unique(backup.sessionExercises, \.id), unique(backup.sets, \.id), unique(backup.metrics, \.id), unique(backup.photos, \.id), unique(backup.goals, \.id), unique(backup.reminders, \.id), unique(backup.preferences, \.id), unique(backup.records, \.id), Set(backup.preferences.map(\.key)).count == backup.preferences.count else { throw BackupError.invalidValues }
+        guard unique(backup.trainingProfiles, \.id),
+              Set(backup.trainingProfiles.map(\.key)).count == backup.trainingProfiles.count,
+              backup.trainingProfiles.allSatisfy({ $0.key == SmartTrainingStore.profileKey
+                  && SmartTrainingStore.validProfile(goal: $0.goalRaw, level: $0.levelRaw,
+                    equipment: $0.equipmentRaw, duration: $0.durationMinutes, increment: $0.incrementKg) }) else {
+            throw BackupError.invalidValues
+        }
         func valid(_ value: Double?) -> Bool { value == nil || (value?.isFinite == true && (value ?? -1) >= 0 && (value ?? 0) <= 10_000_000) }
         guard backup.sets.allSatisfy({ valid($0.weightKg) && (0...10000).contains($0.reps) && ($0.rpe == nil || (0...10).contains($0.rpe ?? -1)) && ["warmup", "working", "drop", "failure"].contains($0.kindRaw) }),
               backup.metrics.allSatisfy({ valid($0.weightKg) && valid($0.chestCm) && valid($0.waistCm) && valid($0.armCm) && valid($0.hipsCm) && valid($0.thighCm) && ($0.fatPercent == nil || (0...100).contains($0.fatPercent ?? -1)) }),
@@ -130,6 +168,23 @@ enum BackupError: Error, LocalizedError {
             try merge(backup.reminders, context: context, model: WorkoutReminder.self, id: \.id, date: \.updatedAt, recordID: \.id, recordDate: \.updatedAt, make: { $0.makeModel() }, apply: { $0.apply(to: $1) })
             try merge(backup.preferences, context: context, model: UserPreferences.self, id: \.id, date: \.updatedAt, recordID: \.id, recordDate: \.updatedAt, make: { $0.makeModel() }, apply: { $0.apply(to: $1) })
             try merge(backup.records, context: context, model: PersonalRecord.self, id: \.id, date: \.updatedAt, recordID: \.id, recordDate: \.updatedAt, make: { $0.makeModel() }, apply: { $0.apply(to: $1) })
+            // Profiles are singletons by key, even when an import originated on another device.
+            let profiles = try context.fetch(FetchDescriptor<TrainingProfile>())
+            var byKey = Dictionary(profiles.map { ($0.key, $0) }, uniquingKeysWith: {
+                $0.updatedAt >= $1.updatedAt ? $0 : $1
+            })
+            for record in backup.trainingProfiles {
+                if let profile = byKey[record.key] {
+                    if record.updatedAt > profile.updatedAt { record.apply(to: profile) }
+                } else {
+                    let profile = record.makeModel()
+                    context.insert(profile)
+                    byKey[record.key] = profile
+                }
+            }
+            for profile in profiles {
+                if let survivor = byKey[profile.key], survivor !== profile { context.delete(profile) }
+            }
             try context.save()
         } catch { context.rollback(); throw error }
     }

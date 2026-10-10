@@ -1,4 +1,5 @@
 import SwiftUI
+import UIKit
 
 @MainActor struct StatCard: View {
     let title: String
@@ -35,11 +36,22 @@ import SwiftUI
 @MainActor struct NumericField: View {
     let title: String
     @Binding var value: String
+    var selectOnFocus = false
+    @FocusState private var focused: Bool
     var body: some View {
         TextField(title, text: $value)
             .keyboardType(.decimalPad)
             .multilineTextAlignment(.trailing)
             .accessibilityLabel(title)
+            .focused($focused)
+            .onChange(of: focused) { _, active in
+                guard active && selectOnFocus else { return }
+                DispatchQueue.main.async {
+                    if focused {
+                        UIApplication.shared.sendAction(#selector(UITextField.selectAll(_:)), to: nil, from: nil, for: nil)
+                    }
+                }
+            }
     }
 }
 

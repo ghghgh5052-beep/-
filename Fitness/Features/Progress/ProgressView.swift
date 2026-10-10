@@ -86,6 +86,10 @@ import Charts
                     Picker("الفترة", selection: $range) {
                         Text("شهر").tag(30); Text("ثلاثة أشهر").tag(90); Text("سنة").tag(365); Text("سنتان").tag(730)
                     }.pickerStyle(.segmented)
+                    NavigationLink { MuscleRecoveryView() } label: {
+                        Label("خريطة العضلات والتعافي التقديري", systemImage: "figure.stand")
+                            .frame(maxWidth: .infinity, minHeight: 44, alignment: .leading)
+                    }.buttonStyle(.bordered).accessibilityIdentifier("progress.recovery")
                     if finished.isEmpty {
                         EmptyState(title: "كل مجموعة تصنع فرقًا", message: "أكمل أول جلسة لتظهر أحجام تدريبك وأرقامك الشخصية هنا.", symbol: "chart.xyaxis.line")
                     } else {
