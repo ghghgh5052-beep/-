@@ -166,7 +166,11 @@ final class SmartFlowTests: XCTestCase {
                     scrollUp = bounds.midY > app.frame.midY
                 }
             }
-            if scrollUp { app.swipeUp() } else { app.swipeDown() }
+            // Short, slow drags avoid oscillating past a small target on SE.
+            // Holding before release also stops momentum at the destination.
+            let from = app.coordinate(withNormalizedOffset: CGVector(dx: 0.5, dy: scrollUp ? 0.70 : 0.40))
+            let to = app.coordinate(withNormalizedOffset: CGVector(dx: 0.5, dy: scrollUp ? 0.40 : 0.70))
+            from.press(forDuration: 0.05, thenDragTo: to, withVelocity: .slow, thenHoldForDuration: 0.05)
         }
         if !element.exists || !element.isHittable {
             capture(app, name: "Unreachable element " + element.identifier)
