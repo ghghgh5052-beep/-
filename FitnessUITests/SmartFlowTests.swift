@@ -81,6 +81,9 @@ final class SmartFlowTests: XCTestCase {
         let calves = app.buttons["recovery.region.calves"]
         reveal(calves, in: app)
         XCTAssertTrue(calves.label.contains("غير محدد"))
+        calves.tap()
+        reveal(readiness, in: app, up: false)
+        XCTAssertTrue(readiness.label.contains("غير محدد"))
         capture(app, name: "Arabic recovery distinguishes trained and unknown muscles")
     }
 

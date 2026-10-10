@@ -151,7 +151,6 @@ import SwiftData
             }.frame(minHeight: 52).padding(.horizontal, 16).padding(.vertical, 10)
                 .contentShape(Rectangle())
         }.buttonStyle(.plain)
-            .accessibilityElement(children: .ignore)
             .accessibilityLabel(region.arabicName + "، " + percentage(recovery?.readiness) + "، "
                                 + (recovery?.summaryArabic ?? "لا يوجد سجل كافٍ للتقدير"))
             .accessibilityHint("عرض تاريخ التدريب وعدد الجولات")
