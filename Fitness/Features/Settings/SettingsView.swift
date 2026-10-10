@@ -24,7 +24,7 @@ import LocalAuthentication
                     Picker("بداية الأسبوع", selection: $preferences.weekStart) {
                         ForEach([7,1,2,3,4,5,6], id: \.self) { Text(dayName($0)).tag($0) }
                     }
-                    Stepper(value: $preferences.defaultRestSeconds, in: 15...600, step: 15) { Text("الراحة الافتراضية: " + ArabicFormat.duration(settings.defaultRestSeconds, arabic: settings.useArabicDigits)) }
+                    Stepper(value: $preferences.defaultRestSeconds, in: 15...600, step: 15) { Text("الراحة الافتراضية: " + ArabicFormat.duration(Double(settings.defaultRestSeconds), arabic: settings.useArabicDigits)) }
                     NavigationLink("التذكيرات", destination: RemindersView())
                 }
                 Section("الخصوصية") {

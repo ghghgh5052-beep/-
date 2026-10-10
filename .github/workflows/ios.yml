@@ -12,7 +12,7 @@ jobs:
     runs-on: macos-15
     timeout-minutes: 45
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
       - name: Select Xcode 16.4
         run: sudo xcode-select -s /Applications/Xcode_16.4.app/Contents/Developer
       - name: Validate the committed project
@@ -24,7 +24,7 @@ jobs:
       - name: Archive and package without signing
         run: bash scripts/build_unsigned_ipa.sh
       - name: Upload unsigned IPA and signing manifest
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v6
         with:
           name: Wateera-unsigned-${{ github.sha }}
           if-no-files-found: error
@@ -37,7 +37,7 @@ jobs:
             build/signing/
       - name: Upload test results and build logs
         if: always()
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v6
         with:
           name: Wateera-diagnostics-${{ github.sha }}
           if-no-files-found: ignore

@@ -16,25 +16,13 @@ import UniformTypeIdentifiers
     @State private var errorMessage: String?
     var body: some View {
         Form {
-            Section("تصدير بياناتك") {
-                Button("نسخة كاملة بصيغة جيسون") { export(csv: false) }
-                Button("الجلسات والقياسات كجدول سي إس في") { export(csv: true) }
-                Text("النسخة الكاملة تشمل الخطط والمكتبة والجلسات والقياسات والصور والأهداف والتذكيرات والتفضيلات. يمكن حفظها أو مشاركتها من تطبيق الملفات.").font(.caption).foregroundStyle(.secondary)
-            }
-            Section("استعادة أو دمج") {
-                Button("اختيار ملف جيسون أو سي إس في") { importing = true }
-                Text("تُدمج البيانات حسب المعرّف وتاريخ التعديل. تُحفظ السجلات الأحدث، وتبقى سجلاتك الأخرى. يُفضّل إكمال الجلسة النشطة قبل الاستيراد.").font(.caption).foregroundStyle(.secondary)
-                if let preview {
-                    Text("الملف يحتوي على " + ArabicFormat.integer(preview.sessions.count, arabic: settings.useArabicDigits) + " جلسة، و" + ArabicFormat.integer(preview.metrics.count, arabic: settings.useArabicDigits) + " قياس، و" + ArabicFormat.integer(preview.photos.count, arabic: settings.useArabicDigits) + " صورة.")
-                    Button("دمج الملف المحدد") { restore(preview) }.disabled(busy || workout.activeSessionID != nil)
-                    Button("إلغاء الاختيار", role: .cancel) { self.preview = nil }
-                }
-            }
+            exportSection
+            importSection
             if busy { SwiftUI.ProgressView("جارٍ معالجة البيانات…") }
             if let status { Section { Label(status, systemImage: "checkmark.circle").foregroundStyle(settings.color) } }
             Section { Text("قد تحتوي النسخة على صور وبيانات شخصية. اختر المكان الذي تريد حفظها فيه. لا تُرسل البيانات إلى أي خادم داخل التطبيق.").font(.caption).foregroundStyle(.secondary) }
         }.navigationTitle("بياناتك ونسخك الاحتياطية")
-            .fileExporter(isPresented: $exporting, document: exportFile, contentType: exportType, defaultFilename: "وتيرة-" + (exportType == .json ? "نسخة-كاملة" : "جلسات-وقياسات")) { result in
+            .fileExporter(isPresented: $exporting, document: exportFile, contentType: exportType, defaultFilename: exportFilename) { result in
                 switch result { case .success: status = "تم حفظ الملف."; case .failure: errorMessage = "تعذر حفظ الملف. اختر موقعًا آخر وحاول مرة أخرى." }
             }
             .fileImporter(isPresented: $importing, allowedContentTypes: [.json, .commaSeparatedText, .plainText]) { result in
@@ -43,6 +31,36 @@ import UniformTypeIdentifiers
                 case .failure: errorMessage = "تعذر فتح الملف المحدد."
                 }
             }.arabicError($errorMessage)
+    }
+    private var exportFilename: String {
+        exportType == .json ? "وتيرة-نسخة-كاملة" : "وتيرة-جلسات-وقياسات"
+    }
+    private var exportSection: some View {
+        Section("تصدير بياناتك") {
+            Button("نسخة كاملة بصيغة جيسون") { export(csv: false) }
+            Button("الجلسات والقياسات كجدول سي إس في") { export(csv: true) }
+            Text("النسخة الكاملة تشمل الخطط والمكتبة والجلسات والقياسات والصور والأهداف والتذكيرات والتفضيلات. يمكن حفظها أو مشاركتها من تطبيق الملفات.")
+                .font(.caption).foregroundStyle(.secondary)
+        }
+    }
+    private var importSection: some View {
+        Section("استعادة أو دمج") {
+            Button("اختيار ملف جيسون أو سي إس في") { importing = true }
+            Text("تُدمج البيانات حسب المعرّف وتاريخ التعديل. تُحفظ السجلات الأحدث، وتبقى سجلاتك الأخرى. يُفضّل إكمال الجلسة النشطة قبل الاستيراد.")
+                .font(.caption).foregroundStyle(.secondary)
+            if let preview {
+                Text(previewSummary(preview))
+                Button("دمج الملف المحدد") { restore(preview) }
+                    .disabled(busy || workout.activeSessionID != nil)
+                Button("إلغاء الاختيار", role: .cancel) { self.preview = nil }
+            }
+        }
+    }
+    private func previewSummary(_ backup: BackupEnvelope) -> String {
+        let sessions = ArabicFormat.integer(backup.sessions.count, arabic: settings.useArabicDigits)
+        let metrics = ArabicFormat.integer(backup.metrics.count, arabic: settings.useArabicDigits)
+        let photos = ArabicFormat.integer(backup.photos.count, arabic: settings.useArabicDigits)
+        return "الملف يحتوي على \(sessions) جلسة، و\(metrics) قياس، و\(photos) صورة."
     }
     private func export(csv: Bool) {
         busy = true; defer { busy = false }
