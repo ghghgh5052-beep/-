@@ -64,9 +64,15 @@ final class SessionDeletionFlowTests: XCTestCase {
         capture(app, name: "Arabic RTL history swipe deletion confirmation")
         app.alerts.buttons["تراجع"].tap()
         XCTAssertTrue(history.exists)
-        history.swipeLeft()
-        history.swipeRight()
-        XCTAssertTrue(remove.waitForExistence(timeout: 5)); remove.tap()
+        XCTAssertFalse(app.buttons["workout.summary.done"].exists)
+        // UIKit closes the swipe actions when the first action presents its alert.
+        // Drag right again; a left swipe has no action and can activate the row button.
+        let from = history.coordinate(withNormalizedOffset: CGVector(dx: 0.2, dy: 0.5))
+        let to = history.coordinate(withNormalizedOffset: CGVector(dx: 0.9, dy: 0.5))
+        from.press(forDuration: 0.05, thenDragTo: to, withVelocity: .slow, thenHoldForDuration: 0.05)
+        let deleteAgain = app.buttons.matching(NSPredicate(format: "label CONTAINS %@ AND label CONTAINS %@",
+                                                           "حذف جلسة", "تمرين حر")).firstMatch
+        XCTAssertTrue(deleteAgain.waitForExistence(timeout: 5)); deleteAgain.tap()
         app.alerts.buttons["workout.delete.confirm"].tap()
         XCTAssertTrue(app.staticTexts["تاريخك يبدأ من هنا"].waitForExistence(timeout: 10))
         XCTAssertFalse(history.exists)
