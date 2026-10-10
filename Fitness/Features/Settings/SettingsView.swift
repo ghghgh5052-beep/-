@@ -43,6 +43,8 @@ import LocalAuthentication
                 }
                 Section("مزامنة آي كلاود") {
                     Label(sync.statusText, systemImage: sync.state == .localOnly ? "iphone" : "icloud")
+                        .accessibilityElement(children: .combine)
+                        .accessibilityLabel(sync.statusText)
                         .accessibilityIdentifier("settings.sync.status")
                     if sync.state != .localOnly {
                         if let imported = sync.lastImport { Text("آخر استقبال: " + ArabicFormat.date(imported)).font(.caption) }
