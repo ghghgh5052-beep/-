@@ -96,12 +96,18 @@ import SwiftData
             .background(Color(uiColor: .systemGroupedBackground))
             .navigationTitle("خططي")
             .toolbar {
+                ToolbarItem(placement: .topBarLeading) {
+                    Button { showArchived.toggle() } label: {
+                        Image(systemName: showArchived ? "calendar" : "archivebox")
+                            .frame(minWidth: 44, minHeight: 44)
+                    }
+                    .accessibilityLabel(showArchived ? "عرض الخطط الحالية" : "عرض الخطط المؤرشفة")
+                }
                 ToolbarItem(placement: .topBarTrailing) {
-                    Menu {
-                        Button { showingTemplates = true } label: { Label("خطة جديدة", systemImage: "plus") }
-                        Toggle("الخطط المؤرشفة", isOn: $showArchived)
-                    } label: { Image(systemName: "plus.circle") }
-                    .accessibilityLabel("إدارة الخطط").accessibilityIdentifier("plans.add")
+                    Button { showingTemplates = true } label: {
+                        Image(systemName: "plus.circle").frame(minWidth: 44, minHeight: 44)
+                    }
+                    .accessibilityLabel("إنشاء خطة جديدة").accessibilityIdentifier("plans.add")
                 }
             }
             .sheet(isPresented: $showingTemplates, onDismiss: {

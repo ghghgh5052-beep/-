@@ -16,15 +16,16 @@ final class MainFlowTests: XCTestCase {
         let plansTab = app.tabBars.buttons["خططي"]
         XCTAssertTrue(plansTab.waitForExistence(timeout: 15))
         plansTab.tap()
+        capture(app, name: "Arabic plans")
         let addPlan = app.buttons["plans.add"]
         XCTAssertTrue(addPlan.waitForExistence(timeout: 5))
         XCTAssertTrue(addPlan.isHittable)
         addPlan.tap()
-        app.buttons["خطة جديدة"].tap()
         let template = app.buttons["planTemplate_ppl"]
         XCTAssertTrue(template.waitForExistence(timeout: 5)); template.tap()
         let name = app.textFields["plan.name"]
         XCTAssertTrue(name.waitForExistence(timeout: 5))
+        capture(app, name: "Arabic plan editor")
         name.tap()
         // Selecting all avoids keyboard-specific delete behavior in Arabic.
         name.press(forDuration: 1.2)
@@ -35,6 +36,7 @@ final class MainFlowTests: XCTestCase {
         XCTAssertTrue(start.waitForExistence(timeout: 5)); start.tap()
         let weight = app.textFields.matching(identifier: "set.weight.0").firstMatch
         XCTAssertTrue(weight.waitForExistence(timeout: 5))
+        capture(app, name: "Arabic workout logging")
         weight.tap(); weight.typeText("20")
         let complete = app.buttons.matching(identifier: "set.complete.0").firstMatch
         XCTAssertTrue(complete.exists); complete.tap()
@@ -51,9 +53,17 @@ final class MainFlowTests: XCTestCase {
         let completed = app.descendants(matching: .any).matching(identifier: "progress.completed").firstMatch
         XCTAssertTrue(completed.exists)
         XCTAssertTrue(completed.label.contains("١") || completed.label.contains("1"))
-        let attachment = XCTAttachment(screenshot: app.screenshot())
-        attachment.name = "Arabic workout progress"
+        capture(app, name: "Arabic workout progress")
+    }
+
+    @MainActor private func capture(_ app: XCUIApplication, name: String) {
+        let attachment = XCTAttachment(data: app.screenshot().pngRepresentation, uniformTypeIdentifier: "public.png")
+        attachment.name = name
         attachment.lifetime = .keepAlways
         add(attachment)
+        let hierarchy = XCTAttachment(string: app.debugDescription)
+        hierarchy.name = name + " accessibility"
+        hierarchy.lifetime = .keepAlways
+        add(hierarchy)
     }
 }

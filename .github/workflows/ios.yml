@@ -21,6 +21,14 @@ jobs:
           python3 scripts/tooling_tests.py
       - name: Run unit and main flow UI tests
         run: bash scripts/test_ios.sh
+      - name: Export readable test diagnostics
+        if: always()
+        run: |
+          if [ -d build/tests/Tests.xcresult ]; then
+            xcrun xcresulttool get test-results summary --path build/tests/Tests.xcresult > build/tests/summary.json
+            xcrun xcresulttool get build-results --path build/tests/Tests.xcresult > build/tests/build-results.json
+            xcrun xcresulttool export attachments --path build/tests/Tests.xcresult --output-path build/tests/attachments
+          fi
       - name: Archive and package without signing
         run: bash scripts/build_unsigned_ipa.sh
       - name: Upload unsigned IPA and signing manifest
