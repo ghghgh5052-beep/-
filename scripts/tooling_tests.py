@@ -18,7 +18,7 @@ assert TEMP_ROOT.is_relative_to(ROOT.resolve())
 TEMP_ROOT.mkdir(parents=True,exist_ok=True)
 
 class PackagingTests(unittest.TestCase):
-    def fixture(self, folder, *, group='group.test', signature=False, missing=False):
+    def fixture(self, folder, *, group='group.test', signature=False, missing=False, missing_intent=False):
         path=Path(folder)/'synthetic-tooling-fixture.zip'
         info={'CFBundleIdentifier':'com.test.app','CFBundleExecutable':'Fitness','SharedAppGroup':'group.test','CFBundleVersion':'1','NSSupportsLiveActivities':True}
         ext={'CFBundleIdentifier':'com.test.app.widgets','CFBundleExecutable':'FitnessWidgets','SharedAppGroup':group,'CFBundleVersion':'1','NSExtension':{'NSExtensionPointIdentifier':'com.apple.widgetkit-extension'}}
@@ -26,6 +26,10 @@ class PackagingTests(unittest.TestCase):
         with zipfile.ZipFile(path,'w') as archive:
             archive.writestr('Payload/Fitness.app/Info.plist',plistlib.dumps(info))
             archive.writestr('Payload/Fitness.app/Fitness',header)
+            metadata = {'actions': {'StartTodayWorkoutIntent': {}}, 'autoShortcuts': [{'actionIdentifier': 'StartTodayWorkoutIntent'}]}
+            if missing_intent: metadata['actions'] = {}
+            archive.writestr('Payload/Fitness.app/Metadata.appintents/extract.actionsdata', json.dumps(metadata))
+            archive.writestr('Payload/Fitness.app/Metadata.appintents/nlu/nlu.lzfse', b'synthetic-training-data')
             if not missing:
                 archive.writestr('Payload/Fitness.app/PlugIns/FitnessWidgets.appex/Info.plist',plistlib.dumps(ext))
                 archive.writestr('Payload/Fitness.app/PlugIns/FitnessWidgets.appex/FitnessWidgets',header)
@@ -43,6 +47,9 @@ class PackagingTests(unittest.TestCase):
     def testSignedBundleIsRejected(self):
         with tempfile.TemporaryDirectory(dir=TEMP_ROOT) as folder:
             with self.assertRaises(AssertionError): verify(self.fixture(folder,signature=True))
+    def testMissingStartWorkoutIntentIsRejected(self):
+        with tempfile.TemporaryDirectory(dir=TEMP_ROOT) as folder:
+            with self.assertRaises(AssertionError): verify(self.fixture(folder,missing_intent=True))
     def testEntitlementVariablesResolveWithoutTeamFabrication(self):
         with tempfile.TemporaryDirectory(dir=TEMP_ROOT) as folder:
             path=Path(folder)/'settings.json'

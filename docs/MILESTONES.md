@@ -1,6 +1,6 @@
 # Milestones and release gates
 
-This checkout contains implementation spanning M1–M5 and M6 test/build tooling. **No milestone is accepted as delivered until its macOS checks pass and its unsigned IPA is attached for testing.** Windows cannot run Xcode. No fake IPA or placeholder binary is included.
+This checkout contains implementation spanning M1–M5 and M6 test/build tooling. **M1's native build gate passed** in [Actions run 38017392175](https://github.com/ghghgh5052-beep/-/actions/runs/38017392175): 23 tests passed and a real unsigned IPA was produced for source commit `e6a58c5775052c396ccc62e604a0cab9a8f3c054`. That IPA also includes the implemented features from subsequent milestones for testing. Their device acceptance gates remain pending; source presence and simulator success do not prove HealthKit, CloudKit, background rest or manual signing.
 
 | Milestone | Source implementation | Required release gate |
 | --- | --- | --- |

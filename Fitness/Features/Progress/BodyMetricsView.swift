@@ -39,7 +39,7 @@ import Charts
                             .foregroundStyle(settings.color)
                         LineMark(x: .value("التاريخ", point.date), y: .value("المتوسط", averages[index]), series: .value("السلسلة", "المتوسط"))
                             .foregroundStyle(.orange).lineStyle(StrokeStyle(lineWidth: 2, dash: [4, 3]))
-                    }.chartXScale(domain: .automatic(reversed: true)).chartXAxis { AxisMarks { value in AxisValueLabel { if let date = value.as(Date.self) { Text(ArabicFormat.date(date)) } } } }
+                    }.chartXScale(domain: .automatic()).chartXAxis { AxisMarks { value in AxisValueLabel { if let date = value.as(Date.self) { Text(ArabicFormat.date(date)) } } } }
                         .chartYAxis { AxisMarks(position: .leading) { value in AxisGridLine(); AxisValueLabel { if let n = value.as(Double.self) { Text(ArabicFormat.number(n, arabic: settings.useArabicDigits)) } } } }
                         .frame(height: 220)
                     Text("الخط البرتقالي: متوسط آخر سبع قراءات.").font(.caption).foregroundStyle(.secondary)

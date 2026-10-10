@@ -2,7 +2,7 @@
 
 مشروع SwiftUI أصلي للاستخدام الشخصي، يعمل محليًا مع SwiftData، ومزامنة CloudKit خاصة بالمستخدم، دون خادم أو حسابات داخل التطبيق أو إعلانات أو أدوات تتبع.
 
-**حالة التسليم:** المصدر وإعدادات Xcode والاختبارات وCI موجودة. لم تُشغّل اختبارات Apple أو يُنتج IPA حتى الآن؛ جهاز العمل Windows ولا يحتوي على Xcode، ولم يُربط مستودع GitHub بعد. لا يمثل نجاح فحص الملفات المحلي تأكيدًا لنجاح البناء أو التثبيت. راجع [حالة التحقق](docs/VALIDATION.md).
+**حالة التسليم:** المشروع مرفوع إلى [المستودع](https://github.com/ghghgh5052-beep/-). اكتمل [أول بناء macOS ناجح](https://github.com/ghghgh5052-beep/-/actions/runs/38017392175): اجتازت اختبارات الوحدة الـ٢٢ واختبار الواجهة، وأُنتج IPA حقيقي غير موقع مع امتداد الويدجت وملفات entitlements. التجربة بعد التوقيع على iPhone، وتكاملات الصحة وآي كلاود والنشاط المباشر، ما زالت تحتاج تحقق الجهاز. راجع [حالة التحقق](docs/VALIDATION.md) وأحدث artifact ناجح في Actions.
 
 ## البناء على Mac
 
@@ -32,11 +32,11 @@ TEST_OUTPUT_DIR="$PWD/build/tests-m2" bash scripts/test_ios.sh
 
 ## GitHub Actions
 
-أنشئ مستودعًا خاصًا فارغًا ثم ارفع هذا المجلد. يحتوي المشروع على [workflow](.github/workflows/ios.yml) يعمل عند push وبالتشغيل اليدوي من Actions → iOS tests and unsigned IPA → Run workflow. يستخدم `macos-15` وXcode 16.4، ويجري الاختبارات قبل الأرشفة. لا يحتاج شهادة أو ملف provisioning أو أسرار توقيع. استخدام runners في المستودعات الخاصة يخضع لحصة حساب GitHub.
+المستودع الحالي متصل بالفعل. يحتوي المشروع على [workflow](.github/workflows/ios.yml) يعمل عند push وبالتشغيل اليدوي من Actions → iOS tests and unsigned IPA → Run workflow. يستخدم `macos-15` وXcode 16.4، ويجري الاختبارات قبل الأرشفة: المجموعة كاملة على شاشة صغيرة، ثم مسار الواجهة على شاشة كبيرة بالوضع الداكن والأرقام الغربية. لا يحتاج شهادة أو ملف provisioning أو أسرار توقيع. استخدام runners في المستودعات الخاصة يخضع لحصة حساب GitHub.
 
 ```bash
-git remote add origin https://github.com/YOUR_USER/wateera-ios.git
-git push -u origin main
+git clone https://github.com/ghghgh5052-beep/-.git wateera-ios
+cd wateera-ios
 ```
 
 بعد نجاح العمل، نزّل artifact باسم `Wateera-unsigned-<commit>`؛ يحتوي على IPA وملفات التوقيع المذكورة. نتائج XCTest ولقطة اختبار الواجهة وسجلات الأخطاء في artifact منفصل. لا توجد خطوات TestFlight أو App Store Connect.
@@ -57,7 +57,7 @@ git push -u origin main
 | `FitnessWidgets` | امتداد WidgetKit وDynamic Island |
 | `FitnessTests` / `FitnessUITests` | حسابات وترحيل وتعارضات ونسخ احتياطي ومسار الواجهة |
 
-تستخدم الواجهة Observation و`@Query` و`@Bindable`؛ يملك `WorkoutCoordinator` حالة الجلسة والمؤقت والحفظ والتكاملات. الحسابات منفصلة وقابلة للاختبار. تعرض الواجهة العربية فقط، وتفرض RTL وتقويمًا ميلاديًا مع بداية أسبوع قابلة للتعديل. تعكس رسوم الزمن محور X صراحة. النصوص تستخدم خط النظام العربي وDynamic Type، وتتكيف شاشة تسجيل المجموعات مع أحجام الإتاحة.
+تستخدم الواجهة Observation و`@Query` و`@Bindable`؛ يملك `WorkoutCoordinator` حالة الجلسة والمؤقت والحفظ والتكاملات. الحسابات منفصلة وقابلة للاختبار. تعرض الواجهة العربية فقط، وتفرض RTL وتقويمًا ميلاديًا مع بداية أسبوع قابلة للتعديل. تستخدم الرسوم انعكاس Swift Charts الأصلي مع RTL دون عكس إضافي يلغي الاتجاه. النصوص تستخدم خط النظام العربي وDynamic Type، وتتكيف شاشة تسجيل المجموعات مع أحجام الإتاحة.
 
 ## سلوك البيانات والخصوصية
 

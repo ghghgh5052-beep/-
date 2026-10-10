@@ -94,7 +94,8 @@ import Charts
                             BarMark(x: .value("الأسبوع", item.date), y: .value("الحجم", settings.displayWeight(item.volume)))
                                 .foregroundStyle(settings.color.gradient)
                         }
-                        .chartXScale(domain: .automatic(reversed: true))
+                        // Swift Charts already mirrors the horizontal scale in the RTL environment.
+                        .chartXScale(domain: .automatic())
                         .chartXAxis { AxisMarks(values: .stride(by: .weekOfYear, count: max(1, range / 42))) { axis in
                             AxisGridLine(); AxisValueLabel { if let date = axis.as(Date.self) { Text(shortDate(date)) } }
                         } }
@@ -107,7 +108,7 @@ import Charts
                         Text("عدد الجلسات الأسبوعي").font(.headline)
                         Chart(weekly) { item in
                             BarMark(x: .value("الأسبوع", item.date), y: .value("الجلسات", item.workouts)).foregroundStyle(.blue.gradient)
-                        }.chartXScale(domain: .automatic(reversed: true)).chartXAxis { AxisMarks { value in AxisValueLabel { if let date = value.as(Date.self) { Text(shortDate(date)) } } } }
+                        }.chartXScale(domain: .automatic()).chartXAxis { AxisMarks { value in AxisValueLabel { if let date = value.as(Date.self) { Text(shortDate(date)) } } } }
                             .chartYAxis { AxisMarks(position: .leading) { value in AxisValueLabel { if let n = value.as(Int.self) { Text(ArabicFormat.integer(n, arabic: settings.useArabicDigits)) } } } }
                             .frame(height: 150)
                         Text("توزيع المجموعات على العضلات").font(.headline)
@@ -137,7 +138,7 @@ import Charts
                             LineMark(x: .value("التاريخ", sample.date), y: .value("القيمة", settings.displayWeight(chartKind == 0 ? sample.oneRM : chartKind == 1 ? sample.top : sample.volume)))
                                 .interpolationMethod(.linear).foregroundStyle(settings.color)
                             PointMark(x: .value("التاريخ", sample.date), y: .value("القيمة", settings.displayWeight(chartKind == 0 ? sample.oneRM : chartKind == 1 ? sample.top : sample.volume))).foregroundStyle(settings.color)
-                        }.chartXScale(domain: .automatic(reversed: true)).chartXAxis { AxisMarks { axis in AxisValueLabel { if let d = axis.as(Date.self) { Text(shortDate(d)) } } } }
+                        }.chartXScale(domain: .automatic()).chartXAxis { AxisMarks { axis in AxisValueLabel { if let d = axis.as(Date.self) { Text(shortDate(d)) } } } }
                             .chartYAxis { AxisMarks(position: .leading) { axis in AxisGridLine(); AxisValueLabel { if let n = axis.as(Double.self) { Text(ArabicFormat.number(n, decimals: 0, arabic: settings.useArabicDigits)) } } } }
                             .frame(height: 220)
                         Text("تقدير أقصى تكرار بمعادلة " + formula.arabicName + ". التقدير أدق مع عشر تكرارات أو أقل.").font(.caption).foregroundStyle(.secondary)

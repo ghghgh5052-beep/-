@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 """Fail packaging if bundle identifiers, extension embedding, or architecture are wrong."""
+import json
 import plistlib
 import struct
 import sys
@@ -19,6 +20,10 @@ def verify(path):
         assert info['SharedAppGroup']==ext['SharedAppGroup'], 'App Groups differ'
         assert info['CFBundleVersion']==ext['CFBundleVersion'], 'Embedded bundle version differs'
         assert info['NSSupportsLiveActivities'] is True
+        metadata = json.loads(archive.read(app + 'Metadata.appintents/extract.actionsdata'))
+        assert 'StartTodayWorkoutIntent' in metadata.get('actions', {}), 'Start-workout App Intent metadata is missing'
+        assert any(shortcut.get('actionIdentifier') == 'StartTodayWorkoutIntent' for shortcut in metadata.get('autoShortcuts', [])), 'Arabic workout shortcut metadata is missing'
+        assert archive.read(app + 'Metadata.appintents/nlu/nlu.lzfse'), 'Shortcut language training data is missing'
         for folder, metadata in [(app,info),(extension,ext)]:
             binary=archive.read(folder+metadata['CFBundleExecutable'])
             magic, cpu = struct.unpack('<II',binary[:8])
@@ -26,6 +31,6 @@ def verify(path):
             assert not any(n.startswith(folder+'_CodeSignature/') for n in names), 'Signed bundle unexpectedly packaged'
         assert not any(n.endswith('embedded.mobileprovision') for n in names), 'A provisioning profile must not be shipped in unsigned IPA'
         assert archive.testzip() is None, 'ZIP integrity check failed'
-        print('IPA structure, arm64 executables, extension embedding, identifiers, and ZIP integrity verified.')
+        print('IPA structure, arm64 executables, extension embedding, identifiers, App Intents metadata, and ZIP integrity verified.')
 
 if __name__=='__main__': verify(sys.argv[1])

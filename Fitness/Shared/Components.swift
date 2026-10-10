@@ -5,9 +5,10 @@ import SwiftUI
     let value: String
     let symbol: String
     var compact = false
+    var compactTitle: String?
     var body: some View {
         VStack(alignment: .leading, spacing: compact ? 8 : 10) {
-            Label(title, systemImage: symbol)
+            Label(compact ? (compactTitle ?? title) : title, systemImage: symbol)
                 .font(compact ? .caption : .subheadline).foregroundStyle(.secondary)
                 .lineLimit(compact ? 2 : nil)
                 .frame(minHeight: compact ? 28 : nil, alignment: .leading)
@@ -17,6 +18,7 @@ import SwiftUI
         .padding(compact ? 10 : 16)
         .background(.quaternary.opacity(0.5), in: RoundedRectangle(cornerRadius: 20))
         .accessibilityElement(children: .combine)
+        .accessibilityLabel(title + "، " + value)
     }
 }
 

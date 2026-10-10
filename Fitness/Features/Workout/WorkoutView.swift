@@ -217,8 +217,8 @@ import UIKit
         TimelineView(.periodic(from: .now, by: 1)) { timeline in
             StatCard(title: "المدة", value: ArabicFormat.duration(session.activeDuration(at: timeline.date), arabic: settings.useArabicDigits), symbol: "clock", compact: !dynamicTypeSize.isAccessibilitySize)
         }
-        StatCard(title: "جولات مكتملة", value: ArabicFormat.integer(completedSets.count, arabic: settings.useArabicDigits), symbol: "checkmark.circle", compact: !dynamicTypeSize.isAccessibilitySize)
-        StatCard(title: "حجم التدريب", value: ArabicFormat.weight(WorkoutMath.volume(sets: completedSets.filter { $0.kindRaw != "warmup" }), settings: settings), symbol: "scalemass", compact: !dynamicTypeSize.isAccessibilitySize)
+        StatCard(title: "جولات مكتملة", value: ArabicFormat.integer(completedSets.count, arabic: settings.useArabicDigits), symbol: "checkmark.circle", compact: !dynamicTypeSize.isAccessibilitySize, compactTitle: "الجولات")
+        StatCard(title: "حجم التدريب", value: ArabicFormat.weight(WorkoutMath.volume(sets: completedSets.filter { $0.kindRaw != "warmup" }), settings: settings), symbol: "scalemass", compact: !dynamicTypeSize.isAccessibilitySize, compactTitle: "الحجم")
     }
 
     private var restTimer: some View {
