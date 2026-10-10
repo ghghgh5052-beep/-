@@ -3,13 +3,18 @@ import SwiftData
 import Observation
 
 @MainActor @Observable final class AppRuntime {
+    static var isTesting: Bool {
+        ProcessInfo.processInfo.arguments.contains("-ui-testing") ||
+            ProcessInfo.processInfo.environment["FITNESS_TESTING"] == "1" ||
+            ProcessInfo.processInfo.environment["XCTestConfigurationFilePath"] != nil
+    }
     var container: ModelContainer?
     var warning: String?
     var errorMessage: String?
     var cloudEnabled = false
     func load() {
         do {
-            let testing = ProcessInfo.processInfo.arguments.contains("-ui-testing")
+            let testing = Self.isTesting
             let requested = !testing && (Bundle.main.object(forInfoDictionaryKey: "CloudSyncEnabled") as? Bool ?? true)
             let result = try PersistenceController.makeContainer(useCloudKit: requested, inMemory: testing,
                 cloudKitContainerIdentifier: Bundle.main.object(forInfoDictionaryKey: "CloudKitContainerIdentifier") as? String)
@@ -97,10 +102,10 @@ import Observation
                 Color(uiColor: .systemBackground).overlay { Image(systemName: "dumbbell.fill").font(.largeTitle).foregroundStyle(settings.color) }.ignoresSafeArea()
             }
         }
-        .fullScreenCover(isPresented: Binding(get: { !onboardingComplete && !protected }, set: { if !$0 { onboardingComplete = true } })) { OnboardingView { onboardingComplete = true } }
+        .fullScreenCover(isPresented: Binding(get: { !AppRuntime.isTesting && !onboardingComplete && !protected }, set: { if !$0 { onboardingComplete = true } })) { OnboardingView { onboardingComplete = true } }
         .task {
             do {
-                if ProcessInfo.processInfo.arguments.contains("-ui-testing") { UserDefaults.standard.removeObject(forKey: "fitness.catalog.seeded.v1") }
+                if AppRuntime.isTesting { UserDefaults.standard.removeObject(forKey: "fitness.catalog.seeded.v1") }
                 try SeedCatalog.seedIfNeeded(context: context)
                 try PersistenceController.reconcile(context: context)
                 try PRService.rebuild(context: context)
@@ -116,7 +121,7 @@ import Observation
                     }
                     catch { startupError = "تعذر دمج بعض بيانات المزامنة. يمكنك إعادة فتح التطبيق للمحاولة." }
                 }
-                if ProcessInfo.processInfo.arguments.contains("-ui-testing") { onboardingComplete = true; settings.lockEnabled = false; settings.photoLockEnabled = false }
+                if AppRuntime.isTesting { onboardingComplete = true; settings.lockEnabled = false; settings.photoLockEnabled = false }
                 _ = WidgetSnapshotService.refresh(context: context, settings: settings)
                 Task { if let reminders = try? context.fetch(FetchDescriptor<WorkoutReminder>()) { await NotificationService.shared.reschedule(reminders: reminders, requestPermission: false) } }
                 consumeShortcut()

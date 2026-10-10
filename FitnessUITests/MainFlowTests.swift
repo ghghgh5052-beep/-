@@ -1,3 +1,4 @@
+import AppIntents
 import XCTest
 
 final class MainFlowTests: XCTestCase {
@@ -6,6 +7,7 @@ final class MainFlowTests: XCTestCase {
         continueAfterFailure = false
         let app = XCUIApplication()
         app.launchArguments = ["-ui-testing", "-AppleLanguages", "(ar)", "-AppleLocale", "ar_SA"]
+        app.launchEnvironment["FITNESS_TESTING"] = "1"
         addUIInterruptionMonitor(withDescription: "Local notification permission") { alert in
             for label in ["السماح", "Allow", "حسنًا", "OK"] where alert.buttons[label].exists { alert.buttons[label].tap(); return true }
             return false
@@ -14,7 +16,10 @@ final class MainFlowTests: XCTestCase {
         let plansTab = app.tabBars.buttons["خططي"]
         XCTAssertTrue(plansTab.waitForExistence(timeout: 15))
         plansTab.tap()
-        app.buttons["plans.add"].tap()
+        let addPlan = app.buttons["plans.add"]
+        XCTAssertTrue(addPlan.waitForExistence(timeout: 5))
+        XCTAssertTrue(addPlan.isHittable)
+        addPlan.tap()
         app.buttons["خطة جديدة"].tap()
         let template = app.buttons["planTemplate_ppl"]
         XCTAssertTrue(template.waitForExistence(timeout: 5)); template.tap()
