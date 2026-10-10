@@ -29,13 +29,14 @@ final class SmartFlowTests: XCTestCase {
         XCTAssertTrue(start.isEnabled)
         capture(app, name: "Arabic reviewed editable workout preview")
         start.tap()
+        let options = app.buttons["workout.exercise.options.\(pushUpID)"]
+        XCTAssertTrue(options.waitForExistence(timeout: 10))
         let weight = app.textFields.matching(identifier: "set.weight.0").firstMatch
         reveal(weight, in: app)
         XCTAssertTrue(["10", "١٠"].contains(weight.value as? String ?? ""))
         let reps = app.textFields.matching(identifier: "set.reps.0").firstMatch
         XCTAssertTrue(["12", "١٢"].contains(reps.value as? String ?? ""))
         capture(app, name: "Arabic generated prescription persisted in workout")
-        let options = app.buttons["workout.exercise.options.\(pushUpID)"]
         reveal(options, in: app, up: false)
         options.tap()
         app.buttons["اقتراح الأوزان والتكرارات"].tap()
@@ -156,7 +157,19 @@ final class SmartFlowTests: XCTestCase {
 
     @MainActor private func reveal(_ element: XCUIElement, in app: XCUIApplication, up: Bool = true) {
         for _ in 0..<12 where !element.exists || !element.isHittable {
-            if up { app.swipeUp() } else { app.swipeDown() }
+            // A dismissed sheet can leave the underlying scroll view at a previous
+            // position. Scroll toward a known offscreen frame instead of past it.
+            var scrollUp = up
+            if element.exists {
+                let bounds = element.frame
+                if bounds.height > 0, bounds.midY.isFinite {
+                    scrollUp = bounds.midY > app.frame.midY
+                }
+            }
+            if scrollUp { app.swipeUp() } else { app.swipeDown() }
+        }
+        if !element.exists || !element.isHittable {
+            capture(app, name: "Unreachable element " + element.identifier)
         }
         XCTAssertTrue(element.waitForExistence(timeout: 5))
         XCTAssertTrue(element.isHittable)
