@@ -284,6 +284,7 @@ import UIKit
     let paused: Bool
     @State private var showingDetails = false
     @State private var showingWarmup = false
+    @State private var showingGuide = false
     @State private var confirmingRemove = false
     @State private var errorMessage: String?
 
@@ -311,6 +312,16 @@ import UIKit
                     Button(role: .destructive) { confirmingRemove = true } label: { Label("إزالة من الجلسة", systemImage: "trash") }
                 } label: { Image(systemName: "ellipsis").frame(minWidth: 44, minHeight: 44) }.disabled(paused).accessibilityLabel("خيارات \(exercise.name)")
             }
+            if ExerciseGuides.guide(for: exercise.exerciseID) != nil {
+                Button { showingGuide = true } label: {
+                    Label("صورة التمرين وطريقة التنفيذ", systemImage: "photo")
+                        .font(.subheadline.weight(.medium))
+                        .frame(maxWidth: .infinity, minHeight: 36)
+                }
+                .buttonStyle(.bordered)
+                .accessibilityIdentifier("workout.exercise.guide.\(exercise.exerciseID.uuidString)")
+                .accessibilityLabel("عرض صورة وطريقة تنفيذ \(exercise.name)")
+            }
             if !exercise.notes.isEmpty { Text(exercise.notes).font(.caption).foregroundStyle(.secondary).lineLimit(3) }
             if !dynamicTypeSize.isAccessibilitySize {
                 HStack(spacing: 8) {
@@ -332,6 +343,11 @@ import UIKit
         }
         .padding(16)
         .background(Color(uiColor: .secondarySystemGroupedBackground), in: RoundedRectangle(cornerRadius: 20))
+        .sheet(isPresented: $showingGuide) {
+            if let guide = ExerciseGuides.guide(for: exercise.exerciseID) {
+                ExerciseGuideSheet(guide: guide, exerciseName: exercise.name)
+            }
+        }
         .sheet(isPresented: $showingDetails) {
             NavigationStack {
                 Form {

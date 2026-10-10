@@ -2,6 +2,7 @@
 """Validate OpenStep project membership and configuration without requiring Xcode."""
 from pathlib import Path
 import json
+import hashlib
 import plistlib
 import re
 import sys
@@ -74,10 +75,33 @@ def validate():
     import struct
     assert header[:8]==b'\x89PNG\r\n\x1a\n' and struct.unpack('>II',header[16:24])==(1024,1024)
     assert header[25]==2,'App icon must be RGB without alpha'
+    art_root=ROOT/'Fitness/Resources/Assets.xcassets'
+    art=json.loads((ROOT/'Fitness/Resources/ExerciseArtManifest.json').read_text(encoding='utf-8'))
+    assert [item['code'] for item in art['images']]==list(range(1,67)), 'Exercise artwork must cover all 66 catalog IDs'
+    assert len({item['sha256'] for item in art['images']})==66, 'Exercise artwork must not reuse unrelated images'
+    expected_assets=set()
+    for item in art['images']:
+        name=f'exercise_{item["code"]:03d}'
+        assert item['asset']==name
+        folder=art_root/(name+'.imageset'); expected_assets.add(folder.name)
+        contents=json.loads((folder/'Contents.json').read_text(encoding='utf-8'))
+        assert contents['images']==[{'filename':name+'.png','idiom':'universal'}], 'Unexpected image asset configuration'
+        image=(folder/(name+'.png')).read_bytes()
+        assert image[:8]==b'\x89PNG\r\n\x1a\n', 'Exercise image must be PNG'
+        width,height=struct.unpack('>II',image[16:24])
+        assert width>=1024 and height>=640 and width>height, 'Exercise image must be a clear landscape canvas'
+        assert hashlib.sha256(image).hexdigest()==item['sha256'] and len(image)==item['bytes'], 'Artwork provenance checksum mismatch'
+    assert {p.name for p in art_root.glob('exercise_*.imageset')}==expected_assets, 'Unexpected or incomplete exercise assets'
+    prompts=json.loads((ROOT/'scripts/exercise_art_prompts.json').read_text(encoding='utf-8'))
+    assert [item['code'] for item in prompts['entries']]==list(range(1,67))
+    review=json.loads((ROOT/'docs/EXERCISE_ART_REVIEW.json').read_text(encoding='utf-8'))
+    assert [item['code'] for item in review['entries']]==list(range(1,67)), 'Every exercise requires an actual visual review'
+    art_hashes={item['code']:item['sha256'] for item in art['images']}
+    assert all(item['status']=='pass' and item['sha256']==art_hashes[item['code']] for item in review['entries']), 'A changed image requires a new visual review'
     for p in (ROOT/'Fitness').rglob('*.swift'):
         text=p.read_text(encoding='utf-8')
         assert not re.search(r'\btry!|\bas!|fatalError\s*\(|preconditionFailure\s*\(',text),f'Unsafe production path: {p}'
-    print(f'Validated project graph, {len(app)} app sources, embedded extension, Arabic plists, entitlements, scheme, and opaque 1024px icon.')
+    print(f'Validated project graph, {len(app)} app sources, embedded extension, Arabic plists, entitlements, scheme, opaque 1024px icon, and 66 reviewed exercise canvases.')
 
 if __name__=='__main__':
     try: validate()

@@ -43,6 +43,7 @@ import SwiftData
                             } label: {
                                 ExerciseLibraryRow(exercise: exercise)
                             }
+                            .accessibilityIdentifier("exercise.library.\(exercise.id.uuidString)")
                             .swipeActions(edge: .leading, allowsFullSwipe: true) {
                                 Button {
                                     exercise.isFavorite.toggle()
@@ -113,12 +114,16 @@ import SwiftData
 
     var body: some View {
         HStack(spacing: 12) {
-            Image(systemName: exercise.kindRaw == "كارديو" ? "figure.run" : "dumbbell.fill")
-                .foregroundStyle(.tint)
-                .font(.title3)
-                .frame(width: 42, height: 42)
-                .background(Color.accentColor.opacity(0.1), in: RoundedRectangle(cornerRadius: 12))
-                .accessibilityHidden(true)
+            if let guide = ExerciseGuides.guide(for: exercise.id) {
+                ExerciseGuideThumbnail(guide: guide)
+            } else {
+                Image(systemName: exercise.kindRaw == "كارديو" ? "figure.run" : "dumbbell.fill")
+                    .foregroundStyle(.tint)
+                    .font(.title2)
+                    .frame(width: 64, height: 64)
+                    .background(Color.accentColor.opacity(0.1), in: RoundedRectangle(cornerRadius: 14))
+                    .accessibilityHidden(true)
+            }
             VStack(alignment: .leading, spacing: 5) {
                 Text(exercise.name).font(.headline)
                 Text([exercise.primaryMuscleRaw, exercise.equipmentRaw].filter { !$0.isEmpty }.joined(separator: " · "))
@@ -194,7 +199,11 @@ import SwiftData
         List {
             Section {
                 HStack {
-                    Image(systemName: "dumbbell.fill").font(.largeTitle).foregroundStyle(.tint).accessibilityHidden(true)
+                    if let guide = ExerciseGuides.guide(for: exercise.id) {
+                        ExerciseGuideThumbnail(guide: guide)
+                    } else {
+                        Image(systemName: "dumbbell.fill").font(.largeTitle).foregroundStyle(.tint).accessibilityHidden(true)
+                    }
                     VStack(alignment: .leading, spacing: 8) {
                         Text(exercise.name).font(.title2.bold())
                         Text(exercise.isCustom ? "تمرين خاص" : "من المكتبة الأساسية").font(.caption).foregroundStyle(.secondary)
@@ -206,6 +215,12 @@ import SwiftData
                     save()
                 } label: {
                     Label(exercise.isFavorite ? "إزالة من المفضلة" : "إضافة إلى المفضلة", systemImage: exercise.isFavorite ? "star.fill" : "star")
+                }
+            }
+            if let guide = ExerciseGuides.guide(for: exercise.id) {
+                Section("طريقة التنفيذ") {
+                    ExerciseGuideContent(guide: guide, exerciseName: exercise.name)
+                        .padding(.vertical, 8)
                 }
             }
             Section("تفاصيل التمرين") {

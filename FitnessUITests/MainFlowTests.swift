@@ -12,22 +12,95 @@ final class MainFlowTests: XCTestCase {
         let onboarding = app.buttons["onboarding.finish"]
         if onboarding.waitForExistence(timeout: 3) { onboarding.tap() }
         XCTAssertTrue(app.tabBars.buttons["خططي"].waitForExistence(timeout: 15))
-        XCTAssertTrue(app.staticTexts["startup.warning"].waitForExistence(timeout: 5))
         let title = app.navigationBars["التمرين"].staticTexts["التمرين"].firstMatch
-        let warning = app.staticTexts["startup.warning"]
-        let dismissWarning = app.buttons["إخفاء التنبيه"]
         XCTAssertTrue(title.waitForExistence(timeout: 5))
-        XCTAssertTrue(dismissWarning.exists)
-        let layout = XCTNSPredicateExpectation(predicate: NSPredicate { _, _ in
-            title.frame.minY >= max(warning.frame.maxY, dismissWarning.frame.maxY) + 4
-        }, object: nil)
-        XCTAssertEqual(XCTWaiter.wait(for: [layout], timeout: 5), .completed,
-                       "The startup notice must not overlap the navigation title")
+        XCTAssertFalse(app.staticTexts["startup.warning"].exists)
+        XCTAssertFalse(app.buttons["إخفاء التنبيه"].exists)
         capture(app, name: "Arabic local startup without signed integrations")
+        app.tabBars.buttons["الإعدادات"].tap()
+        let localStatus = app.descendants(matching: .any).matching(identifier: "settings.sync.status").firstMatch
+        for _ in 0..<6 where !localStatus.isHittable { app.swipeUp() }
+        XCTAssertTrue(localStatus.waitForExistence(timeout: 5))
+        XCTAssertTrue(localStatus.isHittable)
+        XCTAssertTrue(localStatus.label.contains("البيانات محفوظة على هذا الجهاز"))
+        capture(app, name: "Arabic local storage status in settings")
+        let about = app.buttons["settings.about"]
+        for _ in 0..<4 where !about.isHittable { app.swipeUp() }
+        XCTAssertTrue(about.waitForExistence(timeout: 5))
+        XCTAssertTrue(about.isHittable)
+        XCTAssertFalse(app.staticTexts.containing(NSPredicate(format: "label CONTAINS %@", "لا حسابات")).firstMatch.exists)
+        about.tap()
+        XCTAssertTrue(app.navigationBars["عن وتيرة"].waitForExistence(timeout: 5))
+        let owner = app.staticTexts["app.owner.name"]
+        for _ in 0..<4 where !owner.isHittable { app.swipeUp() }
+        XCTAssertTrue(owner.waitForExistence(timeout: 5))
+        XCTAssertTrue(owner.isHittable)
+        XCTAssertEqual(owner.label, "Coach : 3BIID - AB")
+        XCTAssertFalse(app.staticTexts.containing(NSPredicate(format: "label CONTAINS %@", "لا حسابات")).firstMatch.exists)
+        capture(app, name: "Arabic app ownership")
         app.terminate()
         app.launch()
         XCTAssertTrue(app.tabBars.buttons["خططي"].waitForExistence(timeout: 15))
-        XCTAssertTrue(app.staticTexts["startup.warning"].waitForExistence(timeout: 5))
+        XCTAssertTrue(title.waitForExistence(timeout: 5))
+        XCTAssertFalse(app.staticTexts["startup.warning"].exists)
+    }
+
+    @MainActor
+    func testOfflineExerciseImagesCanBeViewedZoomedAndClosed() {
+        continueAfterFailure = false
+        let app = XCUIApplication()
+        app.launchArguments = ["-ui-testing", "-AppleLanguages", "(ar)", "-AppleLocale", "ar_SA"]
+        app.launchEnvironment["FITNESS_TESTING"] = "1"
+        app.launchEnvironment["FITNESS_TEST_THEME"] = ProcessInfo.processInfo.environment["UI_TEST_THEME"] ?? "system"
+        app.launchEnvironment["FITNESS_TEST_DIGITS"] = ProcessInfo.processInfo.environment["UI_TEST_DIGITS"] ?? "arabic"
+        app.launch()
+        let library = app.tabBars.buttons["المكتبة"]
+        XCTAssertTrue(library.waitForExistence(timeout: 15))
+        library.tap()
+        let search = app.searchFields.firstMatch
+        XCTAssertTrue(search.waitForExistence(timeout: 5))
+        if !search.isHittable { app.swipeDown() }
+        XCTAssertTrue(search.isHittable)
+        search.tap()
+        search.typeText("ضغط الصدر بالبار")
+        let benchPress = app.buttons["exercise.library.00000001-0000-4000-8000-000000000001"]
+        XCTAssertTrue(benchPress.waitForExistence(timeout: 5))
+        XCTAssertTrue(benchPress.isHittable)
+        capture(app, name: "Arabic exercise library with offline thumbnails")
+        benchPress.tap()
+        XCTAssertTrue(app.navigationBars["تفاصيل التمرين"].waitForExistence(timeout: 5))
+        let canvas = app.buttons["exercise.guide.image.0"]
+        for _ in 0..<5 where !canvas.isHittable { app.swipeUp() }
+        XCTAssertTrue(canvas.waitForExistence(timeout: 5))
+        XCTAssertTrue(canvas.isHittable)
+        XCTAssertFalse(app.buttons["exercise.guide.image.1"].exists)
+        let directions = app.staticTexts.containing(NSPredicate(
+            format: "label CONTAINS %@ AND label CONTAINS %@ AND label CONTAINS %@ AND label CONTAINS %@",
+            "بداية", "نهاية", "اليمين", "اليسار")).firstMatch
+        XCTAssertTrue(directions.waitForExistence(timeout: 5), "The Arabic caption must identify right/start and left/end")
+        capture(app, name: "Arabic bench press start and end illustration canvas")
+        canvas.tap()
+        let close = app.buttons["exercise.guide.image.close"]
+        XCTAssertTrue(close.waitForExistence(timeout: 5))
+        let fullImage = app.images.containing(NSPredicate(format: "label CONTAINS %@", "ضغط الصدر بالبار")).firstMatch
+        XCTAssertTrue(fullImage.waitForExistence(timeout: 5))
+        capture(app, name: "Arabic full size bench press illustration canvas")
+        let enlarge = app.buttons["تكبير الصورة"]
+        let reduce = app.buttons["تصغير الصورة"]
+        XCTAssertTrue(enlarge.isEnabled)
+        XCTAssertFalse(reduce.isEnabled)
+        enlarge.tap()
+        let enlarged = XCTNSPredicateExpectation(predicate: NSPredicate { _, _ in reduce.isEnabled }, object: nil)
+        XCTAssertEqual(XCTWaiter.wait(for: [enlarged], timeout: 5), .completed)
+        capture(app, name: "Arabic enlarged exercise image")
+        reduce.tap()
+        let originalSize = XCTNSPredicateExpectation(predicate: NSPredicate { _, _ in !reduce.isEnabled }, object: nil)
+        XCTAssertEqual(XCTWaiter.wait(for: [originalSize], timeout: 5), .completed)
+        close.tap()
+        let closed = XCTNSPredicateExpectation(predicate: NSPredicate { _, _ in !close.exists }, object: nil)
+        XCTAssertEqual(XCTWaiter.wait(for: [closed], timeout: 5), .completed)
+        XCTAssertTrue(app.navigationBars["تفاصيل التمرين"].waitForExistence(timeout: 5))
+        capture(app, name: "Arabic exercise details after closing image")
     }
 
     @MainActor
@@ -67,6 +140,23 @@ final class MainFlowTests: XCTestCase {
         let weight = app.textFields.matching(identifier: "set.weight.0").firstMatch
         XCTAssertTrue(weight.waitForExistence(timeout: 5))
         capture(app, name: "Arabic workout logging")
+        let pause = app.buttons["workout.pause"]
+        XCTAssertTrue(pause.isHittable)
+        pause.tap()
+        let guide = app.buttons.matching(NSPredicate(format: "identifier BEGINSWITH %@", "workout.exercise.guide.")).firstMatch
+        for _ in 0..<5 where !guide.isHittable { app.swipeUp() }
+        XCTAssertTrue(guide.isHittable)
+        XCTAssertTrue(guide.isEnabled, "Read-only exercise guidance must remain available while paused")
+        guide.tap()
+        XCTAssertTrue(app.buttons["exercise.guide.image.0"].waitForExistence(timeout: 5))
+        capture(app, name: "Arabic exercise illustration during paused workout")
+        app.buttons["exercise.guide.done"].tap()
+        for _ in 0..<6 where !pause.isHittable { app.swipeDown() }
+        XCTAssertTrue(pause.isHittable)
+        XCTAssertTrue(pause.label.contains("استئناف"))
+        pause.tap()
+        for _ in 0..<5 where !weight.isHittable { app.swipeUp() }
+        XCTAssertTrue(weight.isHittable)
         weight.tap()
         weight.typeText("20")
         XCTAssertTrue(["20", "٢٠"].contains(weight.value as? String ?? ""), "Entered weight must replace the previous value")

@@ -42,7 +42,7 @@ import Observation
         WindowGroup {
             Group {
                 if let container = runtime.container {
-                    RootView(warning: runtime.warning, cloudEnabled: runtime.cloudEnabled)
+                    RootView(cloudEnabled: runtime.cloudEnabled)
                         .modelContainer(container)
                 } else {
                     VStack(spacing: 20) {
@@ -61,7 +61,6 @@ import Observation
 }
 
 @MainActor struct RootView: View {
-    let warning: String?
     let cloudEnabled: Bool
     @Environment(\.modelContext) private var context
     @Environment(\.scenePhase) private var scenePhase
@@ -71,30 +70,18 @@ import Observation
     @Environment(AppLockService.self) private var lock
     @AppStorage("onboardingComplete") private var onboardingComplete = false
     @State private var tab = 0
-    @State private var warningDismissed = false
     @State private var startupError: String?
     private var protected: Bool { settings.lockEnabled && !lock.isUnlocked }
     var body: some View {
         ZStack {
-            VStack(spacing: 0) {
-                if let warning, !warningDismissed {
-                    HStack(spacing: 8) {
-                        Text(warning).font(.caption).fixedSize(horizontal: false, vertical: true)
-                            .accessibilityIdentifier("startup.warning")
-                        Button { warningDismissed = true } label: {
-                            Image(systemName: "xmark").frame(width: 44, height: 44)
-                        }.accessibilityLabel("إخفاء التنبيه")
-                    }
-                    .padding(.horizontal, 12).padding(.vertical, 4).background(.orange.opacity(0.15))
-                }
-                TabView(selection: $tab) {
-                    WorkoutView().tabItem { Label("التمرين", systemImage: "dumbbell.fill") }.tag(0)
-                    PlansView().tabItem { Label("خططي", systemImage: "calendar") }.tag(1)
-                    LibraryView().tabItem { Label("المكتبة", systemImage: "square.grid.2x2") }.tag(2)
-                    ProgressDashboardView().tabItem { Label("تقدّمي", systemImage: "chart.xyaxis.line") }.tag(3)
-                    SettingsView().tabItem { Label("الإعدادات", systemImage: "gearshape") }.tag(4)
-                }.onChange(of: workout.activeSessionID) { _, id in if id != nil { tab = 0 } }
+            TabView(selection: $tab) {
+                WorkoutView().tabItem { Label("التمرين", systemImage: "dumbbell.fill") }.tag(0)
+                PlansView().tabItem { Label("خططي", systemImage: "calendar") }.tag(1)
+                LibraryView().tabItem { Label("المكتبة", systemImage: "square.grid.2x2") }.tag(2)
+                ProgressDashboardView().tabItem { Label("تقدّمي", systemImage: "chart.xyaxis.line") }.tag(3)
+                SettingsView().tabItem { Label("الإعدادات", systemImage: "gearshape") }.tag(4)
             }.disabled(protected).accessibilityHidden(protected)
+                .onChange(of: workout.activeSessionID) { _, id in if id != nil { tab = 0 } }
             if protected {
                 VStack(spacing: 20) {
                     Image(systemName: "lock.shield").font(.system(size: 52)).foregroundStyle(settings.color)
@@ -177,7 +164,7 @@ import Observation
             Text("وتيرة يساعدك على التخطيط وتسجيل مجموعاتك ومتابعة ما يتحسن، خطوة بخطوة.").font(.title3).foregroundStyle(.secondary)
             Label("ابدأ بقالب وعدّله على راحتك", systemImage: "calendar")
             Label("كل مجموعة تُحفظ أثناء تمرينك", systemImage: "checkmark.shield")
-            Label("بياناتك على جهازك وآي كلاود الخاص بك", systemImage: "lock")
+            Label("بياناتك محفوظة على جهازك", systemImage: "lock")
             Spacer()
             Button("لنبدأ") { finish() }.font(.headline).frame(maxWidth: .infinity).padding().background(settings.color, in: RoundedRectangle(cornerRadius: 18)).foregroundStyle(.white)
                 .accessibilityIdentifier("onboarding.finish")

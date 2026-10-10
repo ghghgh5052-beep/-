@@ -42,16 +42,28 @@ import LocalAuthentication
                     Text("قراءة الوزن والخطوات، وكتابة الجلسات المكتملة بعد موافقتك. يمكنك إدارة الصلاحيات في تطبيق الصحة.").font(.caption).foregroundStyle(.secondary)
                 }
                 Section("مزامنة آي كلاود") {
-                    Label(sync.statusText, systemImage: "icloud")
-                    if let imported = sync.lastImport { Text("آخر استقبال: " + ArabicFormat.date(imported)).font(.caption) }
-                    if let exported = sync.lastExport { Text("آخر إرسال: " + ArabicFormat.date(exported)).font(.caption) }
-                    Button("فحص حساب آي كلاود") { Task { await sync.refreshAccount() } }
-                    Text("تعمل بياناتك محليًا دون اتصال. عند توفر آي كلاود تُزامَن البيانات والصور في حاويتك الخاصة. لا يعني انتهاء إرسال واحد وصول كل البيانات إلى الأجهزة الأخرى.").font(.caption).foregroundStyle(.secondary)
+                    Label(sync.statusText, systemImage: sync.state == .localOnly ? "iphone" : "icloud")
+                        .accessibilityIdentifier("settings.sync.status")
+                    if sync.state != .localOnly {
+                        if let imported = sync.lastImport { Text("آخر استقبال: " + ArabicFormat.date(imported)).font(.caption) }
+                        if let exported = sync.lastExport { Text("آخر إرسال: " + ArabicFormat.date(exported)).font(.caption) }
+                        Button("فحص حساب آي كلاود") { Task { await sync.refreshAccount() } }
+                    }
+                    Text(sync.state == .localOnly
+                         ? "يمكنك متابعة التمرين وحفظ تقدمك دون اتصال. مزامنة آي كلاود غير متاحة حاليًا."
+                         : "تعمل بياناتك محليًا دون اتصال. عند توفر آي كلاود تُزامَن البيانات والصور في حاويتك الخاصة. لا يعني انتهاء إرسال واحد وصول كل البيانات إلى الأجهزة الأخرى.")
+                        .font(.caption).foregroundStyle(.secondary)
                 }
                 Section("بياناتك") { NavigationLink("تصدير واستيراد ونسخ احتياطي", destination: BackupView()) }
-                Section("وتيرة") {
+                Section("عن وتيرة") {
                     Text("مخطط تمرينك، وسجل تقدمك.")
-                    Text("لا حسابات، ولا إعلانات، ولا أدوات تتبع.").foregroundStyle(.secondary)
+                    NavigationLink { AboutView() } label: {
+                        VStack(alignment: .leading, spacing: 6) {
+                            Label("الملكية والحقوق", systemImage: "checkmark.seal")
+                            Text(AppBranding.ownerName).font(.subheadline).foregroundStyle(.secondary)
+                                .environment(\.layoutDirection, .leftToRight)
+                        }.padding(.vertical, 4)
+                    }.accessibilityIdentifier("settings.about")
                     Text("الإصدار " + ArabicFormat.digits(Bundle.main.object(forInfoDictionaryKey: "CFBundleShortVersionString") as? String ?? "1.0", arabic: settings.useArabicDigits)).font(.caption)
                 }
             }.navigationTitle("الإعدادات")

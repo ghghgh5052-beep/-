@@ -132,6 +132,7 @@
 			"files" = (
 				"7CBDCCDB2D31C4EF0A6F7642",
 				"984EC7B8F8FA90EEDB716DA3",
+				"1DBB5FE401445F547C7E8976",
 				"B5DD6CE095C80D53296CFC6C",
 				"CDC98DEFE7075F7C8AFA4C95",
 			);
@@ -206,6 +207,10 @@
 			"lastKnownFileType" = "sourcecode.swift";
 			"path" = "Fitness/Services/WidgetSnapshotService.swift";
 			"sourceTree" = "<group>";
+		};
+		"1DBB5FE401445F547C7E8976" = {
+			"isa" = "PBXBuildFile";
+			"fileRef" = "8EE21803167E9353254B4070";
 		};
 		"1F2146A8339CB7582679C8D2" = {
 			"isa" = "PBXTargetDependency";
@@ -376,6 +381,12 @@
 			"path" = "FitnessTests/BackupTests.swift";
 			"sourceTree" = "<group>";
 		};
+		"3CB503123BF6ABD8BB2BD7FC" = {
+			"isa" = "PBXFileReference";
+			"lastKnownFileType" = "sourcecode.swift";
+			"path" = "Fitness/Core/ExerciseGuides.swift";
+			"sourceTree" = "<group>";
+		};
 		"41477369EB116BB930ACE1F3" = {
 			"isa" = "PBXBuildFile";
 			"fileRef" = "F08BF740DFA7D0514C7E31DA";
@@ -521,6 +532,10 @@
 			"path" = "FitnessTests.xctest";
 			"sourceTree" = "BUILT_PRODUCTS_DIR";
 		};
+		"781D35F38FECD44C2ECE6698" = {
+			"isa" = "PBXBuildFile";
+			"fileRef" = "93BC7E9CE236925713C89310";
+		};
 		"79F6DC424ECD6C90A518EEB0" = {
 			"isa" = "PBXFileReference";
 			"lastKnownFileType" = "sourcecode.swift";
@@ -555,6 +570,7 @@
 				"EEDFD399863E81F0BB28B9DC",
 				"EC87155D8378A230BBC35666",
 				"0BD6A8F04BC512EC179399C1",
+				"AF12F66AF7C58687522157C6",
 				"EECFB3FA6DCFAF66F0866C62",
 				"0B4CB22FFD4047865B526E16",
 				"331F7E7A99539A441C118A4F",
@@ -564,6 +580,7 @@
 				"0990F8EE9A0EA70E29692D1C",
 				"6F72EEEF00E6B77B2C910A10",
 				"0BEA16C4C39E21BC49A7BD3A",
+				"EA130D6319C884176F672524",
 				"8D183511F5B6CD570034102E",
 				"70FE23A687B6DD4F2C8BCC6E",
 				"18A938EB1F17E355D063A29B",
@@ -575,6 +592,7 @@
 				"1FF230346C0F2B2926D612DE",
 				"01FCECD1A9942D74984614CF",
 				"6A8510CBE8A3263662C505C7",
+				"781D35F38FECD44C2ECE6698",
 				"41477369EB116BB930ACE1F3",
 			);
 			"runOnlyForDeploymentPostprocessing" = 0;
@@ -646,6 +664,12 @@
 			};
 			"name" = "Release";
 		};
+		"8EE21803167E9353254B4070" = {
+			"isa" = "PBXFileReference";
+			"lastKnownFileType" = "sourcecode.swift";
+			"path" = "FitnessTests/ExerciseGuideTests.swift";
+			"sourceTree" = "<group>";
+		};
 		"9009B3B6440D8F62069B6C8D" = {
 			"isa" = "PBXBuildFile";
 			"fileRef" = "31D8E6147E52899B87674B84";
@@ -658,6 +682,12 @@
 			"isa" = "PBXTargetDependency";
 			"target" = "D8701D5EA7B64691847615F1";
 			"targetProxy" = "98DCFE2F1E0891E3EE59E06E";
+		};
+		"93BC7E9CE236925713C89310" = {
+			"isa" = "PBXFileReference";
+			"lastKnownFileType" = "sourcecode.swift";
+			"path" = "Fitness/Shared/ExerciseGuideView.swift";
+			"sourceTree" = "<group>";
 		};
 		"93E1669807B27A21875915A7" = {
 			"isa" = "XCBuildConfiguration";
@@ -766,6 +796,7 @@
 				"1A7070D46DAB7A6A7BB6D326",
 				"5E9530042CD26E17A92712FE",
 				"0CD24045BF24CB63E945FD24",
+				"3CB503123BF6ABD8BB2BD7FC",
 				"79F6DC424ECD6C90A518EEB0",
 				"38C5343769F448EBA64C70E7",
 				"9E88AFB09EEBBBB308A98BFB",
@@ -775,6 +806,7 @@
 				"2540876D4A952E3A0939E511",
 				"96140E02CA932CF7740B03F5",
 				"D75CC73EE8F13ECA77A6CDED",
+				"E65AF423B244042ABE0D737B",
 				"6F30B9597462BC97F7C3AE8D",
 				"44AFCD9AEB6D473DE997612B",
 				"53F97FB6B28D89D0DF108AA0",
@@ -789,9 +821,11 @@
 				"1BFFF990FA8A25246CE4EAE5",
 				"7C14CE1335DA8BC756A6D586",
 				"9E5748D5F8047FB167FDAB1F",
+				"93BC7E9CE236925713C89310",
 				"F08BF740DFA7D0514C7E31DA",
 				"39628AFE920C9FB6E71C3606",
 				"3127F2DF7C5FA22F8A6DC6DC",
+				"8EE21803167E9353254B4070",
 				"494CD3D7C8C54C5634F92E71",
 				"7C59A5F5235F288C7F384420",
 				"5B0C0032240DCE747BD4ACBF",
@@ -800,6 +834,10 @@
 				"6F7199ED7B63CDA338A0FB82",
 			);
 			"sourceTree" = "<group>";
+		};
+		"AF12F66AF7C58687522157C6" = {
+			"isa" = "PBXBuildFile";
+			"fileRef" = "3CB503123BF6ABD8BB2BD7FC";
 		};
 		"AF483BA74508E3879D6C9A5E" = {
 			"isa" = "PBXBuildFile";
@@ -940,6 +978,16 @@
 			);
 			"defaultConfigurationIsVisible" = 0;
 			"defaultConfigurationName" = "Release";
+		};
+		"E65AF423B244042ABE0D737B" = {
+			"isa" = "PBXFileReference";
+			"lastKnownFileType" = "sourcecode.swift";
+			"path" = "Fitness/Features/Settings/AboutView.swift";
+			"sourceTree" = "<group>";
+		};
+		"EA130D6319C884176F672524" = {
+			"isa" = "PBXBuildFile";
+			"fileRef" = "E65AF423B244042ABE0D737B";
 		};
 		"EC87155D8378A230BBC35666" = {
 			"isa" = "PBXBuildFile";

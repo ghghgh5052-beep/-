@@ -11,7 +11,7 @@ Date: 2026-10-10 (Asia/Riyadh). Authoring host: Windows. Source is connected to 
 - Reviewed model schema defaults/CloudKit compatibility, pure calculations, migration path, recoverable persistence, PR idempotence, conflict rules, import validation and API contracts across modules.
 - Wrote XCTest suites for formulas, invalid inputs, volumes/units, optimal plate composition, warmups, PR history, streak/averages, migrations, seed identity, conflict handling, JSON/CSV roundtrips and malformed imports.
 - Wrote a main-flow XCUITest for plan creation → workout start → set completion → saved progress.
-- XCTest source contains 22 unit tests and one UI test. All 23 passed on iPhone SE (3rd generation), iOS 18.5 in the first successful native build.
+- The first native build contained 22 unit tests and one UI test. All 23 passed on iPhone SE (3rd generation), iOS 18.5; this is a historical result, not the current source count.
 - Ran **10 portable tooling tests: 10 passed**. These validate entitlement expansion from separate native target settings, rejection of incomplete signing manifests, project/plist structure, and rejection of missing extensions, missing App Intent metadata, mismatched groups and signed bundles. Packaging tests use synthetic headers only; they do not prove a real app executable works.
 
 **Static checks and code review do not compile Swift and do not execute XCTest.**
@@ -26,8 +26,17 @@ Date: 2026-10-10 (Asia/Riyadh). Authoring host: Windows. Source is connected to 
 - Inspected actual Arabic plan, workout and progress PNG screenshots from the small iPhone simulator. CI now also runs the flow on a large iPhone in dark mode with Western digits and exports screenshots plus accessibility hierarchies for both destinations.
 - [Two-size passing run](https://github.com/ghghgh5052-beep/-/actions/runs/38017763411), source `13659c005d9cbf12304be0332ace2a8d6a7a5e79`: 23 tests passed on iPhone SE, plus the same UI flow on iPhone 16 Pro Max. Both build summaries reported zero warnings and errors. The exported Pro Max screenshots were visually inspected and confirmed dark appearance and Western digits; SE screenshots confirmed Arabic-Indic digits and light appearance.
 - Xcode's `appintentsnltrainingprocessor` printed `Unable to parse extract.actionsdata` while succeeding. The packaged JSON was independently decoded and contains the start-workout intent, Arabic shortcut phrases and nonempty trained-language data. Packaging now validates these files explicitly. This confirms their presence, not successful Siri invocation on a signed device.
-- Tests use `FITNESS_TESTING=1` and an isolated in-memory local store, avoiding entitlement-requiring CloudKit calls from the unsigned XCTest host. This does not change the production CloudKit configuration.
+- Standard workout/image UI fixtures use `FITNESS_TESTING=1` and an isolated in-memory local store. The production-startup UI test instead opens a permanent local store through the real bootstrap path and relaunches the app; it does not prove a fresh installation on a signed device. This does not change production CloudKit configuration.
 - Packaging queries app scheme settings and widget target settings separately. Both shipping targets are required before entitlement export; this avoids relying on `-showBuildSettings -scheme` to include implicit dependencies.
+
+## Verified startup repair and version 1.1 gates
+
+- [Startup-repair run](https://github.com/ghghgh5052-beep/-/actions/runs/38021944528), source `80ca60b3a1f70b1d9c68ea06254e835999d98f69`: 29 unit tests and two UI tests passed on SE; two UI tests passed on Pro Max. Both native build summaries reported zero errors, warnings and analyzer warnings. Ten portable tooling tests and three real Mach-O signature checks passed. These results precede the version 1.1 illustrations and ownership changes.
+- The owner subsequently confirmed successful launch after manual signing and reported testing most app functions. This confirms the earlier launch repair; it does not establish signed CloudKit/HealthKit/widget acceptance or acceptance of a later binary.
+- Version 1.1 removes the startup banner, shows truthful storage status in Settings, adds ownership only (`Coach : 3BIID - AB`) and provides 66 offline start/end illustration canvases. Real accounts/backend and social links are outside this release, as explicitly requested by the owner.
+- Current XCTest sources contain **32 unit tests and three UI tests**. The asset tests load all 66 images from the actual app bundle and verify permanent-ID association, rename stability and the absence of misleading custom-exercise fallbacks. UI tests cover opening, enlarging, reducing and closing the illustration, reading ownership/local status, reopening production storage, and viewing guidance while a workout is paused before resuming logging.
+- CI executes the 35-test complete suite on SE and the three UI tests on Pro Max: **38 native executions** are required. Portable asset checks validate exact PNG checksums/dimensions and 66 unique canvases. Successful execution is evidenced by the matching source commit, both native summaries, build diagnostics and IPA checksum delivered with the release; source/test presence alone is not a passing result.
+- Illustration review is recorded separately from native execution, in [EXERCISE_ART.md](EXERCISE_ART.md). Actual screenshot inspection and signed-device acceptance remain separate from generation and static checks.
 
 ## Pending broader validation
 

@@ -1,0 +1,776 @@
+{
+  "formatVersion": 1,
+  "date": "2026-10-10",
+  "method": "AI agent inspection of each actual PNG with view_image; comparison of catalog, apparatus and both body poses. Corrections were generated and inspected again.",
+  "scope": "Movement identity, visible equipment connections, right/start and left/end labels, key body contacts, framing and obvious extra-limb artifacts. Technical visual review; no documented human specialist review.",
+  "entries": [
+    {
+      "code": 1,
+      "asset": "exercise_001",
+      "sha256": "1ab0b649a3dd84e2f191a578a0344e864ddfdde42a4bf0bdfa04af0b8cc95e4b",
+      "status": "pass",
+      "observations": [
+        "Flat barbell bench press with flexed elbows on the right and extended elbows on the left; feet and head/hips supported; continuous bar and plausible grips."
+      ],
+      "notes": [
+        "Bar and shoes have very narrow outer margins; all main contacts remain visible.",
+        "The start shows a bent-elbow press position rather than bar touching mid-chest; do not describe the illustration as a full-range technique certification."
+      ]
+    },
+    {
+      "code": 2,
+      "asset": "exercise_002",
+      "sha256": "1a567db64ac1811fa8ce92431fabe770b472b4c5b743b83e1b3293fa7e0b74b1",
+      "status": "pass",
+      "observations": [
+        "Two separate dumbbells pressed from bent elbows beside chest to extended arms above chest on a flat bench; body/feet contacts consistent."
+      ],
+      "notes": [
+        "The far forearm in the right panel is partially occluded by its dumbbell and torso, but the equipment and press movement remain legible."
+      ]
+    },
+    {
+      "code": 3,
+      "asset": "exercise_003",
+      "sha256": "8e411159c4140e5158c4f4f17fafe739a802ff6661c2f61eaa59faaf459856ba",
+      "status": "pass",
+      "observations": [
+        "Corrected incline barbell press with full shoes and unmarked plates; bent-to-extended elbow pair."
+      ],
+      "notes": [
+        "The bench angle is a moderate incline, closer to 45 than 30 degrees."
+      ]
+    },
+    {
+      "code": 4,
+      "asset": "exercise_004",
+      "sha256": "d7de03b20ac4abd3f4e8448a74bd6f7d5905b512d748187c227a8c6691375e9d",
+      "status": "pass",
+      "observations": [
+        "Incline dumbbell press with two separate weights, clear bent-to-extended elbows, supported torso and grounded feet."
+      ],
+      "notes": [
+        "Bench appears closer to 45 degrees than the 30-degree prompt; still a correct inclined representative variant."
+      ]
+    },
+    {
+      "code": 5,
+      "asset": "exercise_005",
+      "sha256": "f7f5df8900bae11dfbaf6f084ed51c447f7dde1b5c0bd28b313a9636adf441b4",
+      "status": "pass",
+      "observations": [
+        "Flat dumbbell fly: right panel has separate dumbbells above the chest; left panel opens the arms laterally with a small elbow bend.",
+        "Flat bench, head/back support, grounded feet, complete bodies and dumbbells are visible.",
+        "Arabic البداية is on the right and النهاية is on the left; no obvious extra limbs or duplicated motion figures."
+      ],
+      "notes": []
+    },
+    {
+      "code": 6,
+      "asset": "exercise_006",
+      "sha256": "f44b62f2527a1bdb7e68072075af7210b02fb0b8528d848f9af09423d6278434",
+      "status": "pass",
+      "observations": [
+        "Standing cable fly: right panel starts with arms open, left panel brings both handles together in front of the chest; split stance is retained.",
+        "Both cable runs connect the hand-held handles to high side pulleys; body, hands, feet and functional equipment are visible.",
+        "Arabic headings have the correct sides; no obvious extra limbs. The outermost machine crossbar is close to the canvas edge without obscuring the movement."
+      ],
+      "notes": []
+    },
+    {
+      "code": 7,
+      "asset": "exercise_007",
+      "sha256": "23868f50ac56e3d85539ea0f82cf6dd6e262b464c1583c3f48ee85886d44165b",
+      "status": "pass",
+      "observations": [
+        "Current canonical chest-press image has both handles physically connected to rigid lever arms; bent-to-extended elbows press forward from supported seat."
+      ],
+      "notes": [
+        "This viewed canonical version appears repaired compared with root's earlier floating-grip report."
+      ]
+    },
+    {
+      "code": 8,
+      "asset": "exercise_008",
+      "sha256": "f0b2fdda8ddc0d00d6d290368471c3224e0efdf9b6af8052aa2d798e5c886eda",
+      "status": "pass",
+      "observations": [
+        "Bodyweight push-up: right panel has straight arms, palms and toes supporting a straight body; left panel lowers the chest with bent elbows while keeping knees off the floor.",
+        "Both complete bodies, hands and shoes fit within the canvas; no apparatus or obvious extra limbs.",
+        "Arabic headings have the correct sides and the two poses are clearly distinct."
+      ],
+      "notes": []
+    },
+    {
+      "code": 9,
+      "asset": "exercise_009",
+      "sha256": "e188176954f18b8b2a58a9ee0c2c0ca586c9da031c72b69c455d3ac3a143b310",
+      "status": "pass",
+      "observations": [
+        "Parallel-bar dip: right supported with extended elbows and feet suspended; left body lowered with bent elbows and forward chest lean."
+      ],
+      "notes": []
+    },
+    {
+      "code": 10,
+      "asset": "exercise_010",
+      "sha256": "3ef146e4b59cf636455e03674278da418801991f3f8fc7a5c7f21931361ec6d3",
+      "status": "pass",
+      "observations": [
+        "Pec-deck chest fly using vertical hand grips; rigid lever arms connect to overhead pivots and move from open to closed in front of chest."
+      ],
+      "notes": [
+        "Depicted variant uses hand grips, not elbows pressing 90-degree forearm pads. Generic catalog name/cues match. Elbow bend changes modestly across arc."
+      ]
+    },
+    {
+      "code": 11,
+      "asset": "exercise_011",
+      "sha256": "55a57efc6980e87a17394fb3a9d2d601b4db2d12b357b5b9dbd5acc78babfdba",
+      "status": "pass",
+      "observations": [
+        "Corrected front lat pulldown; actual upper pulley connects cable to bar; overhead-to-upper-chest pair with thighs under pad."
+      ],
+      "notes": [
+        "Replaces earlier disconnected-cable attempt."
+      ]
+    },
+    {
+      "code": 12,
+      "asset": "exercise_012",
+      "sha256": "cbc0d5d6293f309b93146d231335a019642b1a06ea61436b7bc4b5d3ad3def9b",
+      "status": "pass",
+      "observations": [
+        "Overhand pull-up from suspended extended arms to bent elbows with chin above bar; same bar and no foot support."
+      ],
+      "notes": []
+    },
+    {
+      "code": 13,
+      "asset": "exercise_013",
+      "sha256": "2b8c2d76270408fe117b2327ab6708a83deb240828b83b4b3114f1654a8a20b3",
+      "status": "pass",
+      "observations": [
+        "Hip-hinged barbell row with stable bent knees and neutral-looking spine; bar moves from hanging arms toward waist/lower ribs."
+      ],
+      "notes": [
+        "Bar tips have narrow image margins but remain visible. Torso pitch varies slightly without becoming an upright row."
+      ]
+    },
+    {
+      "code": 14,
+      "asset": "exercise_014",
+      "sha256": "df4933199005e6572a55671dc52089e5a6ae531ed9d111f97f54067be304ea9e",
+      "status": "pass",
+      "observations": [
+        "Single dumbbell row with opposite knee/hand on bench and working-side foot grounded; extended arm to elbow drawn behind ribs."
+      ],
+      "notes": []
+    },
+    {
+      "code": 15,
+      "asset": "exercise_015",
+      "sha256": "edc38c24e8a2fa0fb894c4d88e6a1770bca5c987c21fc13f6ef7c8e4b55d3202",
+      "status": "pass",
+      "observations": [
+        "Seated V-handle cable row; cable reaches visible low pulley, feet brace against platform, handle drawn to lower ribs and torso stays upright."
+      ],
+      "notes": [
+        "Top and outer edge of cable tower are cropped. Athlete, functional low pulley and selected weight stack are visible, but prompt requested complete apparatus."
+      ]
+    },
+    {
+      "code": 16,
+      "asset": "exercise_016",
+      "sha256": "15ecfdda6a7ff31bbe996fca97996fcf73428be839acbfb3588f036cc1c5ceb6",
+      "status": "pass",
+      "observations": [
+        "Seated plate-loaded lever row; chest contacts front pad, rigid grip arms reach visible pivots, extended arms become elbows drawn beside ribs."
+      ],
+      "notes": [
+        "Small indeterminate marks on weight plates are not legible UI text."
+      ]
+    },
+    {
+      "code": 17,
+      "asset": "exercise_017",
+      "sha256": "0727eb3d397e585f4ab4d6f83bea9ffc54fc2e1cfefd002a200ea84577b5854c",
+      "status": "pass",
+      "observations": [
+        "Standing high-cable straight-arm pulldown; bar/cable connected and arms nearly straight as bar moves from above-shoulder forward position to thighs."
+      ],
+      "notes": [
+        "Trunk angle differs slightly between poses; the movement remains shoulder extension rather than elbow pushdown."
+      ]
+    },
+    {
+      "code": 18,
+      "asset": "exercise_018",
+      "sha256": "1bd89dc790b0c9ddc3ecc1af6a4792d0f0f2b5e3f2e3353310b5ba89e371fc17",
+      "status": "pass",
+      "observations": [
+        "Conventional barbell deadlift; floor plates and bar near shins at start, upright finish with bar at thighs and arms straight."
+      ],
+      "notes": [
+        "Weight plate surfaces contain faint decorative marks without readable words."
+      ]
+    },
+    {
+      "code": 19,
+      "asset": "exercise_019",
+      "sha256": "17835b70ccab1f39ee582f4fb37c0f30f55865d151a136ad1899fceec4a4c453",
+      "status": "pass",
+      "observations": [
+        "Bodyweight Roman-chair back extension; hip flexed start and finish with shoulder, hip and leg centers aligned; ankle/hip supports remain consistent."
+      ],
+      "notes": [
+        "No apparent exaggerated trunk extension above the leg line; head looks slightly forward in finish."
+      ]
+    },
+    {
+      "code": 20,
+      "asset": "exercise_020",
+      "sha256": "f96f1e3127a01db140026e93a57c144ae34450029c15f36ce97cf26f5fd6d142",
+      "status": "pass",
+      "observations": [
+        "Floor seated band row; band loops around both feet, extended arms become hands near ribs, seated torso remains stable."
+      ],
+      "notes": [
+        "Red band makes elastic equipment clear; small lateral back emphasis appears only in finish."
+      ]
+    },
+    {
+      "code": 21,
+      "asset": "exercise_021",
+      "sha256": "0fabcd30ca1a1cac9778f357a6eda60a9a1360c7dd7b13ec1deab4e20440b54c",
+      "status": "pass",
+      "observations": [
+        "Standing barbell shoulder press: front-clavicle bent-elbow start on the right; bar overhead with extended arms on the left.",
+        "Standing feet, continuous bar, two arms and two legs remain fully visible; the bar is in front of the neck.",
+        "Arabic البداية is on the right and النهاية is on the left. No obvious extra limbs or duplicated athlete figures are visible."
+      ],
+      "notes": []
+    },
+    {
+      "code": 22,
+      "asset": "exercise_022",
+      "sha256": "5fa1e5b755ac181b8fc59c0d2913fb29e3c92b01db1b72906b872bfb861dce1f",
+      "status": "pass",
+      "observations": [
+        "Seated dumbbell shoulder press with a supported upright back: weights beside the ears on the right and overhead extended arms on the left.",
+        "Both separate dumbbells, grounded shoes, head and bench contact remain visible.",
+        "Arabic البداية is on the right and النهاية is on the left. No obvious extra limbs or duplicated athlete figures are visible."
+      ],
+      "notes": []
+    },
+    {
+      "code": 23,
+      "asset": "exercise_023",
+      "sha256": "ce9e62373b8ce158da020e34fbc43718657bdb9d55f9dda1bdcec78b6027be5b",
+      "status": "pass",
+      "observations": [
+        "Lateral raise: right-panel weights hang beside the thighs; left-panel arms raise sideways to shoulder height.",
+        "The lateral plane is visibly different from front raise 24; both figures and separate dumbbells are complete.",
+        "Arabic البداية is on the right and النهاية is on the left. No obvious extra limbs or duplicated athlete figures are visible."
+      ],
+      "notes": []
+    },
+    {
+      "code": 24,
+      "asset": "exercise_024",
+      "sha256": "c2eb25c33ab1818c87bf463f28229381068ea74145d3b2dbdd28a6dc7a578ed6",
+      "status": "pass",
+      "observations": [
+        "Front raise: right-panel arms are down; left-panel arms extend forward to shoulder height with palms facing down.",
+        "Side three-quarter view clearly distinguishes the movement from lateral raise 23; full bodies and both weights are visible.",
+        "Arabic البداية is on the right and النهاية is on the left. No obvious extra limbs or duplicated athlete figures are visible."
+      ],
+      "notes": []
+    },
+    {
+      "code": 25,
+      "asset": "exercise_025",
+      "sha256": "361015d84390dc90c52d18be52814addd6e84115ed3bcd44dcec2c3db1f7d8a2",
+      "status": "pass",
+      "observations": [
+        "Bent-over rear-delt fly: both panels preserve a hip hinge and neutral torso; hanging dumbbells on the right open sideways on the left.",
+        "A small elbow bend is retained; the finish is a fly rather than a row. Full bodies and both dumbbells are visible.",
+        "Arabic البداية is on the right and النهاية is on the left. No obvious extra limbs or duplicated athlete figures are visible."
+      ],
+      "notes": []
+    },
+    {
+      "code": 26,
+      "asset": "exercise_026",
+      "sha256": "a80c6f250f6710bce59d014e0630ab753c54f1e85d9f8fab5328c5eee784a180",
+      "status": "pass",
+      "observations": [
+        "Standing cable rope face pull: arms forward on the right; rope center at the forehead with separated hands and high elbows on the left.",
+        "The face-level rope path, cable connection, feet and full athlete are visible; the movement is not a pull to the chest.",
+        "Arabic البداية is on the right and النهاية is on the left. No obvious extra limbs or duplicated athlete figures are visible."
+      ],
+      "notes": []
+    },
+    {
+      "code": 27,
+      "asset": "exercise_027",
+      "sha256": "34eceb06418e831f5d495fc373be97d42aef90948effb2d9f6a46be6400c8d73",
+      "status": "pass",
+      "observations": [
+        "Seated machine shoulder press: right-panel handles are beside the shoulders with elbows bent; left-panel handles are clearly above the head with extended arms.",
+        "The two poses are distinct; back support, feet, lever machine and two arms are clear. It is not a seated chest press.",
+        "Arabic البداية is on the right and النهاية is on the left. No obvious extra limbs or duplicated athlete figures are visible."
+      ],
+      "notes": []
+    },
+    {
+      "code": 28,
+      "asset": "exercise_028",
+      "sha256": "b88263a7fc6bd4bb7496666e18051731428bda0486a4627481be1a59814d4bb6",
+      "status": "pass",
+      "observations": [
+        "Dumbbell shrug: shoulders are relaxed on the right and distinctly elevated toward the ears on the left.",
+        "Elbows stay straight, dumbbells rise only slightly and the neck remains neutral. Full bodies and both dumbbells are visible.",
+        "Arabic البداية is on the right and النهاية is on the left. No obvious extra limbs or duplicated athlete figures are visible."
+      ],
+      "notes": []
+    },
+    {
+      "code": 29,
+      "asset": "exercise_029",
+      "sha256": "db5bb882f7950f08c923b995deeb81675c38319fb533cde6183226dd6fc8917a",
+      "status": "pass",
+      "observations": [
+        "Barbell back squat: standing right-panel start and roughly parallel-thigh left-panel squat.",
+        "The bar is supported across the upper back, heels remain grounded and both hands/feet are visible; it is distinct from front squat 30.",
+        "Arabic البداية is on the right and النهاية is on the left. No obvious extra limbs or duplicated athlete figures are visible."
+      ],
+      "notes": []
+    },
+    {
+      "code": 30,
+      "asset": "exercise_030",
+      "sha256": "fed275d7579559b6e7a7b8ab2ce71088bf7b98c748cd3751dc3d6ffd333851a4",
+      "status": "pass",
+      "observations": [
+        "Front squat: bar lies across the front deltoids/clavicles with forward high elbows in both panels.",
+        "Right-panel standing start and left-panel squat have grounded heels; the bar is not behind the neck. Bodies and apparatus remain complete.",
+        "Arabic البداية is on the right and النهاية is on the left. No obvious extra limbs or duplicated athlete figures are visible."
+      ],
+      "notes": []
+    },
+    {
+      "code": 31,
+      "asset": "exercise_031",
+      "sha256": "a5d9ac34c4603ab236b1eedc013fc94fee701addd9e241dc1223414e795536b2",
+      "status": "pass",
+      "observations": [
+        "Dumbbell squat: one weight in each straight hanging arm, standing on the right and squatting on the left.",
+        "The weights remain beside the legs; the image does not show a goblet squat or barbell. Grounded feet and both bodies are visible.",
+        "Arabic البداية is on the right and النهاية is on the left. No obvious extra limbs or duplicated athlete figures are visible."
+      ],
+      "notes": []
+    },
+    {
+      "code": 32,
+      "asset": "exercise_032",
+      "sha256": "327047278d2576189032a44603cea3d1298162647b17490cdb3ba1ded51661fb",
+      "status": "pass",
+      "observations": [
+        "Sled leg press: supported reclining torso and soles on the platform; bent knees on the right and extended legs on the left.",
+        "Platform and sled positions move consistently along diagonal rails. Full body and functional contacts remain visible despite cosmetic cropping at the outer machine edge.",
+        "Arabic البداية is on the right and النهاية is on the left. No obvious extra limbs or duplicated athlete figures are visible."
+      ],
+      "notes": []
+    },
+    {
+      "code": 33,
+      "asset": "exercise_033",
+      "sha256": "8cb22f3809f38db77aeb40658ce3e5a386442501f681fcd32dd556287ebd22e6",
+      "status": "pass",
+      "observations": [
+        "Seated leg extension: supported upright torso, front shin roller and bent knees on the right; lower legs extend horizontally on the left.",
+        "The movement, seat and front roller clearly differ from prone leg curl 34. Shoes and athlete are fully visible.",
+        "Arabic البداية is on the right and النهاية is on the left. No obvious extra limbs or duplicated athlete figures are visible."
+      ],
+      "notes": []
+    },
+    {
+      "code": 34,
+      "asset": "exercise_034",
+      "sha256": "75fae5b938b6d1d8f8058932e00372c297fc83346101a7859d3df3aee657de53",
+      "status": "pass",
+      "observations": [
+        "Prone leg curl: the athlete lies belly down with thighs on the horizontal bench; extended-leg start on the right and heels raised by knee flexion on the left.",
+        "The roller contacts the backs of the ankles; it is clearly distinct from seated leg extension 33. Athlete, shoes and machine remain visible.",
+        "Arabic البداية is on the right and النهاية is on the left. No obvious extra limbs or duplicated athlete figures are visible."
+      ],
+      "notes": []
+    },
+    {
+      "code": 35,
+      "asset": "exercise_035",
+      "sha256": "771afb32069173289c6503094b6334f29804d6563abe0f89eedb66c1a834a7a7",
+      "status": "pass",
+      "observations": [
+        "Romanian deadlift: standing bar-at-thighs start on the right and hip-hinge lowering to mid-shin on the left with only a slight knee bend.",
+        "The bar stays close to the shins and does not touch the floor; this differs visibly from conventional floor deadlift 18, which was opened for comparison. Full figures and bar remain visible.",
+        "Arabic البداية is on the right and النهاية is on the left. No obvious extra limbs or duplicated athlete figures are visible."
+      ],
+      "notes": []
+    },
+    {
+      "code": 36,
+      "asset": "exercise_036",
+      "sha256": "654d431170e417172d8ad6e47e6ce0320220671b03f51cb6a88d44d9d5f262c6",
+      "status": "pass",
+      "observations": [
+        "Forward dumbbell lunge: feet together on the right, split stance with front knee about 90 degrees and back knee near the ground on the left.",
+        "Torso remains upright, front heel grounded, both shoes and both hand-held dumbbells visible.",
+        "Arabic البداية is on the right and النهاية is on the left. No obvious extra limbs or duplicated athlete figures are visible."
+      ],
+      "notes": []
+    },
+    {
+      "code": 37,
+      "asset": "exercise_037",
+      "sha256": "aa3996b7be5320808c53b581766e4f0e073b70b69757a39d37cfe55f9c36eddd",
+      "status": "pass",
+      "observations": [
+        "Bulgarian split squat: rear foot rests on the bench in both poses; grounded front leg changes from near-straight to bent roughly90 degrees.",
+        "One dumbbell per hand is identifiable; the far dumbbell is partly occluded in the lowered pose. Body, rear support, shoes and bench fit within the canvas.",
+        "Arabic headings are beginning on the right and finish on the left; no obvious ghost limbs."
+      ],
+      "notes": []
+    },
+    {
+      "code": 38,
+      "asset": "exercise_038",
+      "sha256": "c28cc238f2c19e3c09b03bc2a5e4b2d6e8cad8864c3981c6312c1bedba4b754a",
+      "status": "pass",
+      "observations": [
+        "Padded-bar hip thrust: lowered hips right and raised hips left with upper-back bench support. Corrected frame includes both complete shoes and bench.",
+        "Arabic beginning on right and finish on left; actual corrected PNG inspected."
+      ],
+      "notes": []
+    },
+    {
+      "code": 39,
+      "asset": "exercise_039",
+      "sha256": "1021315708364e536b41909c4171e3bb6ef82aa5482b429650026079e1f760ed",
+      "status": "pass",
+      "observations": [
+        "Standing machine calf raise: both forefeet supported on narrow elevated step with free heels; lower heels right and elevated heels left, straight legs.",
+        "Arabic beginning on right and finish on left; actual corrected PNG inspected."
+      ],
+      "notes": []
+    },
+    {
+      "code": 40,
+      "asset": "exercise_040",
+      "sha256": "8c6ab1e58dab6d80bd9d16d09e2452118e95f80371d9303d77f82ba6094a765d",
+      "status": "pass",
+      "observations": [
+        "Seated machine calf raise: forefeet on narrow platform, heel range visible between panels, thigh pad above kneecaps and stable seated knee angle.",
+        "Arabic beginning on right and finish on left; actual corrected PNG inspected."
+      ],
+      "notes": []
+    },
+    {
+      "code": 41,
+      "asset": "exercise_041",
+      "sha256": "9afe9606d03716f794a70b660d18ead73342f3b79c7be1260a13677b88272857",
+      "status": "pass",
+      "observations": [
+        "Hip abduction: knees start close on the right and spread outward in the left finish panel; pads are positioned at the outer sides of the knees.",
+        "Back remains supported, feet stay on the machine footrests, and the bodies and functional apparatus are complete.",
+        "Arabic headings correctly distinguish beginning and finish; no obvious ghost limbs."
+      ],
+      "notes": []
+    },
+    {
+      "code": 42,
+      "asset": "exercise_042",
+      "sha256": "b8ac07e93cefea197edc12de4fe42d336308636b22b5367013f2e1ca045afa6f",
+      "status": "pass",
+      "observations": [
+        "Hip adduction: legs start open on the right and knees squeeze inward on the left; pads contact the inner knee sides.",
+        "Movement is clearly opposite to code41. The supported seated body, feet and mechanical pad supports are visible.",
+        "Arabic headings are correct, and no obvious ghost limbs are visible."
+      ],
+      "notes": []
+    },
+    {
+      "code": 43,
+      "asset": "exercise_043",
+      "sha256": "05e4b7deacd97b45fa5347431fe2921e721e1da628c19a02da858e6f389abecf",
+      "status": "pass",
+      "observations": [
+        "Bodyweight box step-up with no dumbbells or other weights: right panel has one full foot on the box and the other on the floor; left panel stands with both feet on the same box.",
+        "Straight finish knees, full bodies, complete shoes and the stable box are visible; this is a step rather than a jump.",
+        "Arabic headings correctly place beginning on the right and finish on the left; no obvious ghost limbs."
+      ],
+      "notes": []
+    },
+    {
+      "code": 44,
+      "asset": "exercise_044",
+      "sha256": "2b4bceab14cb198ef7ccf4f47c2eabfac8f73997202fe96e5ac85601f0e514d2",
+      "status": "pass",
+      "observations": [
+        "Floor bodyweight glute bridge: right hips rest on the mat, left hips rise while the upper back remains grounded and feet stay flat.",
+        "No barbell or bench appears; both bodies and the mat are fully framed, with no obvious ghost limbs.",
+        "Arabic headings are on the correct sides and the two positions are visibly distinct."
+      ],
+      "notes": []
+    },
+    {
+      "code": 45,
+      "asset": "exercise_045",
+      "sha256": "59d2f0a2c2e856ff56ccee1f2e6d5d877d40d58076270be8adf7bb12d6ff5953",
+      "status": "pass",
+      "observations": [
+        "Standing supinated barbell curl: right bar is at thigh height with extended arms, left elbows flex to bring it toward the upper torso.",
+        "Upper arms stay beside the torso; barbell plates, both hands and the full bodies fit within the canvas.",
+        "Arabic headings are correct and no obvious ghost limbs appear."
+      ],
+      "notes": []
+    },
+    {
+      "code": 46,
+      "asset": "exercise_046",
+      "sha256": "2fb8eafd5cd39f1e9c4a55e32b5b5ce269295e6de2a776ea732fbb84563d1f74",
+      "status": "pass",
+      "observations": [
+        "Standing two-dumbbell supinated curl: right arms extended with palms forward; left bends the elbows with horizontal dumbbell shafts and supinated hands.",
+        "Visibly differs from the neutral-grip hammer curl. Both dumbbells and full bodies are framed without obvious extra limbs.",
+        "Arabic beginning/finish headings are correctly positioned."
+      ],
+      "notes": []
+    },
+    {
+      "code": 47,
+      "asset": "exercise_047",
+      "sha256": "9ee6fd7aae7aa310d488913d58280ee393dda6f42b6a94a810dc97890266c699",
+      "status": "pass",
+      "observations": [
+        "Standing hammer curl: neutral hand grip is retained, with thumb ends upward and dumbbell shafts vertical in the flexed left pose.",
+        "Right arms start down by the thighs; left elbows flex without an obvious torso swing. Both dumbbells and full bodies are visible.",
+        "Arabic headings have the correct sides, and no obvious ghost limbs appear."
+      ],
+      "notes": []
+    },
+    {
+      "code": 48,
+      "asset": "exercise_048",
+      "sha256": "dcc45aae301ec7587c4d8436c0858449e7f1ba8fc087d40856764ebdb0d0891b",
+      "status": "pass",
+      "observations": [
+        "Low-pulley cable biceps curl: the short bar connects continuously through its central fitting to a visible low pulley, rather than a high triceps pulley.",
+        "Right arms are extended, left elbows flex toward the chest; supinated grip and stable torso are identifiable. Full athlete and the functional low-pulley/weight-stack section are visible; the upper tower extends beyond the image top.",
+        "Arabic headings are correct and no obvious ghost limbs appear."
+      ],
+      "notes": []
+    },
+    {
+      "code": 49,
+      "asset": "exercise_049",
+      "sha256": "be648f7257a2e409d8ced4ea2bd3f8e03342fe05a4339b9ab1e2b5add3a14d25",
+      "status": "pass",
+      "observations": [
+        "Preacher curl machine with supported upper arms and clear elbow flexion. Corrected both grips visibly connect to rigid lever arms and machine pivot.",
+        "Arabic beginning on right and finish on left; actual corrected PNG inspected."
+      ],
+      "notes": []
+    },
+    {
+      "code": 50,
+      "asset": "exercise_050",
+      "sha256": "53a768026a5fcda7156c3c0fefcf8220231f1808d1a828ebf500c5fa85e865ab",
+      "status": "pass",
+      "observations": [
+        "High-pulley cable triceps pushdown: right elbows are bent near90 degrees with the bar at lower chest; left arms extend to bring the bar to the thighs.",
+        "Upper arms stay beside the torso; short bar, continuous high cable, pulley, full machine and complete athlete are visible.",
+        "Arabic headings correctly place beginning on the right and finish on the left, with no obvious ghost limbs."
+      ],
+      "notes": []
+    },
+    {
+      "code": 51,
+      "asset": "exercise_051",
+      "sha256": "23f36ae152b5ec5f7a6da7c5085440517415520630a58b38661141106c93be7b",
+      "status": "pass",
+      "observations": [
+        "Seated overhead dumbbell triceps extension: one vertical dumbbell is held with both hands beneath its upper plate; right elbows bend with the dumbbell behind the head, left extends overhead.",
+        "Upper arms remain near the head; the full dumbbell, hands, body, shoes and bench fit within the canvas.",
+        "Arabic headings are correct and no obvious extra limbs appear. The exercise is clearly distinct from the lying EZ-bar extension."
+      ],
+      "notes": []
+    },
+    {
+      "code": 52,
+      "asset": "exercise_052",
+      "sha256": "4c1ee8558652d812626043bb39a67294c07cffca89c978bfd6da3c0deadd967d",
+      "status": "pass",
+      "observations": [
+        "Lying EZ-bar triceps extension: bent elbows right and extended elbows left with stable upper-arm direction. Corrected complete shoe and bench framing.",
+        "Arabic beginning on right and finish on left; actual corrected PNG inspected."
+      ],
+      "notes": []
+    },
+    {
+      "code": 53,
+      "asset": "exercise_053",
+      "sha256": "84af0f8b6a01233304af93d5b8295cddd319f11788b3ecd3b228bad85f2a62d5",
+      "status": "pass",
+      "observations": [
+        "Close-grip bench press: hands approximately shoulder-width, lowered bar right and extended arms left. Corrected frame includes both complete shoes and rack.",
+        "Arabic beginning on right and finish on left; actual corrected PNG inspected."
+      ],
+      "notes": []
+    },
+    {
+      "code": 54,
+      "asset": "exercise_054",
+      "sha256": "cb140373a129cb0bf4d81fd10ce1fedd2943bbbab106d617dad24a7a1292fe26",
+      "status": "pass",
+      "observations": [
+        "Seated palms-up wrist curl: forearms supported on thighs with nearly fixed elbows; right hands droop at wrists and left hands lift toward forearm level. Independent reinspection also passed.",
+        "Arabic beginning on right and finish on left; actual corrected PNG inspected."
+      ],
+      "notes": []
+    },
+    {
+      "code": 55,
+      "asset": "exercise_055",
+      "sha256": "a33de953a4c78f13aa2ced2aa37c8f5026a9374540a99fa0e322c6f409323627",
+      "status": "pass",
+      "observations": [
+        "Forearm plank setup from supported knees to straight torso on forearms and toes; isometric setup/hold pair.",
+        "Arabic beginning on right and finish on left; full functional body geometry inspected."
+      ],
+      "notes": []
+    },
+    {
+      "code": 56,
+      "asset": "exercise_056",
+      "sha256": "ea6d09906c264b5be5e9b3b6e2399e352110f0fa8bf4046c59bcfe5b34db2dd3",
+      "status": "pass",
+      "observations": [
+        "Side plank setup then hips raised with forearm support and aligned trunk; isometric setup/hold pair.",
+        "Arabic beginning on right and finish on left; full functional body geometry inspected."
+      ],
+      "notes": []
+    },
+    {
+      "code": 57,
+      "asset": "exercise_057",
+      "sha256": "6233e8412567e9f1d591bc4b599c12654f5e84118ccbd9a5ac421d59445662ff",
+      "status": "pass",
+      "observations": [
+        "Hanging bent-knee raise with straight overhead arms and a clear lowered/raised knee pair.",
+        "Arabic beginning on right and finish on left; full functional body geometry inspected."
+      ],
+      "notes": []
+    },
+    {
+      "code": 58,
+      "asset": "exercise_058",
+      "sha256": "d40a3ef13a545e34a7b661aef542f7d41c103de84864247d66316d9019f03875",
+      "status": "pass",
+      "observations": [
+        "Supine crunch raises shoulders and upper back while lower back remains supported, distinct from a full sit-up.",
+        "Arabic beginning on right and finish on left; full functional body geometry inspected."
+      ],
+      "notes": []
+    },
+    {
+      "code": 59,
+      "asset": "exercise_059",
+      "sha256": "840009d76f4c573c9c8c3a3fe367df96a17ece03611d183ec08476da112ba5d3",
+      "status": "pass",
+      "observations": [
+        "Kneeling high-pulley rope crunch with hands by temples, ribcage flexing toward pelvis and cable connected.",
+        "Arabic beginning on right and finish on left; full functional body geometry inspected."
+      ],
+      "notes": []
+    },
+    {
+      "code": 60,
+      "asset": "exercise_060",
+      "sha256": "41f0128d4748af81b36b0c24bc04902ec20fe4fb589ac6fa961999c0fb9dbf5e",
+      "status": "pass",
+      "observations": [
+        "Kneeling ab-wheel rollout with a small single wheel, controlled forward extension and return setup, distinct from a barbell.",
+        "Arabic beginning on right and finish on left; full functional body geometry inspected."
+      ],
+      "notes": []
+    },
+    {
+      "code": 61,
+      "asset": "exercise_061",
+      "sha256": "ed465b92afdf533f467fd629a30e4448ef0305068c6c2b0083e486a0dc362203",
+      "status": "pass",
+      "observations": [
+        "Medicine-ball Russian twist: ball and both hands visibly change from right side to left side of figure, torso follows while feet and hips stay supported.",
+        "Arabic beginning on right and finish on left; actual corrected PNG inspected."
+      ],
+      "notes": []
+    },
+    {
+      "code": 62,
+      "asset": "exercise_062",
+      "sha256": "ddff6ef3eb03cb6c3ac39f24a487beac80cea1c6d821bd48e1d072520d127a57",
+      "status": "pass",
+      "observations": [
+        "Dead bug: foreground arm vertical and background arm overhead, foreground leg extended and background knee bent. Contralateral extension is now clearly visible.",
+        "Actual final PNG inspected by root and independently by another agent; complete body and Arabic right/start left/end labels."
+      ],
+      "notes": []
+    },
+    {
+      "code": 63,
+      "asset": "exercise_063",
+      "sha256": "1bf23fa951ff2c605fc8ab2afaa90b1c452459c5589ed253443058cd945aae67",
+      "status": "pass",
+      "observations": [
+        "Treadmill walking: right heel-strike/double-contact and left single-leg stance with other foot in swing. Clearly distinct phases, at least one foot on belt, no running flight.",
+        "Arabic beginning on right and finish on left; actual corrected PNG inspected."
+      ],
+      "notes": []
+    },
+    {
+      "code": 64,
+      "asset": "exercise_064",
+      "sha256": "60e1cbb7b6b99c8db8a7fc81d20d1d75535aae6632544728d8d75fd5b1ba2807",
+      "status": "pass",
+      "observations": [
+        "Stationary bicycle shows different connected-pedal positions with supported seated athlete.",
+        "Arabic beginning on right and finish on left; full functional body geometry inspected."
+      ],
+      "notes": []
+    },
+    {
+      "code": 65,
+      "asset": "exercise_065",
+      "sha256": "f88396db820e6447c6356254081a4b72361490c1b9c6194d19ca5806e7ed982d",
+      "status": "pass",
+      "observations": [
+        "Rower catch has bent knees and forward arms, finish straight legs and handle at lower sternum with restrained torso lean.",
+        "Arabic beginning on right and finish on left; full functional body geometry inspected."
+      ],
+      "notes": []
+    },
+    {
+      "code": 66,
+      "asset": "exercise_066",
+      "sha256": "8f9f4e25f42dec22dbd8db617362c5b70d26dab58b1d55a92a666a5bed159575",
+      "status": "pass",
+      "observations": [
+        "Jump-rope floor setup and low airborne finish with continuous rope below both feet and full athlete.",
+        "Arabic beginning on right and finish on left; full functional body geometry inspected."
+      ],
+      "notes": []
+    }
+  ]
+}

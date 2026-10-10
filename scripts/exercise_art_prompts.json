@@ -1,0 +1,423 @@
+{
+  "formatVersion": 1,
+  "tool": "Built-in image_gen",
+  "layout": "Right: start; left: finish. Isometric exercises show setup and hold.",
+  "common": "Use case: scientific-educational. Asset: a professional Arabic iPhone fitness app exercise guide. Create ONE landscape 1536x1024 illustration with TWO equal side-by-side panels on pure white. RIGHT panel is beginning labeled exactly آ«ط§ظ„ط¨ط¯ط§ظٹط©آ» at top. LEFT panel is finish labeled exactly آ«ط§ظ„ظ†ظ‡ط§ظٹط©آ» at top. Only those two Arabic words, no other text or numbers. Same adult male athlete in both panels, short dark hair, fitted black shorts and training shoes, bare torso with detailed anatomically plausible muscle contours. Premium fitness textbook black fine-line drawing with restrained gray muscle shading, sharp clean edges and realistic proportions. Full athlete AND required apparatus completely visible with generous white margin, equipment geometry consistent between panels. Choose a clear three-quarter or side view best revealing movement; keep camera fixed. Two arms, two legs, five fingers each visible hand, no ghosted duplicate limbs, no motion overlays, no watermark, logo or English. Each panel is a separate complete figure. Clearly distinct correct start and finish, safe neutral spine and controlled movement. Exercise-specific requirement: ",
+  "entries": [
+    {
+      "code": 1,
+      "movement": "Flat barbell bench press. Flat horizontal bench, feet firmly on floor, head/hips supported. RIGHT bar at mid-chest, elbows bent about90. LEFT same bar pressed above mid-chest, elbows extended. Barbell held with both hands wider than shoulders, plates on both ends.",
+      "cue": "ط«ط¨ظ‘طھ ط§ظ„ظ‚ط¯ظ…ظٹظ† ط¹ظ„ظ‰ ط§ظ„ط£ط±ط¶طŒ ظˆط£ظ†ط²ظ„ ط§ظ„ط¨ط§ط± ط¨طھط­ظƒظ‘ظ… ظ†ط­ظˆ ظ…ظ†طھطµظپ ط§ظ„طµط¯ط±."
+    },
+    {
+      "code": 2,
+      "movement": "Flat dumbbell bench press. Flat bench, grounded feet. RIGHT one dumbbell in each hand beside chest with bent elbows. LEFT press BOTH dumbbells vertically above chest, arms extended. No barbell.",
+      "cue": "ط«ط¨ظ‘طھ ط§ظ„ط¸ظ‡ط± ظˆط§ظ„ظ‚ط¯ظ…ظٹظ†طŒ ظˆط§ط¶ط؛ط· ط§ظ„ط¯ظ…ط¨ظ„ظٹظ† ظپظˆظ‚ ط§ظ„طµط¯ط± ط¯ظˆظ† ط§طµط·ط¯ط§ظ…ظ‡ظ…ط§."
+    },
+    {
+      "code": 3,
+      "movement": "Incline barbell bench press. Bench backrest distinctly inclined30degrees, feet floor. RIGHT barbell at upper chest in front, elbows bent; LEFT arms extended pressing above upper chest. Same rack and bench in both.",
+      "cue": "ط§ط³طھط®ط¯ظ… ظ…ظٹظ„ظ‹ط§ ظ…ط¹طھط¯ظ„ظ‹ط§ ظ„ظ„ظ…ظ‚ط¹ط¯طŒ ظˆط£ظ†ط²ظ„ ط§ظ„ط¨ط§ط± ظ†ط­ظˆ ط£ط¹ظ„ظ‰ ط§ظ„طµط¯ط±."
+    },
+    {
+      "code": 4,
+      "movement": "Incline dumbbell bench press. Backrest30degrees, feet floor. RIGHT separate dumbbells beside upper chest elbows bent; LEFT both pressed above upper chest arms extended. No barbell.",
+      "cue": "ط«ط¨ظ‘طھ ط§ظ„ظ‚ط¯ظ…ظٹظ†طŒ ظˆط§ط¶ط؛ط· ط§ظ„ط¯ظ…ط¨ظ„ظٹظ† ظپظˆظ‚ ط£ط¹ظ„ظ‰ ط§ظ„طµط¯ط± ط¨ظ…ط³ط§ط± ظ…طھط²ظ†."
+    },
+    {
+      "code": 5,
+      "movement": "Flat dumbbell chest fly. Supine on flat bench grounded feet. RIGHT dumbbells above chest, arms nearly straight with small15degree fixed elbow bend. LEFT arms opened sideways at chest height into wide arc, same small elbow bend. A fly, not elbow-bending press.",
+      "cue": "ط­ط§ظپط¸ ط¹ظ„ظ‰ ط§ظ†ط«ظ†ط§ط، ط¨ط³ظٹط· ط«ط§ط¨طھ ظ„ظ„ظ…ط±ظپظ‚ظٹظ†طŒ ظˆط§ظپطھط­ ط§ظ„ط°ط±ط§ط¹ظٹظ† ط¶ظ…ظ† ظ…ط¯ظ‰ ظ…ط±ظٹط­."
+    },
+    {
+      "code": 6,
+      "movement": "Standing cable chest fly with two high-side cable pulleys, split stance and slight forward lean. RIGHT arms out to sides at chest level, elbows slightly bent. LEFT hands together in front of chest, same elbow bend, cables visibly pull outwards behind athlete.",
+      "cue": "ط­ط§ظپط¸ ط¹ظ„ظ‰ ط«ط¨ط§طھ ط§ظ„ط¬ط°ط¹طŒ ظˆظ‚ط±ظ‘ط¨ ط§ظ„ظ…ظ‚ط¨ط¶ظٹظ† ط£ظ…ط§ظ… ط§ظ„طµط¯ط± ط¨ظ‚ظˆط³ ظ…طھط­ظƒظ‘ظ…."
+    },
+    {
+      "code": 7,
+      "movement": "Seated lever chest press MACHINE. Seat upright, back supported, feet floor, handles at chest height. RIGHT elbows bent handles near chest. LEFT hands press handles forwards to straight arms. Clear rigid lever arms connected to resistance machine, no overhead press.",
+      "cue": "ط§ط¶ط¨ط· ط§ظ„ظ…ظ‚ط¹ط¯ ظ„طھظƒظˆظ† ط§ظ„ظ…ظ‚ط§ط¨ط¶ ط¹ظ†ط¯ ظ…ط³طھظˆظ‰ ط§ظ„طµط¯ط±طŒ ط«ظ… ط§ط¯ظپط¹ظ‡ط§ ط¥ظ„ظ‰ ط§ظ„ط£ظ…ط§ظ…."
+    },
+    {
+      "code": 8,
+      "movement": "Bodyweight push-up. Clear side view. RIGHT top plank supported on palms and toes, arms straight, body straight head to heels. LEFT elbows bent lowered chest close to floor, SAME straight-body line. No knees on ground.",
+      "cue": "ط§ط¬ط¹ظ„ ط§ظ„ط±ط£ط³ ظˆط§ظ„ط¬ط°ط¹ ظˆط§ظ„ظˆط±ظƒظٹظ† ط¹ظ„ظ‰ ط®ط· ظˆط§ط­ط¯طŒ ظˆط£ظ†ط²ظ„ ط§ظ„طµط¯ط± ط¨طھط­ظƒظ‘ظ…."
+    },
+    {
+      "code": 9,
+      "movement": "Parallel-bar chest dip. Same parallel bars. RIGHT top support arms straight hands gripping bars hips above ground. LEFT elbows bent roughly90 and chest slightly leaning forward, body lowered between bars. Feet off floor both poses.",
+      "cue": "ظ…ظگظ„ ط¨ط§ظ„طµط¯ط± ظ‚ظ„ظٹظ„ظ‹ط§ ط¥ظ„ظ‰ ط§ظ„ط£ظ…ط§ظ…طŒ ظˆط§ظ†ط²ظ„ ط¶ظ…ظ† ظ…ط¯ظ‰ ظ…ط±ظٹط­ ظ„ظ„ظƒطھظپظٹظ†."
+    },
+    {
+      "code": 10,
+      "movement": "Seated pec-deck chest fly machine with forearm pads, feet grounded, back supported. RIGHT upper arms spread to sides at shoulder level, elbows bent90 resting on vertical pads. LEFT bring elbow pads together in front of chest. Both elbow angles stay90. Show lever machine.",
+      "cue": "ط«ط¨ظ‘طھ ط§ظ„ط¸ظ‡ط± ط¹ظ„ظ‰ ط§ظ„ظ…ظ‚ط¹ط¯طŒ ظˆظ‚ط±ظ‘ط¨ ط§ظ„ط°ط±ط§ط¹ظٹظ† ط£ظ…ط§ظ… ط§ظ„طµط¯ط± ط¯ظˆظ† ط±ظپط¹ ط§ظ„ظƒطھظپظٹظ†."
+    },
+    {
+      "code": 11,
+      "movement": "Front lat pulldown machine. Seated thighs under pads grounded feet. RIGHT arms extended overhead grasp wide bar. LEFT pull same bar IN FRONT OF FACE to upper chest, elbows down beside torso. Never behind neck.",
+      "cue": "ط§ط³ط­ط¨ ط§ظ„ط¨ط§ط± ط£ظ…ط§ظ… ط§ظ„ظˆط¬ظ‡ ظ†ط­ظˆ ط£ط¹ظ„ظ‰ ط§ظ„طµط¯ط±طŒ ظ…ط¹ طھظˆط¬ظٹظ‡ ط§ظ„ظ…ط±ظپظ‚ظٹظ† ط¥ظ„ظ‰ ط§ظ„ط£ط³ظپظ„."
+    },
+    {
+      "code": 12,
+      "movement": "Overhand bodyweight pull-up on single horizontal overhead bar. RIGHT dead hang arms extended, feet off floor. LEFT elbows flexed pulling until chin above bar, no kick or swing. Same grip and neutral torso.",
+      "cue": "ط§ط¨ط¯ط£ ط¨طھط¹ظ„ظ‘ظ‚ ط«ط§ط¨طھطŒ ظˆط§ط³ط­ط¨ ط§ظ„ط¬ط³ظ… ط­طھظ‰ ظٹط±طھظپط¹ ط§ظ„ط°ظ‚ظ† ظپظˆظ‚ ط§ظ„ط¨ط§ط± ط¯ظˆظ† طھط£ط±ط¬ط­."
+    },
+    {
+      "code": 13,
+      "movement": "Bent-over barbell row. Standing feet hip width, knees slightly bent, hip hinge with straight neutral spine and torso about30degrees above horizontal BOTH panels. RIGHT barbell hanging below shoulders arms straight. LEFT bar drawn to lower ribs elbows behind. Torso angle unchanged.",
+      "cue": "ط§ط«ظ†ظگ ط§ظ„ظˆط±ظƒظٹظ† ظ…ط¹ ط¸ظ‡ط± ظ…طھط²ظ†طŒ ظˆط§ط³ط­ط¨ ط§ظ„ط¨ط§ط± ظ†ط­ظˆ ط£ط³ظپظ„ ط§ظ„ط£ط¶ظ„ط§ط¹."
+    },
+    {
+      "code": 14,
+      "movement": "Single-arm dumbbell row on flat bench. Left hand and left knee supported on bench, right foot grounded. RIGHT right hand dumbbell hanging below shoulder, arm extended. LEFT right elbow pulled backwards, dumbbell beside lower ribs. Same support, no extra limbs.",
+      "cue": "ط§ط³ظ†ط¯ ظٹط¯ظ‹ط§ ظˆط±ظƒط¨ط© ط¹ظ„ظ‰ ط§ظ„ظ…ظ‚ط¹ط¯طŒ ظˆط§ط³ط­ط¨ ط§ظ„ط¯ظ…ط¨ظ„ ظ†ط­ظˆ ط§ظ„ظˆط±ظƒ ظ…ط¹ ط«ط¨ط§طھ ط§ظ„ط¬ط°ط¹."
+    },
+    {
+      "code": 15,
+      "movement": "Seated low cable row with V-handle. Sitting on low bench feet on footplate, knees soft, torso upright neutral. RIGHT arms extended toward low pulley in front. LEFT handle at lower ribs, elbows behind torso. Cable anchored low and taut, no excessive backwards lean.",
+      "cue": "ط«ط¨ظ‘طھ ط§ظ„ط¬ط°ط¹طŒ ظˆط§ط³ط­ط¨ ط§ظ„ظ…ظ‚ط¨ط¶ ظ†ط­ظˆ ط£ط³ظپظ„ ط§ظ„ط£ط¶ظ„ط§ط¹ ط¯ظˆظ† ظ…ط¨ط§ظ„ط؛ط© ظپظٹ ط§ظ„ظ…ظٹظ„."
+    },
+    {
+      "code": 16,
+      "movement": "Chest-supported seated LEVER rowing MACHINE, clear chest pad and two rigid mechanical lever arms. Feet grounded, chest against angled support pad. RIGHT handles ahead, arms extended. LEFT handles pulled back alongside ribs elbows behind. No cable-floor-row apparatus.",
+      "cue": "ط§ط³ظ†ط¯ ط§ظ„طµط¯ط± ط¹ظ„ظ‰ ط§ظ„ظˆط³ط§ط¯ط©طŒ ظˆط§ط³ط­ط¨ ط§ظ„ظ…ظ‚ط§ط¨ط¶ ط¥ظ„ظ‰ ط§ظ„ط®ظ„ظپ ظ…ط¹ ط«ط¨ط§طھ ط§ظ„ط¬ط°ط¹."
+    },
+    {
+      "code": 17,
+      "movement": "Standing straight-arm cable pulldown using overhead cable with straight bar. Slight hip hinge, knees soft, elbows held almost straight in BOTH panels. RIGHT hands/bar out above shoulder height in front. LEFT hands/bar beside thighs, shoulders extend down in arc. No elbow curl.",
+      "cue": "ط£ط¨ظ‚ظگ ط§ظ„ظ…ط±ظپظ‚ظٹظ† ط´ط¨ظ‡ ظ…ظ…ط¯ظˆط¯ظٹظ†طŒ ظˆط§ط³ط­ط¨ ط§ظ„ظ…ظ‚ط¨ط¶ ط¨ظ‚ظˆط³ ظ†ط­ظˆ ط§ظ„ظپط®ط°ظٹظ†."
+    },
+    {
+      "code": 18,
+      "movement": "Conventional barbell deadlift side view. RIGHT bar on floor over midfoot, hips hinged, knees bent, straight neutral back, both hands gripping just outside legs. LEFT standing tall holding bar at mid-thigh with straight arms and neutral spine. Bar close to shins, no hyperextended lean.",
+      "cue": "ظ‚ط±ظ‘ط¨ ط§ظ„ط¨ط§ط± ظ…ظ† ط§ظ„ط³ط§ظ‚ظٹظ†طŒ ظˆط§ظ†ظ‡ط¶ ط¨ط¯ظپط¹ ط§ظ„ط£ط±ط¶ ظ…ط¹ ط¸ظ‡ط± ظ…طھط²ظ†."
+    },
+    {
+      "code": 19,
+      "movement": "Bodyweight45degree back extension on Roman chair, hips on pad, ankles secured. Arms crossed on chest. RIGHT torso hinged down at hips with neutral spine. LEFT torso lifted until aligned with legs, never hyperextended. Clear apparatus and support.",
+      "cue": "طھط­ط±ظ‘ظƒ ظ…ظ† ط§ظ„ظˆط±ظƒظٹظ†طŒ ظˆط§ط±ظپط¹ ط§ظ„ط¬ط°ط¹ ط­طھظ‰ ظٹطھظ‘ط³ظ‚ ظ…ط¹ ط§ظ„ط³ط§ظ‚ظٹظ†."
+    },
+    {
+      "code": 20,
+      "movement": "Seated resistance BAND row on floor, legs forward knees soft, elastic band loops around both feet, each hand grips band end. RIGHT arms extended, torso upright. LEFT elbows pulled back alongside ribs and band visibly stretched. No metal cable or machine.",
+      "cue": "ط«ط¨ظ‘طھ ط§ظ„ظ…ط·ط§ط· ط­ظˆظ„ ط§ظ„ظ‚ط¯ظ…ظٹظ†طŒ ظˆط§ط³ط­ط¨ ط§ظ„ط·ط±ظپظٹظ† ظ…ط¹ ط«ط¨ط§طھ ط§ظ„ط¸ظ‡ط±."
+    },
+    {
+      "code": 21,
+      "movement": "Standing barbell overhead shoulder press. Feet shoulder width soft knees neutral back. RIGHT barbell at front upper chest/clavicle with elbows under bar. LEFT press bar overhead above midfoot arms extended. Bar never behind neck, no squat or seated bench.",
+      "cue": "ط§ط¨ط¯ط£ ظˆط§ظ„ط¨ط§ط± ط£ظ…ط§ظ… ط£ط¹ظ„ظ‰ ط§ظ„طµط¯ط±طŒ ظˆط§ط¶ط؛ط·ظ‡ ظپظˆظ‚ ط§ظ„ط±ط£ط³ ظ…ط¹ ط«ط¨ط§طھ ط§ظ„ط¬ط°ط¹."
+    },
+    {
+      "code": 22,
+      "movement": "Seated dumbbell overhead shoulder press, upright bench back support. RIGHT dumbbells each beside ears, forearms vertical elbows bent90. LEFT both dumbbells overhead, arms extended. Feet grounded and back supported, no bench chest press.",
+      "cue": "ط§ط³ظ†ط¯ ط§ظ„ط¸ظ‡ط±طŒ ظˆط§ط¶ط؛ط· ط§ظ„ط¯ظ…ط¨ظ„ظٹظ† ظپظˆظ‚ ط§ظ„ط±ط£ط³ ط¯ظˆظ† طھظ‚ظˆظٹط³ ط£ط³ظپظ„ ط§ظ„ط¸ظ‡ط±."
+    },
+    {
+      "code": 23,
+      "movement": "Standing dumbbell lateral raise. RIGHT arms hanging beside thighs holding separate dumbbells. LEFT arms raised SIDEWAYS to shoulder height, elbows softly bent, wrists aligned. Front three-quarter view demonstrates lateral plane, no forward raise.",
+      "cue": "ط§ط±ظپط¹ ط§ظ„ط¯ظ…ط¨ظ„ظٹظ† ط¥ظ„ظ‰ ط§ظ„ط¬ط§ظ†ط¨ظٹظ† ط­طھظ‰ ظ…ط³طھظˆظ‰ ط§ظ„ظƒطھظپظٹظ† ظ…ط¹ ط«ط¨ط§طھ ط§ظ„ط¬ط°ط¹."
+    },
+    {
+      "code": 24,
+      "movement": "Standing dumbbell front raise. Side three-quarter view. RIGHT dumbbells beside thighs arms down. LEFT arms raised FORWARD to shoulder level with small fixed elbow bend, palms facing down. No lateral sideways raise.",
+      "cue": "ط§ط±ظپط¹ ط§ظ„ط°ط±ط§ط¹ظٹظ† ط£ظ…ط§ظ…ظƒ ط­طھظ‰ ظ…ط³طھظˆظ‰ ط§ظ„ظƒطھظپظٹظ† ط¯ظˆظ† طھط£ط±ط¬ط­."
+    },
+    {
+      "code": 25,
+      "movement": "Bent-over dumbbell rear-delt fly. Neutral back hip hinge torso near horizontal BOTH poses, knees soft. RIGHT dumbbells below chest arms down. LEFT arms open sideways at shoulder height relative to torso with small fixed elbow bend. No row or upright posture.",
+      "cue": "ط«ط¨ظ‘طھ ظ…ظٹظ„ ط§ظ„ط¬ط°ط¹طŒ ظˆط§ظپطھط­ ط§ظ„ط°ط±ط§ط¹ظٹظ† ط¥ظ„ظ‰ ط§ظ„ط¬ط§ظ†ط¨ظٹظ† ط¯ظˆظ† ط«ظ†ظٹ ط²ط§ط¦ط¯ ظ„ظ„ظ…ط±ظپظ‚ظٹظ†."
+    },
+    {
+      "code": 26,
+      "movement": "Cable rope FACE PULL, standing facing high pulley at eye level. RIGHT both hands grasp rope ends arms extended forward. LEFT rope center near forehead, rope ends beside temples, elbows high and shoulder externally rotated. Neutral torso and no rope to chest.",
+      "cue": "ط§ط³ط­ط¨ ط§ظ„ط­ط¨ظ„ ظ†ط­ظˆ ط§ظ„ظˆط¬ظ‡طŒ ظˆط£ط¨ط¹ط¯ ط·ط±ظپظٹظ‡ ظ…ط¹ ط¨ظ‚ط§ط، ط§ظ„ط¬ط°ط¹ ط«ط§ط¨طھظ‹ط§."
+    },
+    {
+      "code": 27,
+      "movement": "Seated lever-machine OVERHEAD shoulder press. Seat upright with back support, handles either side of shoulders, large rigid lever arms and resistance machine visible. RIGHT elbows bent90 handles shoulder level. LEFT arms clearly extended overhead, handles above head. Not chest press.",
+      "cue": "ط§ط¶ط¨ط· ط§ظ„ظ…ظ‚ط¹ط¯ ظ„طھط¨ط¯ط£ ط§ظ„ظ…ظ‚ط§ط¨ط¶ ط¨ط¬ط§ظ†ط¨ ط§ظ„ظƒطھظپظٹظ†طŒ ط«ظ… ط§ط¯ظپط¹ظ‡ط§ ط¥ظ„ظ‰ ط£ط¹ظ„ظ‰."
+    },
+    {
+      "code": 28,
+      "movement": "Standing dumbbell shrug. RIGHT arms straight hanging by sides, shoulders relaxed. LEFT shoulders distinctly elevated toward ears while arms remain straight and dumbbells only slightly higher. Neck neutral no shoulder rotation, no bicep curl.",
+      "cue": "ط§ط±ظپط¹ ط§ظ„ظƒطھظپظٹظ† ط¥ظ„ظ‰ ط£ط¹ظ„ظ‰ ط«ظ… ط§ط®ظپط¶ظ‡ظ…ط§ ط¨طھط­ظƒظ‘ظ…طŒ ظ…ط¹ ط¨ظ‚ط§ط، ط§ظ„ط°ط±ط§ط¹ظٹظ† ظ…ظ…ط¯ظˆط¯طھظٹظ†."
+    },
+    {
+      "code": 29,
+      "movement": "Barbell BACK squat. Bar rests upper back/traps never neck/front chest, hands grip both sides. RIGHT standing tall feet shoulderwidth. LEFT hips and knees flexed squat thighs roughly parallel, knees track toes, heels grounded neutral spine. Side three-quarter.",
+      "cue": "ط«ط¨ظ‘طھ ط§ظ„ط¨ط§ط± ط¹ظ„ظ‰ ط£ط¹ظ„ظ‰ ط§ظ„ط¸ظ‡ط±طŒ ظˆط§ظ†ط²ظ„ ظ…ط¹ ط¨ظ‚ط§ط، ط§ظ„ظƒط¹ط¨ظٹظ† ط¹ظ„ظ‰ ط§ظ„ط£ط±ط¶."
+    },
+    {
+      "code": 30,
+      "movement": "Barbell FRONT squat. Bar on FRONT deltoids/clavicles, fingers support bar and elbows pointed HIGH FORWARD in both. RIGHT upright standing. LEFT squat thighs roughly parallel heels grounded knees track toes. Do not position bar behind head.",
+      "cue": "ط¶ط¹ ط§ظ„ط¨ط§ط± ط£ظ…ط§ظ… ط§ظ„ظƒطھظپظٹظ†طŒ ظˆط­ط§ظپط¸ ط¹ظ„ظ‰ ط§ط±طھظپط§ط¹ ط§ظ„ظ…ط±ظپظ‚ظٹظ† ط£ط«ظ†ط§ط، ط§ظ„ظ†ط²ظˆظ„."
+    },
+    {
+      "code": 31,
+      "movement": "Dumbbell squat holding ONE dumbbell in EACH hand alongside body. RIGHT stand feet shoulder width arms straight at sides. LEFT squat bending hips/knees thighs nearparallel, dumbbells remain beside legs, heels grounded. Two separate dumbbells, no goblet or barbell.",
+      "cue": "ط§ظ…ط³ظƒ ط§ظ„ط¯ظ…ط¨ظ„ظٹظ† ط¥ظ„ظ‰ ط¬ط§ظ†ط¨ظٹ ط§ظ„ط¬ط³ظ…طŒ ظˆط§ظ†ط²ظ„ ظ…ط¹ ط«ط¨ط§طھ ط§ظ„ظ‚ط¯ظ…ظٹظ†."
+    },
+    {
+      "code": 32,
+      "movement": "45degree sled leg press machine. Athlete reclined back supported on seat, feet shoulderwidth on inclined sled platform. RIGHT knees flexed about90, sled near body. LEFT legs extended without locking knees, sled higher away. Same machine rails and soles firm on platform.",
+      "cue": "ط«ط¨ظ‘طھ ط§ظ„ط¸ظ‡ط± ظˆط§ظ„ظ‚ط¯ظ…ظٹظ†طŒ ظˆط§ط¯ظپط¹ ط§ظ„ظ…ظ†طµظ‘ط© ط¯ظˆظ† ظ‚ظپظ„ ط§ظ„ط±ظƒط¨طھظٹظ†."
+    },
+    {
+      "code": 33,
+      "movement": "Seated leg EXTENSION machine. Upright supported torso thighs on seat, padded roller against FRONT lower shins just above ankles. RIGHT knees90 feet down. LEFT knees extended lower legs horizontal, roller travels up. Same machine, no leg curl.",
+      "cue": "ط§ط¶ط¨ط· ط§ظ„ظˆط³ط§ط¯ط© ط£ظ…ط§ظ… ط£ط³ظپظ„ ط§ظ„ط³ط§ظ‚ظٹظ†طŒ ظˆظ…ط¯ظ‘ ط§ظ„ط±ظƒط¨طھظٹظ† ط¨طھط­ظƒظ‘ظ…."
+    },
+    {
+      "code": 34,
+      "movement": "PRONE lying leg CURL machine. Athlete belly down on horizontal bench, padded roller BEHIND ankles above heels. RIGHT knees extended legs aligned with bench. LEFT knees flexed heels raised toward buttocks, thighs remain on bench. No seated machine or quad extension.",
+      "cue": "ط«ط¨ظ‘طھ ط§ظ„ظپط®ط°ظٹظ† ط¹ظ„ظ‰ ط§ظ„ظ…ظ‚ط¹ط¯طŒ ظˆط§ط«ظ†ظگ ط§ظ„ط±ظƒط¨طھظٹظ† ظ„ط±ظپط¹ ط§ظ„ظˆط³ط§ط¯ط© ظ†ط­ظˆ ط§ظ„ط®ظ„ظپ."
+    },
+    {
+      "code": 35,
+      "movement": "Barbell ROMANIAN deadlift. RIGHT stand tall bar at thighs straight arms knees slightly bent. LEFT hinge hips backwards torso lowers neutral spine, bar travels close to shins to midshin, knees stay only slightly bent. Not squat/conventional floor deadlift, heels grounded.",
+      "cue": "ط£ط±ط¬ط¹ ط§ظ„ظˆط±ظƒظٹظ† ط¥ظ„ظ‰ ط§ظ„ط®ظ„ظپطŒ ظˆط£ط¨ظ‚ظگ ط§ظ„ط¨ط§ط± ظ‚ط±ظٹط¨ظ‹ط§ ظ…ظ† ط§ظ„ط³ط§ظ‚ظٹظ† ظˆط§ظ„ط¸ظ‡ط± ظ…طھط²ظ†ظ‹ط§."
+    },
+    {
+      "code": 36,
+      "movement": "Forward dumbbell lunge, one dumbbell per hand arms down. RIGHT standing together tall. LEFT step one foot forward into split stance, front knee90 over foot, back knee near floor, torso upright. Both feet visible and front heel grounded.",
+      "cue": "طھظ‚ط¯ظ‘ظ… ط¨ط®ط·ظˆط©طŒ ط«ظ… ط§ظ†ط²ظ„ ظ…ط¹ ط«ط¨ط§طھ ط§ظ„ظƒط¹ط¨ ط§ظ„ط£ظ…ط§ظ…ظٹ ظˆط§ظ„ط¬ط°ط¹."
+    },
+    {
+      "code": 37,
+      "movement": "Bulgarian split squat with one dumbbell per hand, REAR foot top resting on bench behind, front foot grounded. RIGHT top split stance front leg almost straight. LEFT front knee bent90, rear knee lowered toward floor, rear foot remains bench. Same legs and supports.",
+      "cue": "ط¶ط¹ ط§ظ„ظ‚ط¯ظ… ط§ظ„ط®ظ„ظپظٹط© ط¹ظ„ظ‰ ط§ظ„ظ…ظ‚ط¹ط¯طŒ ظˆط§ظ†ط²ظ„ ط¨طھط­ظƒظ‘ظ… ظپظˆظ‚ ط§ظ„ظ‚ط¯ظ… ط§ظ„ط£ظ…ط§ظ…ظٹط©."
+    },
+    {
+      "code": 38,
+      "movement": "Barbell hip thrust, upper back against horizontal bench, feet grounded, padded barbell across front hip crease held by hands. RIGHT hips lowered toward floor knees bent. LEFT hips raised torso horizontal shoulders-to-knees, knees90, head neutral. Same bench/bar placement.",
+      "cue": "ط§ط³ظ†ط¯ ط£ط¹ظ„ظ‰ ط§ظ„ط¸ظ‡ط±طŒ ظˆط§ط±ظپط¹ ط§ظ„ظˆط±ظƒظٹظ† ط­طھظ‰ ظٹطھظ‘ط³ظ‚ط§ ظ…ط¹ ط§ظ„ط¬ط°ط¹ ط¯ظˆظ† طھظ‚ظˆظٹط³ ط²ط§ط¦ط¯."
+    },
+    {
+      "code": 39,
+      "movement": "Standing calf raise MACHINE, shoulder pads and small platform. Forefeet on platform with heels beyond edge, knees straight soft. RIGHT heels lowered below platform. LEFT heels raised high onto balls of feet. Side view makes ankle range obvious, no squat.",
+      "cue": "ط«ط¨ظ‘طھ ظ…ظ‚ط¯ظ‘ظ…ط© ط§ظ„ظ‚ط¯ظ…ظٹظ† ط¹ظ„ظ‰ ط§ظ„ظ…ظ†طµظ‘ط©طŒ ظˆط§ط±ظپط¹ ط§ظ„ظƒط¹ط¨ظٹظ† ط«ظ… ط§ط®ظپط¶ظ‡ظ…ط§ ط¨طھط­ظƒظ‘ظ…."
+    },
+    {
+      "code": 40,
+      "movement": "Seated calf raise MACHINE. Seated thighs horizontal knees90 and pads over knees, forefeet on small platform heels hanging free. RIGHT heels below platform. LEFT heels elevated on balls of feet. Thigh/knee angle unchanged.",
+      "cue": "ط¶ط¹ ط§ظ„ظˆط³ط§ط¯ط© ظپظˆظ‚ ط£ط³ظپظ„ ط§ظ„ظپط®ط°ظٹظ†طŒ ظˆط­ط±ظ‘ظƒ ط§ظ„ظƒط¹ط¨ظٹظ† ظ…ط¹ ط«ط¨ط§طھ ظ…ظ‚ط¯ظ‘ظ…ط© ط§ظ„ظ‚ط¯ظ…ظٹظ†."
+    },
+    {
+      "code": 41,
+      "movement": "Seated hip ABDUCTION machine. Front three-quarter view, back supported feet rests, pads against OUTER knees. RIGHT knees fairly close together. LEFT knees spread wide against pads as legs open outward. Clear identical machine and lever pads, outer resistance direction.",
+      "cue": "ط§ط¨ط¯ط£ ظˆط§ظ„ط±ظƒط¨طھط§ظ† ظ…طھظ‚ط§ط±ط¨طھط§ظ†طŒ ط«ظ… ط§ظپطھط­ ط§ظ„ط³ط§ظ‚ظٹظ† ط¥ظ„ظ‰ ط§ظ„ط®ط§ط±ط¬ ط¨طھط­ظƒظ‘ظ…."
+    },
+    {
+      "code": 42,
+      "movement": "Seated hip ADDUCTION machine. Front threequarter, back supported feetrests, pads against INNER knees. RIGHT legs/knees wide open. LEFT knees brought close together squeezing pads inward. Exactly opposite of abduction, same machine.",
+      "cue": "ط§ط¨ط¯ط£ ظˆط§ظ„ط³ط§ظ‚ط§ظ† ظ…ظپطھظˆط­طھط§ظ†طŒ ط«ظ… ظ‚ط±ظ‘ط¨ظ‡ظ…ط§ ط¥ظ„ظ‰ ط§ظ„ط¯ط§ط®ظ„ ط¨طھط­ظƒظ‘ظ…."
+    },
+    {
+      "code": 43,
+      "movement": "BODYWEIGHT box step-up, no weights. RIGHT standing in front of stable kneeheight box with one foot planted fully on box and other on floor, knee bent. LEFT athlete standing tall ON box both feet on top, knees extended. Same box, no jump.",
+      "cue": "ط¶ط¹ ط§ظ„ظ‚ط¯ظ… ظƒط§ظ…ظ„ط© ط¹ظ„ظ‰ ط§ظ„طµظ†ط¯ظˆظ‚طŒ ط«ظ… ط§طµط¹ط¯ ط¨ط¯ظپط¹ ط§ظ„ظ‚ط¯ظ… ط§ظ„ط£ظ…ط§ظ…ظٹط©."
+    },
+    {
+      "code": 44,
+      "movement": "Floor bodyweight glute bridge. Supine on mat feet flat knees bent90, arms at sides. RIGHT hips resting floor. LEFT hips raised until shoulder-hip-knee straight line, upper back remains floor. No barbell or bench.",
+      "cue": "ط§ط¶ط؛ط· ط¨ط§ظ„ظ‚ط¯ظ…ظٹظ† ظˆط§ط±ظپط¹ ط§ظ„ظˆط±ظƒظٹظ†طŒ ظ…ط¹ ط¨ظ‚ط§ط، ط§ظ„ظƒطھظپظٹظ† ط¹ظ„ظ‰ ط§ظ„ط£ط±ط¶."
+    },
+    {
+      "code": 45,
+      "movement": "Standing barbell biceps curl. RIGHT barbell held supinated palmsforward at thighs arms extended. LEFT elbows bent curling bar toward upper chest, upper arms remain beside torso. No overhead press, torso upright.",
+      "cue": "ط«ط¨ظ‘طھ ط§ظ„ظ…ط±ظپظ‚ظٹظ† ط¨ط¬ط§ظ†ط¨ ط§ظ„ط¬ط°ط¹طŒ ظˆط§ط±ظپط¹ ط§ظ„ط¨ط§ط± ط¯ظˆظ† طھط£ط±ط¬ط­."
+    },
+    {
+      "code": 46,
+      "movement": "Standing two dumbbell biceps curl, palms forward SUPINATED. RIGHT both dumbbells down beside thighs. LEFT both elbows bend dumbbells toward shoulders, upper arms stay by torso palmsup. No neutral hammer grip.",
+      "cue": "ط§ط¬ط¹ظ„ ط±ط§ط­طھظٹ ط§ظ„ظٹط¯ظٹظ† ظ„ظ„ط£ظ…ط§ظ…طŒ ظˆط§ط±ظپط¹ ط§ظ„ط¯ظ…ط¨ظ„ظٹظ† ظ…ط¹ ط«ط¨ط§طھ ط§ظ„ظ…ط±ظپظ‚ظٹظ†."
+    },
+    {
+      "code": 47,
+      "movement": "Standing dumbbell HAMMER curl. RIGHT arms down with NEUTRAL grip thumbs facing forward/up, palms facing each other. LEFT elbows bend weights toward shoulders keeping NEUTRAL grip thumb ends upward and dumbbell shafts vertical. No supinated curl.",
+      "cue": "ط£ط¨ظ‚ظگ ط±ط§ط­طھظٹ ط§ظ„ظٹط¯ظٹظ† ظ…طھظ‚ط§ط¨ظ„طھظٹظ†طŒ ظˆط§ط«ظ†ظگ ط§ظ„ظ…ط±ظپظ‚ظٹظ† ط¯ظˆظ† طھط­ط±ظٹظƒ ط§ظ„ط¬ط°ط¹."
+    },
+    {
+      "code": 48,
+      "movement": "Standing LOW-pulley cable biceps curl with short straight bar, palms up. RIGHT arms extended bar near thighs, cable runs down to pulley. LEFT elbows bent bar toward chest, upper arms stable. Not high-pulley triceps pushdown.",
+      "cue": "ط§ط³ط­ط¨ ط§ظ„ظ…ظ‚ط¨ط¶ ط¥ظ„ظ‰ ط£ط¹ظ„ظ‰ ط¨ط«ظ†ظٹ ط§ظ„ظ…ط±ظپظ‚ظٹظ†طŒ ظ…ط¹ ط«ط¨ط§طھ ط§ظ„ط°ط±ط§ط¹ظٹظ† ط¨ط¬ط§ظ†ط¨ ط§ظ„ط¬ط°ط¹."
+    },
+    {
+      "code": 49,
+      "movement": "Seated preacher-curl MACHINE with slanted upper-arm pad and mechanical lever handles. Upper arms rest on pad. RIGHT forearms extended downward without locking elbows. LEFT forearms curl up toward shoulders, upper arms remain supported. Show machine lever, not standing freeweight.",
+      "cue": "ط§ط³ظ†ط¯ ط£ط¹ظ„ظ‰ ط§ظ„ط°ط±ط§ط¹ظٹظ† ط¹ظ„ظ‰ ط§ظ„ظˆط³ط§ط¯ط©طŒ ظˆط§ط«ظ†ظگ ط§ظ„ظ…ط±ظپظ‚ظٹظ† ط¨طھط­ظƒظ‘ظ…."
+    },
+    {
+      "code": 50,
+      "movement": "Standing HIGH-pulley cable triceps pushdown with straight short bar. RIGHT elbows flexed90 beside ribs bar at lower chest, cable upwards to high pulley. LEFT elbows extend bar to thighs, upper arms stay still by ribs. No curl or overhead extension.",
+      "cue": "ط«ط¨ظ‘طھ ط§ظ„ظ…ط±ظپظ‚ظٹظ† ط¨ط¬ط§ظ†ط¨ ط§ظ„ط¬ط³ظ…طŒ ظˆط§ط¯ظپط¹ ط§ظ„ظ…ظ‚ط¨ط¶ ط¥ظ„ظ‰ ط£ط³ظپظ„ ط¨ظ…ط¯ظ‘ ط§ظ„ط°ط±ط§ط¹ظٹظ†."
+    },
+    {
+      "code": 51,
+      "movement": "Seated overhead dumbbell triceps extension holding ONE dumbbell with BOTH hands around inner top plate, arms above head. RIGHT elbows flexed dumbbell behind head, upper arms vertical. LEFT elbows extended dumbbell above head, same fixed upper arms. Back neutral.",
+      "cue": "ط«ط¨ظ‘طھ ط£ط¹ظ„ظ‰ ط§ظ„ط°ط±ط§ط¹ظٹظ† ط¨ط¬ط§ظ†ط¨ ط§ظ„ط±ط£ط³طŒ ظˆظ…ط¯ظ‘ ط§ظ„ظ…ط±ظپظ‚ظٹظ† ظ„ط±ظپط¹ ط§ظ„ط¯ظ…ط¨ظ„."
+    },
+    {
+      "code": 52,
+      "movement": "Lying EZ-bar triceps extension on flat bench feet floor. Upper arms vertical above shoulders BOTH poses. RIGHT elbows bent EZbar just above forehead (not touching). LEFT elbows extended bar over shoulders. Only forearms pivot, no bench chest press.",
+      "cue": "ط«ط¨ظ‘طھ ط£ط¹ظ„ظ‰ ط§ظ„ط°ط±ط§ط¹ظٹظ†طŒ ظˆط­ط±ظ‘ظƒ ط§ظ„ط³ط§ط¹ط¯ظٹظ† ظ…ط¹ ط¥ط¨ظ‚ط§ط، ط§ظ„ط¨ط§ط± ط¨ط¹ظٹط¯ظ‹ط§ ط¹ظ† ط§ظ„ظˆط¬ظ‡."
+    },
+    {
+      "code": 53,
+      "movement": "Close-grip flat barbell bench press. Hands about SHOULDER WIDTH, not touching, elbows tucked near body. RIGHT bar at lower/midchest elbows bent. LEFT bar pressed above chest arms extended. Supine flatbench groundedfeet.",
+      "cue": "ط§ط³طھط®ط¯ظ… ظ‚ط¨ط¶ط© ط¨ط¹ط±ط¶ ط§ظ„ظƒطھظپظٹظ† طھظ‚ط±ظٹط¨ظ‹ط§طŒ ظˆط£ط¨ظ‚ظگ ط§ظ„ظ…ط±ظپظ‚ظٹظ† ظ‚ط±ظٹط¨ظٹظ† ظ…ظ† ط§ظ„ط¬ط°ط¹."
+    },
+    {
+      "code": 54,
+      "movement": "Seated DUMBBELL wrist curl. Athlete sitting bench legs apart, BOTH forearms supported along thighs with hands beyond knees PALMS UP. One dumbbell each hand. RIGHT wrists extended hands drooping slightly down. LEFT wrists flexed hands curl upwards. Elbows/forearms unmoved, small clear wrist movement. No barbell, no standing curl.",
+      "cue": "ط§ط³ظ†ط¯ ط§ظ„ط³ط§ط¹ط¯ظٹظ† ط¹ظ„ظ‰ ط§ظ„ظپط®ط°ظٹظ† ظˆظˆط¬ظ‘ظ‡ ط§ظ„ط±ط§ط­طھظٹظ† ظ„ظ„ط£ط¹ظ„ظ‰طŒ ط«ظ… ط­ط±ظ‘ظƒ ط§ظ„ط±ط³ط؛ظٹظ† ظپظ‚ط·."
+    },
+    {
+      "code": 55,
+      "movement": "Forearm plank SETUP then HOLD. RIGHT preparation on knees and forearms with elbows beneath shoulders. LEFT lift knees into full plank on FOREARMS and TOES, straight line head-shoulders-hips-heels, no raised hips or sag. Head neutral. Side view.",
+      "cue": "ط§ظ„طµظˆط±ط© ط§ظ„ط£ظˆظ„ظ‰ ظ„ظ„طھط¬ظ‡ظٹط²طŒ ظˆط§ظ„ط«ط§ظ†ظٹط© ظ„ظ„ط«ط¨ط§طھط› ط­ط§ظپط¸ ط¹ظ„ظ‰ ط§ط³طھظ‚ط§ظ…ط© ط§ظ„ط¬ط³ظ… ظˆطھظ†ظپظ‘ط³ ط¨ظ‡ط¯ظˆط،."
+    },
+    {
+      "code": 56,
+      "movement": "Side plank SETUP then HOLD. Side view. RIGHT athlete lies on one side propped on lower forearm with elbow directly under shoulder, legs extended stacked feet, hips just above floor. LEFT lift hips into straight line shoulder-hip-ankle supported forearm and side of lower foot. Upper hand on hip, same side both.",
+      "cue": "ط§ظ„طµظˆط±ط© ط§ظ„ط£ظˆظ„ظ‰ ظ„ظ„طھط¬ظ‡ظٹط²طŒ ظˆط§ظ„ط«ط§ظ†ظٹط© ظ„ظ„ط«ط¨ط§طھط› ط§ط±ظپط¹ ط§ظ„ظˆط±ظƒظٹظ† ظˆط§ط¬ط¹ظ„ ط§ظ„ظ…ط±ظپظ‚ ط£ط³ظپظ„ ط§ظ„ظƒطھظپ."
+    },
+    {
+      "code": 57,
+      "movement": "Hanging knee raise on overhead bar. Arms straight in BOTH panels. RIGHT legs hang straight feet off floor. LEFT knees bend and lift toward chest, thighs above horizontal, pelvis gently curls, no swing. No pullup arm bend.",
+      "cue": "ط§ط«ط¨طھ ظپظٹ ط§ظ„طھط¹ظ„ظ‘ظ‚طŒ ظˆط§ط±ظپط¹ ط§ظ„ط±ظƒط¨طھظٹظ† ظ†ط­ظˆ ط§ظ„ط¬ط°ط¹ ط¯ظˆظ† طھط£ط±ط¬ط­."
+    },
+    {
+      "code": 58,
+      "movement": "Supine abdominal CRUNCH on mat knees bent feet grounded, hands light at temples no pulling neck. RIGHT shoulderblades floor. LEFT shoulderblades slightly lifted chest curls toward pelvis, LOWER BACK remains floor. Not full situp. Sideview.",
+      "cue": "ط§ط±ظپط¹ ط£ط¹ظ„ظ‰ ط§ظ„ط¸ظ‡ط± ظ‚ظ„ظٹظ„ظ‹ط§طŒ ظ…ط¹ ط¨ظ‚ط§ط، ط£ط³ظپظ„ ط§ظ„ط¸ظ‡ط± ط¹ظ„ظ‰ ط§ظ„ط£ط±ط¶ ط¯ظˆظ† ط´ط¯ظ‘ ط§ظ„ط±ظ‚ط¨ط©."
+    },
+    {
+      "code": 59,
+      "movement": "Kneeling cable abdominal crunch. Knees on mat facing HIGH pulley rope ends beside temples. RIGHT upright kneeling torso slightly inclined, hands stay beside head. LEFT flex SPINE curling ribs toward pelvis, elbows move toward knees, hips position remains fairly fixed. Not standing triceps pushdown.",
+      "cue": "ط§ط±ظƒط¹ ط£ظ…ط§ظ… ط§ظ„ط¨ظƒط±ط©طŒ ظˆظ‚ط±ظ‘ط¨ ط§ظ„ط£ط¶ظ„ط§ط¹ ظ…ظ† ط§ظ„ط­ظˆط¶ ظ…ط¹ ط«ط¨ط§طھ ط§ظ„ظٹط¯ظٹظ† ط¨ط¬ط§ظ†ط¨ ط§ظ„ط±ط£ط³."
+    },
+    {
+      "code": 60,
+      "movement": "Kneeling AB WHEEL rollout using SMALL single abwheel with axle hand grips, NOT BARBELL. RIGHT knees mat, hands gripping wheel below shoulders, hips above knees. LEFT roll wheel FORWARD, arms extend ahead and torso lowers close to floor in straight shoulder-hip line, knees stay mat, no pike or back sag.",
+      "cue": "ط§ط«ط¨طھ ط¹ظ„ظ‰ ط§ظ„ط±ظƒط¨طھظٹظ†طŒ ظˆط§ط¯ظپط¹ ط§ظ„ط¹ط¬ظ„ط© ط£ظ…ط§ظ…ظƒ ط¶ظ…ظ† ظ…ط¯ظ‰ ظٹط­ط§ظپط¸ ط¹ظ„ظ‰ ط«ط¨ط§طھ ط§ظ„ط¬ط°ط¹."
+    },
+    {
+      "code": 61,
+      "movement": "Seated Russian twist with MEDICINE BALL. Knees bent BOTH feet firmly floor, torso slightly reclined neutral back. RIGHT hold ball both hands by right hip trunk rotated right. LEFT rotate trunk and ball to left hip, no moving feet. Front threequarter view clearly shows opposite sides. No dumbbell.",
+      "cue": "ط«ط¨ظ‘طھ ط§ظ„ظ‚ط¯ظ…ظٹظ†طŒ ظˆط­ط±ظ‘ظƒ ط§ظ„ظƒط±ط© ظ…ظ† ط¬ط§ظ†ط¨ ط¥ظ„ظ‰ ط¢ط®ط± ط¨ط¯ظˆط±ط§ظ† ظ…طھط­ظƒظ‘ظ… ظ„ظ„ط¬ط°ط¹."
+    },
+    {
+      "code": 62,
+      "movement": "Dead bug exercise supine on mat. RIGHT hips/knees both90 tabletop, both arms vertical above shoulders. LEFT one arm extended behind head nearfloor and OPPOSITE leg extended forward nearfloor, other arm remains vertical and other knee90. Lower back stays mat, exactly two arms/twolegs.",
+      "cue": "ظ…ط¯ظ‘ ط°ط±ط§ط¹ظ‹ط§ ظˆط§ظ„ط³ط§ظ‚ ط§ظ„ظ…ظ‚ط§ط¨ظ„ط© ط¨ط§ظ„طھظ†ط§ظˆط¨طŒ ظ…ط¹ ط¨ظ‚ط§ط، ط£ط³ظپظ„ ط§ظ„ط¸ظ‡ط± ط¹ظ„ظ‰ ط§ظ„ط£ط±ط¶."
+    },
+    {
+      "code": 63,
+      "movement": "Walking on treadmill, SAME treadmill machine bothpanels, NOT running. RIGHT right leg stepping forward leftlegbehind, LEFT opposite step leftlegforward rightbehind. Upright relaxed torso, arms naturally counter-swing, at leastonefoot belt both poses. No jumping, console clearly visible.",
+      "cue": "ط§ظ…ط´ظگ ط¨ط®ط·ظˆط§طھ ظ…ط±ظٹط­ط©طŒ ظ…ط¹ ظˆط¶ط¹ ظ‚ط§ط¦ظ… ظˆظ†ط¸ط± ط¥ظ„ظ‰ ط§ظ„ط£ظ…ط§ظ…."
+    },
+    {
+      "code": 64,
+      "movement": "Stationary exercise bike, same seated athlete and bike both panels. Upright torso light hand grip handlebars. RIGHT right pedal near top leftpedal bottom. LEFT rightpedal bottom leftpedal top, hips stayseat. Clear crank, twofeet attachedpedals, twolegs.",
+      "cue": "ط§ط¶ط¨ط· ط§ظ„ظ…ظ‚ط¹ط¯ ظ„ظ…ط¯ظ‰ ظ…ط±ظٹط­ ظ„ظ„ط±ظƒط¨طھظٹظ†طŒ ظˆط¨ط¯ظ‘ظ„ ط§ظ„ط¶ط؛ط· ط¹ظ„ظ‰ ط§ظ„ط¯ظˆظ‘ط§ط³طھظٹظ† ط¨ط¥ظٹظ‚ط§ط¹ ط«ط§ط¨طھ."
+    },
+    {
+      "code": 65,
+      "movement": "Air-resistance ROWING ERGOMETER, same rail slidingseat largefrontfan handlechain both. RIGHT CATCH: seat close to fan, knees bent shins vertical, torso slightforwardhiphinge, arms straight handleforward. LEFT FINISH: seat back alongrail, legs extended, torso slightbacklean, elbows bent handle at lowersternum. Feet secured footplates, no outdoor boat.",
+      "cue": "ط§ط¨ط¯ط£ ط¨ط¯ظپط¹ ط§ظ„ط³ط§ظ‚ظٹظ†طŒ ط«ظ… ط§ط³ط­ط¨ ط§ظ„ظ…ظ‚ط¨ط¶ط› ظˆظپظٹ ط§ظ„ط¹ظˆط¯ط© ظ…ط¯ظ‘ ط§ظ„ط°ط±ط§ط¹ظٹظ† ظ‚ط¨ظ„ ط«ظ†ظٹ ط§ظ„ط±ظƒط¨طھظٹظ†."
+    },
+    {
+      "code": 66,
+      "movement": "Jump rope exercise with one thin rope twohandles. RIGHT ready standing feet floor rope behind calves, handles beside hips. LEFT LOW jump fewcentimeters abovefloor, feet together softknees, rope visible beneathfeet passing forward, wrists rotate handles at hipheight. Samebody andrope, no giant jump.",
+      "cue": "ط§ظ‚ظپط² ظ‚ظ„ظٹظ„ظ‹ط§ ط¹ظ† ط§ظ„ط£ط±ط¶طŒ ظˆط­ط±ظ‘ظƒ ط§ظ„ط­ط¨ظ„ ظ…ظ† ط§ظ„ط±ط³ط؛ظٹظ† ظ…ط¹ ط±ظƒط¨طھظٹظ† ظ…ط±ظ†طھظٹظ†."
+    }
+  ],
+  "finalRevisions": [
+    {
+      "code": 38,
+      "operation": "edit",
+      "prompt": "Preserve the exact athlete, both valid hip-thrust body poses, padded barbell, Arabic headings, two-panel monochrome medical illustration and white background. Correct framing only: zoom both scenes out enough that ALL toes of BOTH shoes, entire bench including its left end and supports, bar and weights are visible, with at least 40 pixels clean white margin on all canvas edges. No anatomical or movement change. Do not crop shoes, apparatus or text.",
+      "finalSha256": "c28cc238f2c19e3c09b03bc2a5e4b2d6e8cad8864c3981c6312c1bedba4b754a"
+    },
+    {
+      "code": 49,
+      "operation": "edit",
+      "prompt": "Repair the preacher curl machine mechanical connection in the LEFT ط§ظ„ظ†ظ‡ط§ظٹط© pose. The near hand currently holds a detached floating capped tube. BOTH near and far hand grips must be physically attached to rigid curl lever arms connected to the machine pivot near knee height. Draw a visible rigid connecting lever between the near grip and the machine pivot. Both grips/lever arms rise together when elbows flex. No detached tube, third grip, extra hand or floating apparatus. Preserve RIGHT ط§ظ„ط¨ط¯ط§ظٹط© and left flexed-elbow body pose, upper arms supported on preacher pad, Arabic headings and white two-panel anatomy style. Entire body and equipment framed with margin.",
+      "finalSha256": "be648f7257a2e409d8ced4ea2bd3f8e03342fe05a4339b9ab1e2b5add3a14d25"
+    },
+    {
+      "code": 52,
+      "operation": "edit",
+      "prompt": "Correct framing only. Preserve the exact two valid lying EZ-bar triceps extension poses and Arabic headings with monochrome anatomy on white. Zoom BOTH panels out so every shoe toe of both feet, full athlete, EZ bar and complete bench including supports appear wholly within canvas, with at least 40 pixels white margin. Far shoe toes are currently cut by right edge in both scenes; restore them. Keep upper arms stationary, right-start elbows flexed bar near forehead, left-finish elbows extended. No new objects or numerals.",
+      "finalSha256": "4c1ee8558652d812626043bb39a67294c07cffca89c978bfd6da3c0deadd967d"
+    },
+    {
+      "code": 53,
+      "operation": "edit",
+      "prompt": "Correct framing only. Preserve the two close-grip bench press poses, hands approximately shoulder-width, athlete and rack, Arabic headings and white two-panel anatomy. Zoom both scenes out enough that BOTH shoes including far-shoe toes, all athlete, bar/plates and bench/rack are entirely visible inside canvas with 40 pixels white margin. No English or arbitrary plate numerals, logos or other labels. Preserve right-start lowered bar at lower chest and left-finish arms extended.",
+      "finalSha256": "84af0f8b6a01233304af93d5b8295cddd319f11788b3ecd3b228bad85f2a62d5"
+    },
+    {
+      "code": 39,
+      "operation": "regenerate",
+      "prompt": "Side-profile standing calf raise machine, athlete faces RIGHT in both panels. Feet point right, small elevated step under ONLY toes/balls with both heels freely hanging OFF LEFT/back edge. RIGHT start heels hanging clearly BELOW step-top, ankle dorsiflexion with toes elevated and heel dropped. LEFT finish heels clearly ABOVE toes with ankle plantarflexion. Straight legs, supported shoulder pads, grips and full machine. Keep both feet and support edge visible, NOT a flat whole-foot platform. Same camera, no squat.",
+      "finalSha256": "1021315708364e536b41909c4171e3bb6ef82aa5482b429650026079e1f760ed"
+    },
+    {
+      "code": 40,
+      "operation": "regenerate",
+      "prompt": "Side-profile seated calf raise machine, athlete faces LEFT. Knees and hips remain90, thigh pad presses distal THIGHS above kneecaps. Feet pointLEFT, step supports ONLY forefeet on its LEFT/front edge while heels hang freely behind toRIGHT. RIGHT start heels CLEARLY BELOW step top. LEFT finish heels CLEARLY ABOVE step top. A small visible gap under free heels in both panels. Only ankle angle changes, no whole-foot flat support. Hands grip connected handles. Full athlete/equipment visible.",
+      "finalSha256": "8c6ab1e58dab6d80bd9d16d09e2452118e95f80371d9303d77f82ba6094a765d"
+    },
+    {
+      "code": 54,
+      "operation": "regenerate",
+      "prompt": "Seated DUMBBELL WRIST CURL shown in a clear SIDE view. The athlete sits on bench leaning forward, elbows90 and FOREARMS REST HORIZONTALLY ALONG THIGHS, in BOTH panels with exactly identical forearm/elbow position. Hands extend beyond knees palmsUP holding one small dumbbell each. RIGHT beginning: wrists extend and HANDS TILT DOWN at approximately45 degrees with dumbbells hanging beyond knees. LEFT finish: wrists flex and HANDS TILT UP at45 degrees with dumbbells raised beyond knees. The WRIST JOINT ONLY is the visible hinge. Forearms remain on thighs absolutely stationary, NOT an elbow curl. Large clear wrist-angle difference. Full body within margin.",
+      "finalSha256": "cb140373a129cb0bf4d81fd10ce1fedd2943bbbab106d617dad24a7a1292fe26"
+    },
+    {
+      "code": 61,
+      "operation": "regenerate",
+      "prompt": "Russian twist with medicine ball from a symmetrical directly FRONT view, seated athlete on floor with hips centered, feet planted in front of hips and knees bent. EXACT same hips and feet bothpanels. RIGHT ط¨ط¯ط§ظٹط© panel ball visibly at CANVAS-RIGHT beside athlete's own LEFT hip, both arms extend diagonally toRIGHT, chest/shoulders turned toward ball. LEFT ظ†ظ‡ط§ظٹط© panel ball visibly at CANVAS-LEFT beside athlete's own RIGHT hip, both arms extend diagonally toLEFT, chest/shoulders turned toward ball. The position of BALL AND BOTH HANDS must visibly cross from one side of athlete to the opposite side. Both panels MUST NOT depict ball on same side. Upright head follows trunk, gentle torso recline. Both complete figures with generousmargin.",
+      "finalSha256": "ed465b92afdf533f467fd629a30e4448ef0305068c6c2b0083e486a0dc362203"
+    },
+    {
+      "code": 62,
+      "operation": "regenerate",
+      "prompt": "Dead bug from an elevated oblique view of supine athlete on mat, head toCANVASLEFT feet toCANVASRIGHT, near-side body contours clearly distinguishable from far side. RIGHT beginning both knees over hips90 and both arms toward ceiling. LEFT finish: NEAR arm extended along floor overhead toLEFT; NEAR thigh remains pointingUP with knee90 so its shin horizontal at hipheight; FAR leg fully extended low near floor toRIGHT; FAR arm verticalup. Extended arm and leg must belong to OPPOSITE shoulders/hips. The near arm and near leg MUST NOT both be straight. Clearly visible near bent knee, far straight leg, near overhead arm and far vertical arm. Exactlytwoarms/twolegs, lumbar back rests mat. Fullfigures and both ends of matinsidewhitemargins.",
+      "finalSha256": "ddff6ef3eb03cb6c3ac39f24a487beac80cea1c6d821bd48e1d072520d127a57"
+    },
+    {
+      "code": 63,
+      "operation": "regenerate",
+      "prompt": "Treadmill WALKING sequence from fixed side-threequarter camera, head facesRIGHT. RIGHT ط¨ط¯ط§ظٹط© is heelstrike: NEARleg extendedFORWARD withheelcontactbelt at front, FARleg behind withtoebeltcontact, NEARarmbehind,FARarmforward. LEFT ظ†ظ‡ط§ظٹط© is MIDSTANCE: NEARleg VERTICAL directlybeneathhips fullyplantedonbelt, FARleg flexed at knee andSWINGSFORWARD withfoot visiblynearNEARankle butoffbelt. NEARarm relaxedbyhip, FARarm alsoapproachingcenter. Bothpanels clearly DIFFERENT stride phases, not duplicate silhouettes. At leastonefoot onbeltalways, normalwalking notrunning. Same treadmill, complete athlete/machine withmargin.",
+      "finalSha256": "1bf23fa951ff2c605fc8ab2afaa90b1c452459c5589ed253443058cd945aae67"
+    },
+    {
+      "code": 62,
+      "operation": "edit",
+      "prompt": "Edit ONLY the arms of the LEFT panel labelled ط§ظ„ظ†ظ‡ط§ظٹط©. Keep the legs, torso, mat, RIGHT panel and headings unchanged. In the LEFT panel the foreground/NEAR LEG is straight and the background/FAR LEG is bent. Therefore change the arms to the OPPOSITE diagonal: the NEAR ARM attached to the foreground shoulder visible beside the chest must point STRAIGHT UP toward ceiling, and the FAR ARM attached to the background shoulder must extend OVERHEAD behind head along the floor. Remove the current near-arm overhead pose; replace it with near arm upward. Remove the far vertical arm; replace it with far arm overhead. Show clear shoulder connections and distinct two arms, no duplicates, no extra limbs. The result must show extended FAR ARM with extended NEAR LEG, not same-side. Full anatomical black/gray drawing on white, same layout/style, complete hand/foot margins.",
+      "finalSha256": "ddff6ef3eb03cb6c3ac39f24a487beac80cea1c6d821bd48e1d072520d127a57"
+    }
+  ],
+  "earlierCorrectionSummaries": [
+    {
+      "code": 3,
+      "summary": "Restore complete shoe framing and remove fabricated weight plate markings.",
+      "finalSha256": "8e411159c4140e5158c4f4f17fafe739a802ff6661c2f61eaa59faaf459856ba"
+    },
+    {
+      "code": 7,
+      "summary": "Remove the disconnected third grip and connect the two chest-press hand grips to machine lever arms.",
+      "finalSha256": "23868f50ac56e3d85539ea0f82cf6dd6e262b464c1583c3f48ee85886d44165b"
+    },
+    {
+      "code": 11,
+      "summary": "Use an overhead boom so the taut pulldown cable visibly connects the bar to a pulley above it.",
+      "finalSha256": "55a57efc6980e87a17394fb3a9d2d601b4db2d12b357b5b9dbd5acc78babfdba"
+    }
+  ]
+}
