@@ -43,7 +43,10 @@ python3 "$ROOT/scripts/verify_ipa.py" "$OUTPUT/Wateera-unsigned.ipa"
 mkdir -p "$OUTPUT/signing"
 xcodebuild -project "$ROOT/Wateera.xcodeproj" -scheme Wateera -configuration Release \
   -showBuildSettings -json CODE_SIGNING_ALLOWED=NO > "$OUTPUT/signing/build-settings.json"
-python3 "$ROOT/scripts/resolve_entitlements.py" "$OUTPUT/signing/build-settings.json" "$OUTPUT/signing"
+# Scheme settings report the app only; read the embedded target explicitly.
+xcodebuild -project "$ROOT/Wateera.xcodeproj" -target FitnessWidgets -configuration Release -sdk iphoneos \
+  -showBuildSettings -json CODE_SIGNING_ALLOWED=NO > "$OUTPUT/signing/widget-build-settings.json"
+python3 "$ROOT/scripts/resolve_entitlements.py" "$OUTPUT/signing/build-settings.json" "$OUTPUT/signing" "$OUTPUT/signing/widget-build-settings.json"
 cp "$ROOT/docs/CAPABILITIES.md" "$OUTPUT/signing/"
 cp "$ROOT/Config/Identifiers.xcconfig" "$OUTPUT/signing/"
 (cd "$ROOT" && git rev-parse HEAD) > "$OUTPUT/source-commit.txt"

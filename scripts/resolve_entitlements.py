@@ -6,6 +6,11 @@ import sys
 from pathlib import Path
 ROOT=Path(__file__).resolve().parents[1]
 settings=json.loads(Path(sys.argv[1]).read_text())
+if len(sys.argv) > 3:
+    settings.extend(json.loads(Path(sys.argv[3]).read_text()))
+expected={'Fitness','FitnessWidgets'}
+if not expected.issubset({target['target'] for target in settings}):
+    raise SystemExit('Both shipping targets must have native build settings before signing manifests can be exported')
 destination=Path(sys.argv[2]); destination.mkdir(parents=True,exist_ok=True)
 for target in settings:
     name=target['target']

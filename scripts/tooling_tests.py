@@ -60,6 +60,22 @@ class PackagingTests(unittest.TestCase):
             self.assertEqual(app['com.apple.developer.icloud-container-identifiers'],['iCloud.com.test.app'])
             self.assertEqual(set(widget),{'com.apple.security.application-groups'})
             self.assertNotIn('application-identifier',app)
+    def testMissingWidgetSettingsCannotProduceIncompleteSigningManifest(self):
+        with tempfile.TemporaryDirectory(dir=TEMP_ROOT) as folder:
+            path=Path(folder)/'settings.json'
+            path.write_text(json.dumps([{'target':'Fitness','buildSettings':{}}]))
+            result=subprocess.run([sys.executable,str(ROOT/'scripts/resolve_entitlements.py'),str(path),folder],capture_output=True)
+            self.assertNotEqual(result.returncode,0)
+            self.assertFalse((Path(folder)/'Fitness.resolved.entitlements').exists())
+    def testSeparateNativeTargetSettingsExportBothEntitlementFiles(self):
+        with tempfile.TemporaryDirectory(dir=TEMP_ROOT) as folder:
+            app_settings=Path(folder)/'app.json'; widget_settings=Path(folder)/'widget.json'
+            app_settings.write_text(json.dumps([{'target':'Fitness','buildSettings':{'CODE_SIGN_ENTITLEMENTS':'Config/Fitness.entitlements','PRODUCT_BUNDLE_IDENTIFIER':'com.test.app','CLOUDKIT_CONTAINER_IDENTIFIER':'iCloud.com.test.app','CLOUDKIT_ENVIRONMENT':'Development','APP_GROUP_IDENTIFIER':'group.com.test.app','APS_ENVIRONMENT':'development'}}]))
+            widget_settings.write_text(json.dumps([{'target':'FitnessWidgets','buildSettings':{'CODE_SIGN_ENTITLEMENTS':'Config/FitnessWidgets.entitlements','PRODUCT_BUNDLE_IDENTIFIER':'com.test.app.widgets','APP_GROUP_IDENTIFIER':'group.com.test.app'}}]))
+            subprocess.run([sys.executable,str(ROOT/'scripts/resolve_entitlements.py'),str(app_settings),folder,str(widget_settings)],check=True,capture_output=True)
+            widget=plistlib.loads((Path(folder)/'FitnessWidgets.resolved.entitlements').read_bytes())
+            self.assertEqual(widget['com.apple.security.application-groups'],['group.com.test.app'])
+            self.assertTrue((Path(folder)/'Fitness.resolved.entitlements').exists())
     def testProjectGraphAndPlists(self):
         with contextlib.redirect_stdout(io.StringIO()): validate()
     def testOpenStepParserRejectsMalformedGraph(self):

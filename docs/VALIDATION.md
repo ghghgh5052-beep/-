@@ -12,7 +12,7 @@ Date: 2026-10-10 (Asia/Riyadh). Authoring host: Windows. Source is connected to 
 - Wrote XCTest suites for formulas, invalid inputs, volumes/units, optimal plate composition, warmups, PR history, streak/averages, migrations, seed identity, conflict handling, JSON/CSV roundtrips and malformed imports.
 - Wrote a main-flow XCUITest for plan creation → workout start → set completion → saved progress.
 - XCTest source contains 22 unit tests and one UI test. All 23 passed on iPhone SE (3rd generation), iOS 18.5 in the first successful native build.
-- Ran **8 portable tooling tests: 8 passed**. These validate entitlement expansion, project/plist structure, and rejection of missing extensions, missing App Intent metadata, mismatched groups and signed bundles. Packaging tests use synthetic headers only; they do not prove a real app executable works.
+- Ran **10 portable tooling tests: 10 passed**. These validate entitlement expansion from separate native target settings, rejection of incomplete signing manifests, project/plist structure, and rejection of missing extensions, missing App Intent metadata, mismatched groups and signed bundles. Packaging tests use synthetic headers only; they do not prove a real app executable works.
 
 **Static checks and code review do not compile Swift and do not execute XCTest.**
 
@@ -27,6 +27,7 @@ Date: 2026-10-10 (Asia/Riyadh). Authoring host: Windows. Source is connected to 
 - [Two-size passing run](https://github.com/ghghgh5052-beep/-/actions/runs/38017763411), source `13659c005d9cbf12304be0332ace2a8d6a7a5e79`: 23 tests passed on iPhone SE, plus the same UI flow on iPhone 16 Pro Max. Both build summaries reported zero warnings and errors. The exported Pro Max screenshots were visually inspected and confirmed dark appearance and Western digits; SE screenshots confirmed Arabic-Indic digits and light appearance.
 - Xcode's `appintentsnltrainingprocessor` printed `Unable to parse extract.actionsdata` while succeeding. The packaged JSON was independently decoded and contains the start-workout intent, Arabic shortcut phrases and nonempty trained-language data. Packaging now validates these files explicitly. This confirms their presence, not successful Siri invocation on a signed device.
 - Tests use `FITNESS_TESTING=1` and an isolated in-memory local store, avoiding entitlement-requiring CloudKit calls from the unsigned XCTest host. This does not change the production CloudKit configuration.
+- Packaging queries app scheme settings and widget target settings separately. Both shipping targets are required before entitlement export; this avoids relying on `-showBuildSettings -scheme` to include implicit dependencies.
 
 ## Pending broader validation
 
