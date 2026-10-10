@@ -41,7 +41,7 @@ mkdir -p "$STAGING/Payload"
 )
 python3 "$ROOT/scripts/verify_ipa.py" "$OUTPUT/Wateera-unsigned.ipa"
 mkdir -p "$OUTPUT/signing"
-xcodebuild -project "$ROOT/Wateera.xcodeproj" -scheme Wateera -configuration Release \
+xcodebuild -project "$ROOT/Wateera.xcodeproj" -scheme Wateera -configuration Release -destination 'generic/platform=iOS' \
   -showBuildSettings -json CODE_SIGNING_ALLOWED=NO > "$OUTPUT/signing/build-settings.json"
 # Scheme settings report the app only; read the embedded target explicitly.
 xcodebuild -project "$ROOT/Wateera.xcodeproj" -target FitnessWidgets -configuration Release -sdk iphoneos \

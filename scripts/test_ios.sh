@@ -10,6 +10,9 @@ else
   DEVICE_ID="$(python3 "$ROOT/scripts/select_simulator.py" "$OUTPUT/devices.json")"
   DESTINATION="platform=iOS Simulator,id=$DEVICE_ID"
 fi
+if [[ "$DESTINATION" != *"arch="* ]]; then
+  DESTINATION="$DESTINATION,arch=$(uname -m)"
+fi
 python3 "$ROOT/scripts/validate_project.py"
 TEST_SELECTION=(-only-testing:FitnessTests -only-testing:FitnessUITests)
 if [[ "${UI_TESTS_ONLY:-0}" == "1" ]]; then

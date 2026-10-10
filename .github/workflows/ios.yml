@@ -37,6 +37,8 @@ jobs:
           done
       - name: Archive and package without signing
         run: bash scripts/build_unsigned_ipa.sh
+      - name: Verify capability guard against native signatures
+        run: bash scripts/test_native_signatures.sh
       - name: Upload unsigned IPA and signing manifest
         uses: actions/upload-artifact@v6
         with:
