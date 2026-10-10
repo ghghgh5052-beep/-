@@ -63,7 +63,6 @@ import SwiftData
             }.padding()
         }.background(Color(uiColor: .systemGroupedBackground))
             .navigationTitle("استشفاء العضلات").navigationBarTitleDisplayMode(.inline)
-            .accessibilityIdentifier("recovery.screen")
             .toolbar {
                 ToolbarItem(placement: .topBarTrailing) {
                     Button { refresh() } label: { Image(systemName: "arrow.clockwise").frame(minWidth: 44, minHeight: 44) }

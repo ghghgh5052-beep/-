@@ -68,6 +68,8 @@ final class SmartFlowTests: XCTestCase {
         let recovery = app.buttons["progress.recovery"]
         reveal(recovery, in: app)
         recovery.tap()
+        XCTAssertTrue(app.navigationBars["استشفاء العضلات"].waitForExistence(timeout: 5))
+        capture(app, name: "Arabic front and back muscle map after saved workout")
         let readiness = app.staticTexts["recovery.detail.readiness"]
         reveal(readiness, in: app)
         XCTAssertTrue(readiness.label.contains("٩٠") || readiness.label.contains("90"))
@@ -121,6 +123,8 @@ final class SmartFlowTests: XCTestCase {
         let recovery = app.buttons["progress.recovery"]
         reveal(recovery, in: app)
         recovery.tap()
+        XCTAssertTrue(app.navigationBars["استشفاء العضلات"].waitForExistence(timeout: 5))
+        capture(app, name: "Arabic gray muscle map before any workout")
         let readiness = app.staticTexts["recovery.detail.readiness"]
         reveal(readiness, in: app)
         XCTAssertTrue(readiness.label.contains("غير محدد"))

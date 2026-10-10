@@ -167,6 +167,7 @@ import SwiftData
                 }
                 VStack(alignment: .leading, spacing: 4) {
                     Text(value.name).font(.headline)
+                        .accessibilityIdentifier("smart.preview.exercise.\(value.exerciseID.uuidString)")
                     Text("التمرين " + ArabicFormat.integer(number, arabic: settings.useArabicDigits))
                         .font(.caption).foregroundStyle(.secondary)
                 }
@@ -182,7 +183,6 @@ import SwiftData
                     .frame(minHeight: 44)
             }.accessibilityIdentifier("smart.edit.\(value.exerciseID.uuidString)")
         }.padding(.vertical, 4)
-            .accessibilityIdentifier("smart.preview.exercise.\(value.exerciseID.uuidString)")
     }
 
     @ViewBuilder private func prescriptionNumbers(_ value: TrainingPrescription) -> some View {
@@ -335,7 +335,7 @@ private struct PrescriptionSelection: Identifiable {
                     }
                 }
             } header: { Text(prescription.name) } footer: {
-                Text("اترك الوزن فارغًا لاختياره أثناء التمرين. هذه التعديلات تخص هذا الاقتراح فقط.")
+                Text("اترك الوزن فارغًا لاختياره أثناء التمرين. التعديلات تخص هذه الجلسة المقترحة فقط؛ السبب المعروض يشرح أرقام الاقتراح الأصلي.")
             }
         }.navigationTitle("تعديل الاقتراح").navigationBarTitleDisplayMode(.inline)
             .toolbar {
