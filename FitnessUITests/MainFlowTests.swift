@@ -40,8 +40,8 @@ final class MainFlowTests: XCTestCase {
         XCTAssertTrue(weight.waitForExistence(timeout: 5))
         capture(app, name: "Arabic workout logging")
         weight.tap()
-        let currentWeight = weight.value as? String ?? ""
-        weight.typeText(String(repeating: XCUIKeyboardKey.delete.rawValue, count: currentWeight.count) + "20")
+        weight.typeText("20")
+        XCTAssertTrue(["20", "٢٠"].contains(weight.value as? String ?? ""), "Entered weight must replace the previous value")
         let complete = app.buttons.matching(identifier: "set.complete.0").firstMatch
         XCTAssertTrue(complete.exists); complete.tap()
         // An interruption monitor is processed on the next application interaction.
@@ -54,6 +54,8 @@ final class MainFlowTests: XCTestCase {
         if confirm.waitForExistence(timeout: 2) { confirm.tap() }
         let summaryDone = app.buttons["workout.summary.done"]
         XCTAssertTrue(summaryDone.waitForExistence(timeout: 10))
+        let expectedVolume = app.staticTexts.containing(NSPredicate(format: "label CONTAINS %@ OR label CONTAINS %@", "٢٠٠ كجم", "200 كجم")).firstMatch
+        XCTAssertTrue(expectedVolume.exists, "Saved volume must reflect 20 kg for 10 repetitions")
         capture(app, name: "Arabic saved workout summary")
         summaryDone.tap()
         app.tabBars.buttons["تقدّمي"].tap()

@@ -572,7 +572,16 @@ private enum SetKindLabels {
                 onValidityChange?(valid)
             }
             .onChange(of: value) { _, _ in if !focused { refresh() } }
-            .onChange(of: focused) { _, newValue in if !newValue { refresh() } }
+            .onChange(of: focused) { _, newValue in
+                if newValue {
+                    // One-handed editing replaces the existing number in either digit system.
+                    DispatchQueue.main.async {
+                        if focused {
+                            UIApplication.shared.sendAction(#selector(UITextField.selectAll(_:)), to: nil, from: nil, for: nil)
+                        }
+                    }
+                } else { refresh() }
+            }
             .onChange(of: settings.useArabicDigits) { _, _ in refresh() }
             .onChange(of: settings.weightUnit) { _, _ in refresh() }
     }
