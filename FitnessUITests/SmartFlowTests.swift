@@ -11,10 +11,12 @@ final class SmartFlowTests: XCTestCase {
         let generate = app.buttons["smart.generate"]
         reveal(generate, in: app)
         generate.tap()
+        let previewTitle = app.staticTexts["smart.preview.title"]
+        reveal(previewTitle, in: app)
+        XCTAssertTrue(previewTitle.label.contains("بناء العضلات"))
+        capture(app, name: "Arabic generated bodyweight preview")
         let edit = app.buttons["smart.edit.\(pushUpID)"]
         reveal(edit, in: app)
-        XCTAssertTrue(app.staticTexts["smart.preview.title"].exists)
-        capture(app, name: "Arabic generated bodyweight preview")
         edit.tap()
         let repetitions = app.textFields["smart.editor.reps"]
         XCTAssertTrue(repetitions.waitForExistence(timeout: 5))
