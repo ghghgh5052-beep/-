@@ -86,10 +86,13 @@ final class CalculationTests: XCTestCase {
 
     func testEfficientHistoryMatchesIndividualRecordEvaluation() {
         let weights: [Double] = [100, 100.0005, 101, 0, 80, 120]
-        let sets = (0..<500).map { index in
-            SetSnapshot(weight: weights[index % weights.count], reps: index % 15 + 1,
-                        kindRaw: index % 19 == 0 ? "warmup" : "working", completed: index % 23 != 0,
-                        date: Date(timeIntervalSince1970: Double(index)))
+        let sets: [SetSnapshot] = (0..<500).map { (index: Int) -> SetSnapshot in
+            let weight = weights[index % weights.count]
+            let reps = index % 15 + 1
+            let kind = index % 19 == 0 ? "warmup" : "working"
+            let completed = index % 23 != 0
+            let date = Date(timeIntervalSince1970: Double(index))
+            return SetSnapshot(weight: weight, reps: reps, kindRaw: kind, completed: completed, date: date)
         }
         var preceding: [SetSnapshot] = [], expected: [PRAchievement] = []
         for set in sets {
