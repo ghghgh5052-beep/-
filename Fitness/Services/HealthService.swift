@@ -23,12 +23,16 @@ final class HealthService {
     var errorMessage: String?
     @ObservationIgnored private let store = HKHealthStore()
 
-    var isAvailable: Bool { HKHealthStore.isHealthDataAvailable() }
+    var isAvailable: Bool { SigningCapabilities.current.hasHealthKit && HKHealthStore.isHealthDataAvailable() }
 
     private init() {}
 
     @discardableResult
     func requestAuthorization() async -> Bool {
+        guard SigningCapabilities.current.hasHealthKit else {
+            errorMessage = "التوقيع الحالي لا يتضمن صلاحية تطبيق الصحة. يمكنك متابعة تسجيل بياناتك يدويًا."
+            return false
+        }
         guard isAvailable else {
             errorMessage = "بيانات صحتي غير متاحة على هذا الجهاز."
             return false

@@ -4,7 +4,8 @@ import Observation
 
 @MainActor @Observable final class AppRuntime {
     static var isTesting: Bool {
-        ProcessInfo.processInfo.arguments.contains("-ui-testing") ||
+        if ProcessInfo.processInfo.arguments.contains("-startup-smoke-test") { return false }
+        return ProcessInfo.processInfo.arguments.contains("-ui-testing") ||
             ProcessInfo.processInfo.environment["FITNESS_TESTING"] == "1" ||
             ProcessInfo.processInfo.environment["XCTestConfigurationFilePath"] != nil
     }
@@ -84,7 +85,7 @@ import Observation
             }.onChange(of: workout.activeSessionID) { _, id in if id != nil { tab = 0 } }
                 .safeAreaInset(edge: .top) {
                     if let warning, !warningDismissed {
-                        HStack { Text(warning).font(.caption); Button("إخفاء", systemImage: "xmark") { warningDismissed = true } }
+                        HStack { Text(warning).font(.caption).accessibilityIdentifier("startup.warning"); Button("إخفاء", systemImage: "xmark") { warningDismissed = true } }
                             .padding().background(.orange.opacity(0.15))
                     }
                 }

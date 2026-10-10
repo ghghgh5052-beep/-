@@ -6,6 +6,10 @@ import WidgetKit
 enum WidgetSnapshotService {
     @discardableResult
     static func refresh(context: ModelContext, settings: AppSettings) -> String? {
+        guard let group = SharedWorkoutStorage.groupIdentifier,
+              SigningCapabilities.current.allowsAppGroup(group) else {
+            return "التوقيع الحالي لا يتيح مشاركة بيانات الويدجت. بياناتك محفوظة داخل التطبيق."
+        }
         do {
             var calendar = Calendar(identifier: .gregorian)
             calendar.firstWeekday = min(7, max(1, settings.weekStart))

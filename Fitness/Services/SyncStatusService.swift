@@ -59,7 +59,7 @@ final class SyncStatusService {
     func refreshAccount() async {
         guard cloudEnabled else { state = .localOnly; return }
         guard let identifier = Bundle.main.object(forInfoDictionaryKey: "CloudKitContainerIdentifier") as? String,
-              !identifier.isEmpty, !identifier.contains("$(") else {
+              SigningCapabilities.current.allowsCloudKit(container: identifier) else {
             state = .unavailable
             errorMessage = "لم يتم إعداد حاوية آي كلاود في التطبيق."
             return

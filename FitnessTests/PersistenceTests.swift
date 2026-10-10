@@ -5,6 +5,29 @@ import XCTest
 
 final class PersistenceTests: XCTestCase {
     @MainActor
+    func testMissingSignedCloudKitEntitlementsOpenAndPreserveTheLocalStore() throws {
+        // The CI host is unsigned: this must avoid constructing CloudKit entirely.
+        XCTAssertFalse(SigningCapabilities.current.allowsCloudKit(container: "iCloud.com.personal.Wateera"))
+        let directory = FileManager.default.temporaryDirectory.appendingPathComponent(UUID().uuidString)
+        try FileManager.default.createDirectory(at: directory, withIntermediateDirectories: true)
+        defer { try? FileManager.default.removeItem(at: directory) }
+        let url = directory.appendingPathComponent("Fallback.store")
+        try autoreleasepool {
+            let result = try PersistenceController.makeContainer(useCloudKit: true, storeURL: url,
+                cloudKitContainerIdentifier: "iCloud.com.personal.Wateera")
+            XCTAssertEqual(result.syncMode, .local)
+            XCTAssertNotNil(result.warning)
+            let context = ModelContext(result.container)
+            context.insert(BodyMetric(weightKg: 79))
+            try context.save()
+        }
+        let reopened = try PersistenceController.makeContainer(useCloudKit: true, storeURL: url,
+            cloudKitContainerIdentifier: "iCloud.com.personal.Wateera")
+        XCTAssertEqual(reopened.syncMode, .local)
+        XCTAssertEqual(try ModelContext(reopened.container).fetch(FetchDescriptor<BodyMetric>()).first?.weightKg, 79)
+    }
+
+    @MainActor
     func testMigrationPreservesUUIDReferencesAndSessionData() throws {
         let directory = FileManager.default.temporaryDirectory.appendingPathComponent(UUID().uuidString)
         try FileManager.default.createDirectory(at: directory, withIntermediateDirectories: true)

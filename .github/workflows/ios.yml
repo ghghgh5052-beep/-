@@ -60,3 +60,4 @@ jobs:
             build/tests/
             build/tests-large/
             build/archive.log
+            build/Wateera.xcarchive/dSYMs/

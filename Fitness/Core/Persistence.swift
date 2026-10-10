@@ -48,7 +48,9 @@ enum PersistenceController {
         let identifier = cloudKitContainerIdentifier
             ?? Bundle.main.object(forInfoDictionaryKey: "CloudKitContainerIdentifier") as? String
         var cloudFailure: Error?
-        if useCloudKit, let identifier, !identifier.isEmpty {
+        // CloudKit can terminate the process for a missing entitlement before Swift can catch it.
+        // Check the signature produced by the user's signer, not the unsigned build configuration.
+        if useCloudKit, let identifier, SigningCapabilities.current.allowsCloudKit(container: identifier) {
             do {
                 let configuration = ModelConfiguration("Fitness", schema: schema, url: resolvedURL,
                                                        cloudKitDatabase: .private(identifier))
@@ -66,7 +68,7 @@ enum PersistenceController {
             let container = try ModelContainer(for: schema, migrationPlan: FitnessMigrationPlan.self,
                                                configurations: [configuration])
             let warning = useCloudKit
-                ? "المزامنة غير متاحة الآن. بياناتك محفوظة على هذا الجهاز؛ راجع إعدادات آي كلاود وصلاحيات التطبيق."
+                ? "مزامنة آي كلاود غير متاحة مع التوقيع الحالي أو إعداداته. يمكنك استخدام التطبيق وحفظ بياناتك على هذا الجهاز."
                 : nil
             return PersistenceResult(container: container, syncMode: .local, warning: warning,
                                      diagnostic: cloudFailure.map { String(describing: $0) })

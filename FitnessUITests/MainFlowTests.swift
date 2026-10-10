@@ -3,6 +3,24 @@ import XCTest
 
 final class MainFlowTests: XCTestCase {
     @MainActor
+    func testProductionStartupWithoutIntegrationEntitlements() {
+        continueAfterFailure = false
+        let app = XCUIApplication()
+        // Exercise the production persistent-store/bootstrap path, not the in-memory UI fixture.
+        app.launchArguments = ["-startup-smoke-test", "-AppleLanguages", "(ar)", "-AppleLocale", "ar_SA"]
+        app.launch()
+        let onboarding = app.buttons["onboarding.finish"]
+        if onboarding.waitForExistence(timeout: 3) { onboarding.tap() }
+        XCTAssertTrue(app.tabBars.buttons["خططي"].waitForExistence(timeout: 15))
+        XCTAssertTrue(app.staticTexts["startup.warning"].waitForExistence(timeout: 5))
+        capture(app, name: "Arabic local startup without signed integrations")
+        app.terminate()
+        app.launch()
+        XCTAssertTrue(app.tabBars.buttons["خططي"].waitForExistence(timeout: 15))
+        XCTAssertTrue(app.staticTexts["startup.warning"].waitForExistence(timeout: 5))
+    }
+
+    @MainActor
     func testCreatePlanLogWorkoutAndViewProgress() throws {
         continueAfterFailure = false
         let app = XCUIApplication()

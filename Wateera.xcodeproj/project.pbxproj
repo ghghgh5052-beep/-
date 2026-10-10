@@ -133,6 +133,7 @@
 				"7CBDCCDB2D31C4EF0A6F7642",
 				"984EC7B8F8FA90EEDB716DA3",
 				"B5DD6CE095C80D53296CFC6C",
+				"CDC98DEFE7075F7C8AFA4C95",
 			);
 			"runOnlyForDeploymentPostprocessing" = 0;
 		};
@@ -321,6 +322,10 @@
 				"D024F448A414587D82E64D30",
 			);
 			"runOnlyForDeploymentPostprocessing" = 0;
+		};
+		"331F7E7A99539A441C118A4F" = {
+			"isa" = "PBXBuildFile";
+			"fileRef" = "9E88AFB09EEBBBB308A98BFB";
 		};
 		"342CD7427D0DACB39ACFDAB6" = {
 			"isa" = "PBXFileReference";
@@ -528,6 +533,12 @@
 			"path" = "Fitness/Services/WorkoutCoordinator.swift";
 			"sourceTree" = "<group>";
 		};
+		"7C59A5F5235F288C7F384420" = {
+			"isa" = "PBXFileReference";
+			"lastKnownFileType" = "sourcecode.swift";
+			"path" = "FitnessTests/SigningCapabilitiesTests.swift";
+			"sourceTree" = "<group>";
+		};
 		"7CBDCCDB2D31C4EF0A6F7642" = {
 			"isa" = "PBXBuildFile";
 			"fileRef" = "39628AFE920C9FB6E71C3606";
@@ -546,6 +557,7 @@
 				"0BD6A8F04BC512EC179399C1",
 				"EECFB3FA6DCFAF66F0866C62",
 				"0B4CB22FFD4047865B526E16",
+				"331F7E7A99539A441C118A4F",
 				"0883AAE4D46827E570032B05",
 				"D537458C0EAA773DBD2BE962",
 				"FFE2F64CA25C16FD7C84D3F8",
@@ -726,6 +738,12 @@
 			"path" = "Fitness/Shared/Components.swift";
 			"sourceTree" = "<group>";
 		};
+		"9E88AFB09EEBBBB308A98BFB" = {
+			"isa" = "PBXFileReference";
+			"lastKnownFileType" = "sourcecode.swift";
+			"path" = "Fitness/Core/SigningCapabilities.swift";
+			"sourceTree" = "<group>";
+		};
 		"A17894E9718EA370ED10C0F4" = {
 			"isa" = "PBXFileReference";
 			"lastKnownFileType" = "sourcecode.swift";
@@ -750,6 +768,7 @@
 				"0CD24045BF24CB63E945FD24",
 				"79F6DC424ECD6C90A518EEB0",
 				"38C5343769F448EBA64C70E7",
+				"9E88AFB09EEBBBB308A98BFB",
 				"0514190CFE0886DBA806DC45",
 				"D8EB72A485BEA14308803FDD",
 				"FC991FC71C663E216C16C3FE",
@@ -774,6 +793,7 @@
 				"39628AFE920C9FB6E71C3606",
 				"3127F2DF7C5FA22F8A6DC6DC",
 				"494CD3D7C8C54C5634F92E71",
+				"7C59A5F5235F288C7F384420",
 				"5B0C0032240DCE747BD4ACBF",
 				"1483C3F706351F056B0209B1",
 				"985BDAB13FCED7157EEAECC5",
@@ -845,6 +865,10 @@
 				"02BBF35FC65F5B767C0E0636",
 			);
 			"runOnlyForDeploymentPostprocessing" = 0;
+		};
+		"CDC98DEFE7075F7C8AFA4C95" = {
+			"isa" = "PBXBuildFile";
+			"fileRef" = "7C59A5F5235F288C7F384420";
 		};
 		"D024F448A414587D82E64D30" = {
 			"isa" = "PBXBuildFile";
