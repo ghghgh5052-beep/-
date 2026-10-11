@@ -27,6 +27,8 @@ final class SmartFlowTests: XCTestCase {
         let start = app.buttons["smart.start"]
         reveal(start, in: app)
         XCTAssertTrue(start.isEnabled)
+        XCTAssertLessThan(start.frame.maxY, app.frame.maxY - 20,
+                          "The start action must stay above the home indicator")
         capture(app, name: "Arabic reviewed editable workout preview")
         start.tap()
         let options = app.buttons["workout.exercise.options.\(pushUpID)"]

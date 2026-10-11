@@ -106,6 +106,19 @@ import SwiftData
                 }
             }
         }
+        .safeAreaInset(edge: .bottom) {
+            if let preview, !preview.exercises.isEmpty {
+                Button { start(preview) } label: {
+                    Label("ابدأ هذا التمرين", systemImage: "play.fill")
+                        .font(.headline).frame(maxWidth: .infinity, minHeight: 44)
+                }
+                .buttonStyle(WorkoutActionButtonStyle(color: settings.color))
+                .disabled(coordinator.activeSessionID != nil || coordinator.isBusy)
+                .accessibilityIdentifier("smart.start")
+                .padding(.horizontal, 20).padding(.vertical, 12)
+                .background(.bar)
+            }
+        }
         .task { load() }
         .onChange(of: configurationKey) { _, _ in preview = nil }
         .onChange(of: placeKey) { previous, _ in
@@ -162,12 +175,6 @@ import SwiftData
                 Text("لديك تمرين جارٍ. أكمله أو ألغِه قبل بدء التمرين المقترح.")
                     .font(.footnote).foregroundStyle(.secondary)
             }
-            Button { start(value) } label: {
-                Label("ابدأ هذا التمرين", systemImage: "play.fill")
-                    .font(.headline).frame(maxWidth: .infinity, minHeight: 44)
-            }.buttonStyle(.borderedProminent)
-                .disabled(value.exercises.isEmpty || coordinator.activeSessionID != nil || coordinator.isBusy)
-                .accessibilityIdentifier("smart.start")
         } footer: {
             Text("الأوزان المقترحة نقطة بداية قابلة للتعديل. اختر وزنًا تستطيع التحكم فيه، ويمكنك تعديل الجولات أثناء التمرين.")
         }.listRowBackground(Color.clear)
