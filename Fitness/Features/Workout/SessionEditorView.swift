@@ -70,7 +70,8 @@ import SwiftData
     }
 
     private func number(_ label: String, value: Binding<Double>, identifier: String) -> some View {
-        LabeledContent(label) {
+        HStack {
+            Text(label); Spacer(minLength: 12)
             GymNumberField(value: value, decimals: 2, maximum: 1_000_000, label: label, identifier: identifier)
                 .frame(maxWidth: 150)
         }

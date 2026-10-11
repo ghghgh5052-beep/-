@@ -27,6 +27,8 @@ final class EnhancementFlowTests: XCTestCase {
         reveal(weekly, in: app); weekly.tap()
         XCTAssertTrue(app.navigationBars["تقريرك الأسبوعي"].waitForExistence(timeout: 5))
         capture(app, name: "Arabic weekly report on device")
+        app.navigationBars["تقريرك الأسبوعي"].buttons.firstMatch.tap()
+        XCTAssertTrue(completed.waitForExistence(timeout: 5))
         app.tabBars.buttons["التمرين"].tap()
         let history = app.buttons.matching(NSPredicate(format: "identifier BEGINSWITH %@", "workout.history.")).firstMatch
         reveal(history, in: app); history.tap()

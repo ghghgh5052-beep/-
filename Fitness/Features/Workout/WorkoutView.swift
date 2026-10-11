@@ -492,19 +492,22 @@ import UIKit
                     HStack { indexButton; Text(trackingMode.arabicName).font(.subheadline.bold()); Spacer(); completionButton }
                     if let measurement {
                         if trackingMode == .timed || trackingMode == .distance {
-                            LabeledContent("ثواني") {
+                            HStack {
+                                Text("ثواني"); Spacer(minLength: 12)
                                 trackingField(Binding(get: { measurement.seconds }, set: { measurement.seconds = $0; measurement.updatedAt = .now; save() }), maximum: 86_400, label: "مدة الجولة بالثواني", identifier: "set.seconds.\(set.order)")
                             }
                             if trackingMode == .distance {
-                                LabeledContent("متر") {
+                                HStack {
+                                    Text("متر"); Spacer(minLength: 12)
                                     trackingField(Binding(get: { measurement.distanceMeters }, set: { measurement.distanceMeters = $0; measurement.updatedAt = .now; save() }), maximum: 1_000_000, label: "مسافة الجولة بالمتر", identifier: "set.distance.\(set.order)")
                                 }
                             }
                         } else {
-                            LabeledContent("المساعدة (\(settings.weightLabel))") {
+                            HStack {
+                                Text("المساعدة (\(settings.weightLabel))"); Spacer(minLength: 12)
                                 trackingField(Binding(get: { settings.displayWeight(measurement.assistanceKg) }, set: { measurement.assistanceKg = settings.kilograms($0); measurement.updatedAt = .now; save() }), maximum: settings.displayWeight(2_000), label: "وزن المساعدة", identifier: "set.assistance.\(set.order)")
                             }
-                            LabeledContent("التكرارات") { repsField }
+                            HStack { Text("التكرارات"); Spacer(minLength: 12); repsField.frame(maxWidth: 150) }
                         }
                     }
                 }

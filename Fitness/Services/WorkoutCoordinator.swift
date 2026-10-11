@@ -292,7 +292,7 @@ final class WorkoutCoordinator {
         } catch { errorMessage = "تعذر قراءة نوع تسجيل الجولة. أعد المحاولة."; return }
         guard validTracking, set.weightKg.isFinite, set.weightKg >= 0,
               set.rpe.map({ $0.isFinite && (0...10).contains($0) }) ?? true else {
-            errorMessage = "أدخل وزنًا صالحًا وتكرارًا واحدًا على الأقل، وجهدًا بين صفر وعشرة."
+            errorMessage = "راجع قيم الجولة المطلوبة والجهد؛ المدة والمسافة يجب أن تكونا أكبر من صفر، وجولات التكرارات تحتاج تكرارًا واحدًا على الأقل."
             return
         }
         guard !set.isCompleted else { _ = save(context); return }
