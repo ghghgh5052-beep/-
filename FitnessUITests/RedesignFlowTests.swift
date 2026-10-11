@@ -8,6 +8,7 @@ final class RedesignFlowTests: XCTestCase {
         let calendar = app.buttons["dashboard.calendar"]
         reveal(calendar, app: app); calendar.tap()
         XCTAssertTrue(app.navigationBars["تقويم الإنجاز"].waitForExistence(timeout: 5))
+        XCTAssertFalse(app.navigationBars["الأرقام الشخصية"].exists)
         XCTAssertTrue(app.buttons["الشهر السابق"].isHittable)
         capture(app, "Accessible Arabic monthly calendar")
         app.buttons["الشهر السابق"].tap()
@@ -44,9 +45,9 @@ final class RedesignFlowTests: XCTestCase {
         return app
     }
     @MainActor private func reveal(_ element: XCUIElement, app: XCUIApplication) {
-        let top = app.navigationBars.firstMatch.frame.maxY + 8
-        let bottom = app.tabBars.firstMatch.exists ? app.tabBars.firstMatch.frame.minY - 8 : app.frame.maxY - 60
         for _ in 0..<24 {
+            let top = app.navigationBars.firstMatch.frame.maxY + 8
+            let bottom = app.tabBars.firstMatch.exists ? app.tabBars.firstMatch.frame.minY - 8 : app.frame.maxY - 60
             if element.exists && element.isHittable && element.frame.minY >= top && element.frame.maxY <= bottom { break }
             let up = !element.exists || element.frame.maxY > bottom
             let from = CGPoint(x: app.frame.midX, y: up ? bottom - 60 : top + 70)

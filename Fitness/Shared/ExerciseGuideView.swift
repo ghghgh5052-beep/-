@@ -117,7 +117,7 @@ import UIKit
             ScrollView {
                 ExerciseGuideContent(guide: guide, exerciseName: exerciseName).padding(20)
             }
-            .background(Color(uiColor: .systemGroupedBackground))
+            .wateeraCanvas()
             .navigationTitle(exerciseName)
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {

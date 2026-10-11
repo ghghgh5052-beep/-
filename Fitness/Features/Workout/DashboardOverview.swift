@@ -18,7 +18,10 @@ struct DashboardSnapshot {
     }
 }
 
+enum WorkoutDashboardRoute: Hashable { case calendar, records }
+
 @MainActor struct DashboardOverview: View {
+    let openDestination: (WorkoutDashboardRoute) -> Void
     @Environment(AppSettings.self) private var settings
     @Environment(\.dynamicTypeSize) private var typeSize
     @Query private var sessions: [WorkoutSession]
@@ -41,11 +44,11 @@ struct DashboardSnapshot {
                 Spacer()
                 Text(ArabicFormat.weight(summary.weeklyVolume, settings: settings)).font(.headline).monospacedDigit()
             }.wateeraCard(padding: 16).accessibilityElement(children: .combine)
-            NavigationLink { WorkoutCalendarView() } label: {
+            Button { openDestination(.calendar) } label: {
                 DestinationRow(title: "تقويم إنجازك", subtitle: "شاهد أيام التمرين والراحة خلال الشهر", symbol: "calendar.badge.checkmark")
             }.buttonStyle(WateeraCardButtonStyle()).accessibilityIdentifier("dashboard.calendar")
             if let record = records.first(where: { record in summary.completed.contains { $0.id == record.sessionID } }) {
-                NavigationLink { PersonalRecordsView() } label: {
+                Button { openDestination(.records) } label: {
                     HStack(spacing: 12) {
                         Image(systemName: "trophy.fill").font(.title2).foregroundStyle(WateeraDesign.gold).accessibilityHidden(true)
                         VStack(alignment: .leading, spacing: 5) {
@@ -58,7 +61,7 @@ struct DashboardSnapshot {
                     }.wateeraCard()
                 }.buttonStyle(WateeraCardButtonStyle()).accessibilityIdentifier("dashboard.record")
             } else {
-                NavigationLink { PersonalRecordsView() } label: { DestinationRow(title: "أرقامك الشخصية", subtitle: "تُسجَّل تلقائيًا بعد إكمال جلساتك", symbol: "trophy") }.buttonStyle(WateeraCardButtonStyle())
+                Button { openDestination(.records) } label: { DestinationRow(title: "أرقامك الشخصية", subtitle: "تُسجَّل تلقائيًا بعد إكمال جلساتك", symbol: "trophy") }.buttonStyle(WateeraCardButtonStyle())
             }
         }
     }

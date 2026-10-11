@@ -66,6 +66,7 @@ final class SessionDeletionFlowTests: XCTestCase {
         app.alerts.buttons["تراجع"].tap()
         XCTAssertTrue(history.exists)
         XCTAssertFalse(app.buttons["workout.summary.done"].exists)
+        reveal(history, in: app)
         // UIKit closes the swipe actions when the first action presents its alert.
         // Drag right again; a left swipe has no action and can activate the row button.
         let from = history.coordinate(withNormalizedOffset: CGVector(dx: 0.2, dy: 0.5))
@@ -93,10 +94,13 @@ final class SessionDeletionFlowTests: XCTestCase {
     }
 
     @MainActor private func reveal(_ element: XCUIElement, in app: XCUIApplication, up: Bool = true) {
-        for _ in 0..<12 where !element.exists || !element.isHittable {
-            let direction = element.exists && element.frame.height > 0 ? element.frame.midY > app.frame.midY : up
-            let from = app.coordinate(withNormalizedOffset: CGVector(dx: 0.5, dy: direction ? 0.70 : 0.40))
-            let to = app.coordinate(withNormalizedOffset: CGVector(dx: 0.5, dy: direction ? 0.40 : 0.70))
+        for _ in 0..<18 {
+            let top = app.navigationBars.firstMatch.frame.maxY + 8
+            let bottom = app.tabBars.firstMatch.exists ? app.tabBars.firstMatch.frame.minY - 8 : app.frame.maxY - 70
+            if element.exists && element.isHittable && element.frame.minY >= top && element.frame.maxY <= bottom { break }
+            let direction = element.exists ? element.frame.maxY > bottom : up
+            let from = app.coordinate(withNormalizedOffset: .zero).withOffset(CGVector(dx: app.frame.midX, dy: direction ? bottom - 40 : top + 50))
+            let to = app.coordinate(withNormalizedOffset: .zero).withOffset(CGVector(dx: app.frame.midX, dy: direction ? top + 50 : bottom - 40))
             from.press(forDuration: 0.05, thenDragTo: to, withVelocity: .slow, thenHoldForDuration: 0.05)
         }
         if !element.exists || !element.isHittable { capture(app, name: "Unreachable " + element.identifier) }

@@ -28,6 +28,7 @@ final class EnhancementFlowTests: XCTestCase {
         XCTAssertTrue(app.navigationBars["تقريرك الأسبوعي"].waitForExistence(timeout: 5))
         capture(app, name: "Arabic weekly report on device")
         app.navigationBars["تقريرك الأسبوعي"].buttons.firstMatch.tap()
+        reveal(completed, in: app, up: false)
         XCTAssertTrue(completed.waitForExistence(timeout: 5))
         app.tabBars.buttons["التمرين"].tap()
         let history = app.buttons.matching(NSPredicate(format: "identifier BEGINSWITH %@", "workout.history.")).firstMatch
@@ -90,11 +91,15 @@ final class EnhancementFlowTests: XCTestCase {
         XCTAssertTrue(app.buttons["workout.start"].waitForExistence(timeout: 15))
         return app
     }
-    @MainActor private func reveal(_ element: XCUIElement, in app: XCUIApplication) {
-        for _ in 0..<14 where !element.exists || !element.isHittable {
-            let up = element.exists && element.frame.height > 0 ? element.frame.midY > app.frame.midY : true
-            app.coordinate(withNormalizedOffset: CGVector(dx: 0.5, dy: up ? 0.70 : 0.40)).press(forDuration: 0.05,
-                thenDragTo: app.coordinate(withNormalizedOffset: CGVector(dx: 0.5, dy: up ? 0.40 : 0.70)), withVelocity: .slow, thenHoldForDuration: 0.05)
+    @MainActor private func reveal(_ element: XCUIElement, in app: XCUIApplication, up: Bool = true) {
+        for _ in 0..<18 {
+            let top = app.navigationBars.firstMatch.frame.maxY + 8
+            let bottom = app.tabBars.firstMatch.exists ? app.tabBars.firstMatch.frame.minY - 8 : app.frame.maxY - 70
+            if element.exists && element.isHittable && element.frame.minY >= top && element.frame.maxY <= bottom { break }
+            let direction = element.exists ? element.frame.maxY > bottom : up
+            let from = app.coordinate(withNormalizedOffset: .zero).withOffset(CGVector(dx: app.frame.midX, dy: direction ? bottom - 40 : top + 50))
+            let to = app.coordinate(withNormalizedOffset: .zero).withOffset(CGVector(dx: app.frame.midX, dy: direction ? top + 50 : bottom - 40))
+            from.press(forDuration: 0.05, thenDragTo: to, withVelocity: .slow, thenHoldForDuration: 0.05)
         }
         XCTAssertTrue(element.waitForExistence(timeout: 5)); XCTAssertTrue(element.isHittable)
     }

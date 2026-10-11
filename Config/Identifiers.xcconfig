@@ -19,3 +19,6 @@ CLANG_ENABLE_MODULES = YES
 CLANG_ENABLE_OBJC_ARC = YES
 CODE_SIGN_STYLE = Manual
 CODE_SIGNING_ALLOWED = NO
+// Siri is deferred: do not run the App Intents metadata producer for these targets.
+// Swift Build source: Sources/SWBApplePlatform/AppIntentsMetadataTaskProducer.swift.
+LM_SKIP_METADATA_EXTRACTION = YES

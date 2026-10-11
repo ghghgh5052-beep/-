@@ -36,6 +36,8 @@ import LocalAuthentication
                 }
                 Section("على جهازك") {
                     Label("البيانات محفوظة على هذا الجهاز", systemImage: "internaldrive")
+                        .accessibilityElement(children: .ignore)
+                        .accessibilityLabel("البيانات محفوظة على هذا الجهاز")
                         .accessibilityIdentifier("settings.sync.status")
                     Text("تمارينك وقياساتك وصورك متاحة دون اتصال. احتفظ بنسخة احتياطية من قسم بياناتك.").font(.caption).foregroundStyle(.secondary)
                     Toggle("إبقاء الشاشة مضاءة أثناء التمرين", isOn: $keepScreenAwake)

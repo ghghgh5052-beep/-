@@ -15,6 +15,7 @@ import UIKit
     @State private var deletingHistorySession: WorkoutSession?
     @State private var confirmingHistoryDelete = false
     @State private var celebrating = false
+    @State private var navigationPath: [WorkoutDashboardRoute] = []
 
     private var activeSession: WorkoutSession? {
         sessions.first { $0.id == coordinator.activeSessionID && ["active", "paused"].contains($0.statusRaw) }
@@ -33,7 +34,7 @@ import UIKit
     }
 
     var body: some View {
-        NavigationStack {
+        NavigationStack(path: $navigationPath) {
             Group {
                 if let session = activeSession {
                     ActiveWorkoutScreen(session: session)
@@ -64,7 +65,7 @@ import UIKit
                             }.padding(22).background(WateeraDesign.hero, in: RoundedRectangle(cornerRadius: WateeraDesign.Radius.hero))
                         }
                         .listRowBackground(Color.clear).listRowInsets(EdgeInsets(top: 8, leading: 0, bottom: 4, trailing: 0)).listRowSeparator(.hidden)
-                        Section { DashboardOverview() }.listRowBackground(Color.clear).listRowInsets(EdgeInsets(top: 4, leading: 0, bottom: 4, trailing: 0)).listRowSeparator(.hidden)
+                        Section { DashboardOverview { navigationPath.append($0) } }.listRowBackground(Color.clear).listRowInsets(EdgeInsets(top: 4, leading: 0, bottom: 4, trailing: 0)).listRowSeparator(.hidden)
                         if sessions.contains(where: { ["completed", "excluded"].contains($0.statusRaw) }) {
                             Section("جلساتك السابقة") {
                                 ForEach(sessions.filter { ["completed", "excluded"].contains($0.statusRaw) }) { session in
@@ -99,6 +100,12 @@ import UIKit
             .wateeraCanvas()
             .navigationTitle(activeSession == nil ? "التمرين" : "جلسة التمرين")
             .navigationBarTitleDisplayMode(activeSession == nil ? .large : .inline)
+            .navigationDestination(for: WorkoutDashboardRoute.self) { route in
+                switch route {
+                case .calendar: WorkoutCalendarView()
+                case .records: PersonalRecordsView()
+                }
+            }
             .toolbar {
                 if activeSession == nil {
                     ToolbarItem(placement: .topBarTrailing) { Button { showingCalculator = true } label: { Image(systemName: "plus.forwardslash.minus") }.accessibilityLabel("حاسبات الأوزان والإحماء") }
@@ -118,6 +125,7 @@ import UIKit
                 Text(SessionDeletionCopy.message(healthExported: deletingHistorySession?.healthExported == true))
             }
             .onChange(of: coordinator.activeSessionID) { previous, current in
+                if current != nil { navigationPath.removeAll() }
                 if current == nil, let previous, let ended = sessions.first(where: { $0.id == previous && $0.statusRaw == "completed" }) { celebrating = true; historySession = ended }
             }
             .alert("تنبيه التمرين", isPresented: Binding(get: { coordinator.errorMessage != nil }, set: { if !$0 { coordinator.errorMessage = nil } })) {

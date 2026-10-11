@@ -28,6 +28,8 @@
 
 ## التغليف والتحقق
 
+تُعطّل مرحلة استخراج بيانات App Intents عبر `LM_SKIP_METADATA_EXTRACTION=YES` في إعدادات البناء المشتركة، لأن Siri مؤجل. هذا يوقف المرحلة نفسها دون إسكات تحذيرات Xcode أو ربط AppIntents بلا استخدام. مرجع الإعداد: [مصدر نظام Swift Build من Apple](https://github.com/swiftlang/swift-build/blob/main/Sources/SWBApplePlatform/AppIntentsMetadataTaskProducer.swift).
+
 `scripts/build_unsigned_ipa.sh` ينفّذ archive مع `CODE_SIGNING_ALLOWED=NO CODE_SIGNING_REQUIRED=NO CODE_SIGN_IDENTITY=`، ويضع التطبيق وحده في Payload ثم يضغطه. لا تُستخدم أدوات App Store Connect أو TestFlight. يفحص `verify_ipa.py` arm64 وسلامة ZIP وغياب التوقيع وملف provisioning والامتدادات وإعدادات الميزات المؤجلة. يتأكد اختبار توقيع macOS من عدم طلب صلاحيات التكامل في نسخة البرنامج غير الموقعة وفي نسخة منفصلة بتوقيع ad hoc اختباري. لا يوقّع ملف التسليم.
 
 وقّع IPA كاملًا بأداتك الحالية؛ لا يوجد امتداد يحتاج توقيعًا مستقلًا. الشهادة والفريق وصلاحيات الهوية الأساسية مثل `application-identifier` تأتي من ملف provisioning وأداة التوقيع، ولا تُختلق في المصدر. حافظ على نفس bundle identifier أثناء إعادة التوقيع والتثبيت لتحديث التطبيق مع بياناته. لا تحذف النسخة السابقة إن كنت تريد الاحتفاظ ببياناتها؛ يمكن تصدير نسخة كاملة من الإعدادات أولًا.
