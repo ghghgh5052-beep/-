@@ -41,6 +41,7 @@ struct WeeklyLiftComparison: Identifiable, Equatable {
     let currentReps: Int
     let previousReps: Int
     let comparable: Bool
+    let convention: String
 }
 
 struct WeeklyReport: Equatable {
@@ -91,7 +92,7 @@ enum WeeklyReportEngine {
                 .max(by: { $0.weight == $1.weight ? $0.reps < $1.reps : $0.weight < $1.weight })
             return WeeklyLiftComparison(id: id, name: best.name, currentWeight: best.weight,
                 previousWeight: previousBest?.weight ?? 0, currentReps: best.reps,
-                previousReps: previousBest?.reps ?? 0, comparable: previousBest != nil)
+                previousReps: previousBest?.reps ?? 0, comparable: previousBest != nil, convention: best.convention)
         }.sorted { $0.name.localizedStandardCompare($1.name) == .orderedAscending }
         return WeeklyReport(start: start, end: end, currentSessions: currentIDs.count,
             previousSessions: previousIDs.count, currentSets: currentSets.count, previousSets: previousSets.count,

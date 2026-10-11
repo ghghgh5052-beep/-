@@ -36,6 +36,7 @@ import Charts
                             VStack(alignment: .leading, spacing: 10) {
                                 Text(lift.name).font(.headline)
                                 LabeledContent("هذا الأسبوع", value: liftLabel(lift.currentWeight, lift.currentReps))
+                                Text(LoadConvention(rawValue: lift.convention)?.arabicName ?? "الوزن الكلي").font(.caption).foregroundStyle(.secondary)
                                 if lift.comparable {
                                     LabeledContent("الأسبوع السابق", value: liftLabel(lift.previousWeight, lift.previousReps))
                                     Text(lift.currentWeight > lift.previousWeight ? "وزن أعلى في أفضل جولة" :
@@ -78,7 +79,7 @@ import Charts
         catch { errorMessage = "تعذر إعداد تقرير الأسبوع؛ أعد المحاولة." }
     }
     private func shareText(_ report: WeeklyReport) -> String {
-        let lifts = report.lifts.map { $0.name + ": " + liftLabel($0.currentWeight, $0.currentReps) }.joined(separator: "\n")
+        let lifts = report.lifts.map { $0.name + ": " + liftLabel($0.currentWeight, $0.currentReps) + " • " + (LoadConvention(rawValue: $0.convention)?.arabicName ?? "الوزن الكلي") }.joined(separator: "\n")
         return "وتيرة • Coach : 3BIID - AB\n" + ArabicFormat.date(report.start) + "\nالجلسات: "
             + ArabicFormat.integer(report.currentSessions, arabic: settings.useArabicDigits) + "\nجولات العمل: "
             + ArabicFormat.integer(report.currentSets, arabic: settings.useArabicDigits) + "\n" + lifts

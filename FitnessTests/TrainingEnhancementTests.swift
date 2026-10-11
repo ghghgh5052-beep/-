@@ -120,6 +120,9 @@ final class TrainingEnhancementTests: XCTestCase {
         try TrainingEnhancementStore.replace(item: item, with: replacement, context: context)
         XCTAssertEqual(item.exerciseID, replacement.id); XCTAssertEqual(item.groupID, "دائرة")
         XCTAssertEqual(pending.weightKg, 15); XCTAssertEqual(pending.reps, 12)
+        context.insert(ExercisePreference(exerciseID: replacement.id, conventionRaw: "perHand")); try context.save()
+        try TrainingEnhancementStore.replace(item: item, with: replacement, context: context)
+        XCTAssertEqual(pending.weightKg, 0, "A total-pair load must never become a one-dumbbell prescription")
         pending.isCompleted = true; try context.save()
         XCTAssertThrowsError(try TrainingEnhancementStore.replace(item: item, with: source, context: context))
     }

@@ -68,7 +68,6 @@ import SwiftData
     private func load() {
         guard !loaded else { return }
         mode = TrainingEnhancementStore.defaultMode(exerciseID: exerciseID)
-        if SmartExerciseMetadata.forBuiltInID(exerciseID)?.requiredEquipment.contains(.dumbbell) == true { convention = .perHand }
         do {
             if let value = try context.fetch(FetchDescriptor<ExercisePreference>()).filter({ $0.exerciseID == exerciseID }).max(by: { $0.updatedAt < $1.updatedAt }) {
                 avoid = value.avoid; mode = SetTrackingMode(rawValue: value.modeRaw) ?? .reps

@@ -49,7 +49,8 @@ struct SessionSetEdit: Identifiable {
         let preference = try context.fetch(FetchDescriptor<ExercisePreference>())
             .filter { $0.exerciseID == exerciseID }.max(by: { $0.updatedAt < $1.updatedAt })
         let mode = preference.flatMap { SetTrackingMode(rawValue: $0.modeRaw) } ?? defaultMode(exerciseID: exerciseID)
-        let defaultConvention = SmartExerciseMetadata.forBuiltInID(exerciseID)?.requiredEquipment.contains(.dumbbell) == true ? "perHand" : "total"
+        // Preserve the convention used by existing releases until the user explicitly selects another.
+        let defaultConvention = "total"
         let record = SetMeasurement(setID: set.id, modeRaw: mode.rawValue,
             conventionRaw: preference?.conventionRaw ?? defaultConvention)
         // Legacy completed sets retain their original meaning. New modes are applied only to pending sets.
@@ -143,14 +144,26 @@ struct SessionSetEdit: Identifiable {
         let allSets = try context.fetch(FetchDescriptor<LoggedSet>())
         let prior = history.lazy.compactMap { session in past.first { $0.sessionID == session.id } }.first
         let previous = allSets.filter { $0.sessionExerciseID == prior?.id && $0.isCompleted && $0.kindRaw != "warmup" }.sorted { $0.order < $1.order }
+        let historicalDetails = Dictionary(try context.fetch(FetchDescriptor<SetMeasurement>()).map { ($0.setID, $0) }, uniquingKeysWith: { $0.updatedAt >= $1.updatedAt ? $0 : $1 })
         try transaction(context: context) {
             item.exerciseID = definition.id; item.name = definition.name; item.notes = definition.notes; item.updatedAt = .now
             let ids = Set(sets.map(\.id))
             for value in try context.fetch(FetchDescriptor<SetMeasurement>()) where ids.contains(value.setID) { context.delete(value) }
             for set in sets {
                 let value = previous.indices.contains(set.order) ? previous[set.order] : previous.last
-                set.weightKg = value?.weightKg ?? 0; set.reps = value?.reps ?? 10; set.rpe = nil; set.updatedAt = .now
-                _ = try measurement(set: set, exerciseID: definition.id, context: context)
+                set.weightKg = 0; set.reps = 10; set.rpe = nil; set.updatedAt = .now
+                let detail = try measurement(set: set, exerciseID: definition.id, context: context)
+                if let value {
+                    let oldDetail = historicalDetails[value.id]
+                    let oldMode = oldDetail?.modeRaw ?? "reps"
+                    let oldConvention = oldDetail?.conventionRaw ?? "total"
+                    if oldMode == detail.modeRaw && oldConvention == detail.conventionRaw {
+                        set.weightKg = value.weightKg; set.reps = value.reps
+                        detail.seconds = oldDetail?.seconds ?? 0
+                        detail.distanceMeters = oldDetail?.distanceMeters ?? 0
+                        detail.assistanceKg = oldDetail?.assistanceKg ?? 0
+                    }
+                }
             }
             session.updatedAt = .now
         }
