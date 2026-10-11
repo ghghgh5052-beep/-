@@ -1,6 +1,6 @@
 # وتيرة — واجهة عربية حديثة للـ iPhone
 
-**2.0.0، البناء 6، نسخة محلية بالكامل.** الملكية: **Coach : 3BIID - AB**. SwiftUI / SwiftData / Swift Charts، الحد الأدنى iOS 17. لا توجد مكتبات تطبيق خارجية أو حسابات أو خدمة خلفية. قاعدة البيانات ومنطق التمرين محفوظان؛ هذه مرحلة إعادة تصميم الواجهة وتعطيل التكاملات المؤجلة في حزمة التسليم.
+**2.0.0، البناء 7، نسخة محلية بالكامل.** الملكية: **Coach : 3BIID - AB**. SwiftUI / SwiftData / Swift Charts، الحد الأدنى iOS 17. لا توجد مكتبات تطبيق خارجية أو حسابات أو خدمة خلفية. قاعدة البيانات ومنطق التمرين محفوظان؛ هذه مرحلة إعادة تصميم الواجهة وتعطيل التكاملات المؤجلة في حزمة التسليم.
 
 معرّف التطبيق الحالي **`com.personal.Wateera`**. لا توجد امتدادات داخل IPA ولا طلبات HealthKit أو iCloud أو App Groups أو Push أو Siri أو Watch. تستخدم النسخة نفس App ID وملف provisioning الحاليين؛ لا تغيّر معرّف التوقيع المستخدم للنسخة المثبتة.
 
@@ -9,7 +9,7 @@
 Xcode **16.4** وPython 3 ومحاكيات iOS مطلوبة. يستخدم مترجم Swift 6 بوضع اللغة Swift 5 المتوافق مع Swift 5.9+. المشروع مُدرج، ولا تحتاج مولّد مشروع أو Pillow للبناء.
 
 ```bash
-git clone https://github.com/ghghgh5052-beep/-.git wateera-ios
+git clone https://github.com/ghghgh5052-beep/waterh.git wateera-ios
 cd wateera-ios
 sudo xcode-select -s /Applications/Xcode_16.4.app/Contents/Developer
 python3 scripts/validate_project.py
@@ -42,7 +42,7 @@ TEST_OUTPUT_DIR="$PWD/build/tests-2" bash scripts/test_ios.sh
 
 ## CI والتسليم
 
-[GitHub Actions](.github/workflows/ios.yml) يعمل على push والتشغيل اليدوي، على macOS 15 / Xcode 16.4. يشغّل الاختبارات على iPhone صغير ثم اختبارات الواجهة على iPhone كبير بالوضع الداكن والأرقام الغربية، ويصدر التشخيص ولقطات الشاشات، ثم IPA غير موقّع مع بيانات التحقق. لا تُرفع شهادات أو provisioning إلى المستودع أو CI.
+[GitHub Actions](.github/workflows/ios.yml) يعمل على push والتشغيل اليدوي، على macOS 15 / Xcode 16.4. يشغّل الاختبارات على iPhone صغير واختبارات الواجهة على iPhone كبير بالوضع الداكن والأرقام الغربية بالتوازي، ويصدر التشخيص ولقطات الشاشات. يبدأ تغليف IPA غير موقّع بعد نجاح التشغيلين، مع بيانات التحقق. لا تُرفع شهادات أو provisioning إلى المستودع أو CI.
 
 وقّع الملف الجديد بأداتك على الآيفون. لا يوجد ويدجت يحتاج توقيعًا منفصلًا. حدّث التطبيق بنفس معرّف الحزمة دون حذف النسخة المثبتة للاحتفاظ بالبيانات؛ تتوفر نسخة احتياطية من **الإعدادات ← تصدير واستيراد ونسخ احتياطي**.
 

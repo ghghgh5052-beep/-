@@ -9,6 +9,7 @@ import Charts
     @State private var report: WeeklyReport?
     @State private var errorMessage: String?
     @Environment(\.scenePhase) private var scenePhase
+    @Environment(\.dynamicTypeSize) private var typeSize
 
     var body: some View {
         ScrollView {
@@ -126,7 +127,7 @@ import Charts
                     Chart(samples) { sample in
                         LineMark(x: .value("التاريخ", sample.date), y: .value(unit, mode == .assisted ? settings.displayWeight(sample.value) : sample.value))
                         PointMark(x: .value("التاريخ", sample.date), y: .value(unit, mode == .assisted ? settings.displayWeight(sample.value) : sample.value))
-                    }.chartXAxis { AxisMarks { value in AxisValueLabel { if let date = value.as(Date.self) { Text(ArabicFormat.date(date)) } } } }
+                    }.chartXAxis { AxisMarks(values: .automatic(desiredCount: typeSize.isAccessibilitySize ? 2 : 3)) { value in AxisValueLabel { if let date = value.as(Date.self) { ChartDateLabel(date: date, arabicDigits: settings.useArabicDigits) } } } }
                         .chartYAxis { AxisMarks(position: .leading) { value in AxisValueLabel { if let number = value.as(Double.self) { Text(ArabicFormat.number(number, arabic: settings.useArabicDigits)) } } } }
                         .frame(height: 220).accessibilityLabel("تقدم التمرين حسب الجلسة، " + unit)
                     ForEach(samples.reversed()) { value in

@@ -92,6 +92,24 @@ struct SectionHeading: View {
     }
 }
 
+/// Sparse, two-line Arabic dates keep chart labels legible without changing samples.
+struct ChartDateLabel: View {
+    let date: Date
+    let arabicDigits: Bool
+    var body: some View {
+        Text(label).font(.caption2).multilineTextAlignment(.center)
+            .fixedSize(horizontal: false, vertical: true)
+            .accessibilityLabel(ArabicFormat.date(date))
+    }
+    private var label: String {
+        let formatter = DateFormatter()
+        formatter.calendar = Calendar(identifier: .gregorian)
+        formatter.locale = Locale(identifier: "ar_SA")
+        formatter.dateFormat = "d MMM\nyyyy"
+        return ArabicFormat.digits(formatter.string(from: date), arabic: arabicDigits)
+    }
+}
+
 struct DestinationRow: View {
     let title: String
     let subtitle: String

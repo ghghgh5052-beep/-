@@ -139,18 +139,19 @@ import Charts
                         .foregroundStyle(settings.color.gradient).cornerRadius(4)
                         .accessibilityLabel(shortDate(item.date)).accessibilityValue(ArabicFormat.weight(item.volume, settings: settings))
                 }.chartXScale(domain: .automatic())
-                    .chartXAxis { AxisMarks(values: .stride(by: volumePeriod == 0 ? .weekOfYear : .month, count: volumePeriod == 0 ? max(1, range / 42) : max(1, range / 180))) { axis in
-                        AxisValueLabel { if let date = axis.as(Date.self) { Text(shortDate(date)) } }
+                    .chartXAxis { AxisMarks(values: .automatic(desiredCount: typeSize.isAccessibilitySize ? 2 : 3)) { axis in
+                        AxisValueLabel { if let date = axis.as(Date.self) { ChartDateLabel(date: date, arabicDigits: settings.useArabicDigits) } }
                     } }
                     .chartYAxis { AxisMarks(position: .leading) { value in AxisGridLine(); AxisValueLabel { if let number = value.as(Double.self) { Text(ArabicFormat.number(number, decimals: 0, arabic: settings.useArabicDigits)) } } } }
                     .frame(height: 210).accessibilityLabel(volumePeriod == 0 ? "حجم التدريب حسب الأسبوع" : "حجم التدريب حسب الشهر")
+                    .accessibilityIdentifier("progress.volumeChart")
                 Text("الحجم بوحدة " + settings.weightLabel).font(.caption).foregroundStyle(.secondary)
             }.wateeraCard()
             VStack(alignment: .leading, spacing: 16) {
                 SectionHeading(title: "وتيرة التزامك", subtitle: "عدد الجلسات كل أسبوع")
                 Chart(weekly) { item in BarMark(x: .value("الأسبوع", item.date), y: .value("الجلسات", item.workouts)).foregroundStyle(WateeraDesign.blue.gradient).cornerRadius(4) }
                     .chartXScale(domain: .automatic())
-                    .chartXAxis { AxisMarks { value in AxisValueLabel { if let date = value.as(Date.self) { Text(shortDate(date)) } } } }
+                    .chartXAxis { AxisMarks(values: .automatic(desiredCount: typeSize.isAccessibilitySize ? 2 : 3)) { value in AxisValueLabel { if let date = value.as(Date.self) { ChartDateLabel(date: date, arabicDigits: settings.useArabicDigits) } } } }
                     .chartYAxis { AxisMarks(position: .leading) { value in AxisGridLine(); AxisValueLabel { if let n = value.as(Int.self) { Text(ArabicFormat.integer(n, arabic: settings.useArabicDigits)) } } } }.frame(height: 150)
             }.wateeraCard()
             VStack(alignment: .leading, spacing: 14) {
@@ -185,7 +186,7 @@ import Charts
                     LineMark(x: .value("التاريخ", sample.date), y: .value("القيمة", chartValue(sample))).interpolationMethod(.linear).lineStyle(StrokeStyle(lineWidth: 3)).foregroundStyle(settings.color)
                     PointMark(x: .value("التاريخ", sample.date), y: .value("القيمة", chartValue(sample))).foregroundStyle(settings.color)
                         .accessibilityLabel(shortDate(sample.date)).accessibilityValue(ArabicFormat.number(chartValue(sample), arabic: settings.useArabicDigits))
-                }.chartXScale(domain: .automatic()).chartXAxis { AxisMarks { axis in AxisValueLabel { if let d = axis.as(Date.self) { Text(shortDate(d)) } } } }
+                }.chartXScale(domain: .automatic()).chartXAxis { AxisMarks(values: .automatic(desiredCount: typeSize.isAccessibilitySize ? 2 : 3)) { axis in AxisValueLabel { if let d = axis.as(Date.self) { ChartDateLabel(date: d, arabicDigits: settings.useArabicDigits) } } } }
                     .chartYAxis { AxisMarks(position: .leading) { axis in AxisGridLine(); AxisValueLabel { if let n = axis.as(Double.self) { Text(ArabicFormat.number(n, decimals: 0, arabic: settings.useArabicDigits)) } } } }
                     .frame(height: 230)
                 if chartKind == 0 { Text("تقدير أقصى تكرار بمعادلة " + formula.arabicName + ". التقدير أدق مع عشر تكرارات أو أقل.").font(.caption).foregroundStyle(.secondary) }

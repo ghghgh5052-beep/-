@@ -194,6 +194,15 @@ final class MainFlowTests: XCTestCase {
         XCTAssertTrue(completed.exists)
         XCTAssertTrue(completed.label.contains("١") || completed.label.contains("1"))
         capture(app, name: "Arabic workout progress")
+        let monthly = app.segmentedControls["progress.volumePeriod"].buttons["شهري"]
+        revealChartElement(monthly, in: app); monthly.tap()
+        let volumeChart = app.descendants(matching: .any).matching(identifier: "progress.volumeChart").firstMatch
+        revealChartElement(volumeChart, in: app)
+        capture(app, name: "Arabic monthly volume with clear two-line dates")
+        revealChartElement(monthly, in: app)
+        app.segmentedControls["progress.volumePeriod"].buttons["أسبوعي"].tap()
+        revealChartElement(volumeChart, in: app)
+        capture(app, name: "Arabic weekly volume with clear two-line dates")
         app.tabBars.buttons["التمرين"].tap()
         let history = app.buttons.matching(NSPredicate(format: "identifier BEGINSWITH %@", "workout.history.")).firstMatch
         for _ in 0..<14 where !history.isHittable { app.swipeUp() }
@@ -210,10 +219,21 @@ final class MainFlowTests: XCTestCase {
         XCTAssertTrue(app.staticTexts["تاريخك يبدأ من هنا"].waitForExistence(timeout: 10))
         XCTAssertFalse(history.exists)
         app.tabBars.buttons["تقدّمي"].tap()
+        for _ in 0..<6 where !completed.isHittable { app.swipeDown() }
         XCTAssertTrue(completed.waitForExistence(timeout: 5))
         XCTAssertTrue(completed.label.contains("٠") || completed.label.contains("0"))
         XCTAssertTrue(app.staticTexts["كل مجموعة تصنع فرقًا"].exists)
         capture(app, name: "Arabic progress after deleting the only logged session")
+    }
+
+    @MainActor private func revealChartElement(_ element: XCUIElement, in app: XCUIApplication) {
+        for _ in 0..<12 {
+            let bottom = app.tabBars.firstMatch.frame.minY - 10
+            let top = app.frame.height * 0.2
+            if element.exists && element.isHittable && element.frame.minY >= top && element.frame.maxY <= bottom { return }
+            if element.exists && element.frame.minY < top { app.swipeDown() } else { app.swipeUp() }
+        }
+        XCTAssertTrue(element.waitForExistence(timeout: 5)); XCTAssertTrue(element.isHittable)
     }
 
     @MainActor private func capture(_ app: XCUIApplication, name: String) {
