@@ -27,8 +27,10 @@ final class SmartFlowTests: XCTestCase {
         let start = app.buttons["smart.start"]
         reveal(start, in: app)
         XCTAssertTrue(start.isEnabled)
-        XCTAssertLessThan(start.frame.maxY, app.frame.maxY - 20,
-                          "The start action must stay above the home indicator")
+        // SE has a physical Home button; check the full action stays inside
+        // the viewport on both devices instead of assuming an indicator inset.
+        XCTAssertLessThan(start.frame.maxY, app.frame.maxY - 8,
+                          "The full start action must stay inside the safe viewport")
         capture(app, name: "Arabic reviewed editable workout preview")
         start.tap()
         let options = app.buttons["workout.exercise.options.\(pushUpID)"]
