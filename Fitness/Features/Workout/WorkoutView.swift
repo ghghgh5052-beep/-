@@ -46,16 +46,16 @@ import UIKit
                                     Text("تمرين اليوم: \(day.title)").font(.headline)
                                     Button { coordinator.start(day: day, context: context) } label: {
                                         Label("ابدأ تمرين اليوم", systemImage: "play.fill").frame(maxWidth: .infinity, minHeight: 32)
-                                    }.buttonStyle(WorkoutActionButtonStyle()).accessibilityIdentifier("workout.startToday")
+                                    }.buttonStyle(WorkoutActionButtonStyle(color: settings.color)).accessibilityIdentifier("workout.startToday")
                                 } else if todaysWorkout?.isRest == true {
                                     Label("يوم راحة في جدولك", systemImage: "moon.zzz").foregroundStyle(.secondary)
                                 }
                                 Button { coordinator.start(day: nil, context: context) } label: {
                                     Label("ابدأ تمرينًا حرًا", systemImage: "plus").frame(maxWidth: .infinity, minHeight: 32)
-                                }.buttonStyle(WorkoutActionButtonStyle(prominent: false)).accessibilityIdentifier("workout.start")
+                                }.buttonStyle(WorkoutActionButtonStyle(prominent: false, color: settings.color)).accessibilityIdentifier("workout.start")
                                 Button { showingSmartWorkout = true } label: {
                                     Label("اقترح لي تمرينًا", systemImage: "sparkles").frame(maxWidth: .infinity, minHeight: 38)
-                                }.buttonStyle(WorkoutActionButtonStyle(prominent: false)).accessibilityIdentifier("workout.smart")
+                                }.buttonStyle(WorkoutActionButtonStyle(prominent: false, color: settings.color)).accessibilityIdentifier("workout.smart")
                             }.padding(.vertical, 8)
                         }
                         if sessions.contains(where: { ["completed", "excluded"].contains($0.statusRaw) }) {
@@ -162,7 +162,7 @@ import UIKit
                 Button { addingExercise = true } label: { Label("إضافة تمرين", systemImage: "plus.circle.fill").frame(maxWidth: .infinity, minHeight: 38) }
                     .buttonStyle(.bordered).disabled(paused).accessibilityIdentifier("workout.addExercise")
                 Button { confirmingFinish = true } label: { Label("إنهاء وحفظ التمرين", systemImage: "checkmark.flag.fill").frame(maxWidth: .infinity, minHeight: 38) }
-                    .buttonStyle(WorkoutActionButtonStyle()).disabled(coordinator.isBusy).accessibilityIdentifier("workout.finish")
+                    .buttonStyle(WorkoutActionButtonStyle(color: settings.color)).disabled(coordinator.isBusy).accessibilityIdentifier("workout.finish")
                 Text("يُحفظ كل تغيير تلقائيًا على جهازك.").font(.caption).foregroundStyle(.secondary).frame(maxWidth: .infinity)
                 Button(role: .destructive) { confirmingDiscard = true } label: {
                     Label("إلغاء التمرين دون حفظ", systemImage: "trash").frame(maxWidth: .infinity, minHeight: 44)

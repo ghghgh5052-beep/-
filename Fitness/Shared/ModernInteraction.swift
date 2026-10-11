@@ -12,13 +12,14 @@ import SwiftData
 
 struct WorkoutActionButtonStyle: ButtonStyle {
     var prominent = true
+    var color: Color = .accentColor
     @Environment(\.accessibilityReduceMotion) private var reduceMotion
     @Environment(\.isEnabled) private var enabled
     func makeBody(configuration: Configuration) -> some View {
         configuration.label.font(.headline).padding(.horizontal, 16).padding(.vertical, 10)
             .frame(maxWidth: .infinity, minHeight: 52)
-            .foregroundStyle(prominent ? Color.white : Color.accentColor)
-            .background(prominent ? Color.accentColor : Color.accentColor.opacity(0.12), in: RoundedRectangle(cornerRadius: 18, style: .continuous))
+            .foregroundStyle(prominent ? Color.white : color)
+            .background(prominent ? color : color.opacity(0.12), in: RoundedRectangle(cornerRadius: 18, style: .continuous))
             .opacity(enabled ? (configuration.isPressed ? 0.85 : 1) : 0.4)
             .scaleEffect(configuration.isPressed && !reduceMotion ? 0.975 : 1)
             .animation(reduceMotion ? nil : .spring(response: 0.25, dampingFraction: 0.8), value: configuration.isPressed)
