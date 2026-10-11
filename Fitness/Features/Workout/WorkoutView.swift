@@ -474,6 +474,7 @@ import UIKit
     @Query private var measurements: [SetMeasurement]
     @State private var weightInputValid = true
     @State private var repsInputValid = true
+    @State private var trackingInputValidity: [String: Bool] = [:]
     private var measurement: SetMeasurement? { measurements.filter { $0.setID == set.id }.max { $0.updatedAt < $1.updatedAt } }
     private var trackingMode: SetTrackingMode { measurement.flatMap { SetTrackingMode(rawValue: $0.modeRaw) } ?? .reps }
 
@@ -531,6 +532,7 @@ import UIKit
         .padding(.horizontal, 4)
         .background(set.isCompleted ? Color.green.opacity(0.08) : Color.clear, in: RoundedRectangle(cornerRadius: 12))
         .sensoryFeedback(.success, trigger: set.isCompleted) { previous, current in !previous && current }
+        .onChange(of: trackingMode) { _, _ in trackingInputValidity = [:] }
         .task {
             guard measurement == nil, !set.isCompleted else { return }
             do { _ = try TrainingEnhancementStore.measurement(set: set, exerciseID: exercise.exerciseID, context: context); try context.save() }
@@ -569,7 +571,7 @@ import UIKit
 
     private func trackingField(_ value: Binding<Double>, maximum: Double, label: String, identifier: String) -> some View {
         GymNumberField(value: value, decimals: 2, maximum: maximum, label: label, identifier: identifier,
-            onValidityChange: { weightInputValid = $0 }).disabled(paused || set.isCompleted).frame(maxWidth: 150)
+            onValidityChange: { trackingInputValidity[identifier] = $0 }).disabled(paused || set.isCompleted).frame(maxWidth: 150)
     }
 
     private var indexButton: some View {
@@ -601,12 +603,12 @@ import UIKit
                 coordinator.refreshActivity()
             } else if measurement.map({ TrainingEnhancementStore.validMeasurement($0, set: set) }) ?? (set.reps > 0 && set.weightKg >= 0 && set.weightKg.isFinite) {
                 coordinator.complete(set: set, exercise: exercise, context: context)
-            } else { errorMessage = "أدخل عدد تكرارات أكبر من صفر ووزنًا صحيحًا." }
+            } else { errorMessage = "أدخل قيم الجولة كاملة قبل تسجيل الإنجاز؛ يجب أن تكون المدة والمسافة أو التكرارات أكبر من صفر." }
         } label: {
             Image(systemName: set.isCompleted ? "checkmark.circle.fill" : "checkmark.circle")
                 .font(.system(size: 30, weight: .semibold)).frame(width: 44, height: 48)
                 .foregroundStyle(set.isCompleted ? Color.green : Color.accentColor)
-        }.buttonStyle(.plain).disabled(paused || !weightInputValid || !repsInputValid).accessibilityIdentifier("set.complete.\(set.order)")
+        }.buttonStyle(.plain).disabled(paused || !weightInputValid || !repsInputValid || trackingInputValidity.values.contains(false)).accessibilityIdentifier("set.complete.\(set.order)")
             .accessibilityLabel(set.isCompleted ? "إلغاء إنجاز الجولة \(ArabicFormat.integer(set.order + 1, arabic: settings.useArabicDigits))" : "إنجاز الجولة \(ArabicFormat.integer(set.order + 1, arabic: settings.useArabicDigits))")
     }
 
@@ -621,6 +623,7 @@ import UIKit
         do {
             let siblings = try context.fetch(FetchDescriptor<LoggedSet>(predicate: #Predicate { $0.sessionExerciseID == exerciseID }, sortBy: [SortDescriptor(\.order)]))
             let remaining = siblings.filter { $0.id != set.id }
+            for value in try context.fetch(FetchDescriptor<SetMeasurement>()) where value.setID == set.id { context.delete(value) }
             context.delete(set)
             for (order, item) in remaining.enumerated() { item.order = order; item.updatedAt = .now }
             try context.save()
@@ -630,7 +633,7 @@ import UIKit
     }
 }
 
-private enum SetKindLabels {
+enum SetKindLabels {
     static let values = ["warmup", "working", "drop", "failure"]
     static func name(_ kind: String) -> String {
         switch kind {

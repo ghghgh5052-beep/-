@@ -161,7 +161,8 @@ import SwiftData
                     let avoided = Set(try context.fetch(FetchDescriptor<ExercisePreference>()).filter(\.avoid).map(\.exerciseID))
                     definitions = Dictionary(try context.fetch(FetchDescriptor<Exercise>()).map { ($0.id, $0) }, uniquingKeysWith: { first, _ in first })
                     if let source = snapshot.recoveryExercises.first(where: { $0.id == item.exerciseID }) {
-                        alternatives = ExerciseAlternativesEngine.alternatives(to: source, candidates: snapshot.exercises, available: preferences.equipment, avoided: avoided)
+                        let availableDefinitions = snapshot.recoveryExercises.filter { definitions[$0.id]?.isArchived == false }
+                        alternatives = ExerciseAlternativesEngine.alternatives(to: source, candidates: availableDefinitions, available: preferences.equipment, avoided: avoided)
                     }
                     loaded = true
                 } catch { errorMessage = "تعذر إعداد بدائل التمرين." }

@@ -131,7 +131,7 @@ struct SessionSetEdit: Identifiable {
         let past = try context.fetch(FetchDescriptor<SessionExercise>()).filter { $0.exerciseID == definition.id }
         let allSets = try context.fetch(FetchDescriptor<LoggedSet>())
         let prior = history.lazy.compactMap { session in past.first { $0.sessionID == session.id } }.first
-        let previous = allSets.filter { $0.sessionExerciseID == prior?.id && $0.isCompleted }.sorted { $0.order < $1.order }
+        let previous = allSets.filter { $0.sessionExerciseID == prior?.id && $0.isCompleted && $0.kindRaw != "warmup" }.sorted { $0.order < $1.order }
         try transaction(context: context) {
             item.exerciseID = definition.id; item.name = definition.name; item.notes = definition.notes; item.updatedAt = .now
             let ids = Set(sets.map(\.id))

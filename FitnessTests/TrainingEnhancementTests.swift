@@ -160,6 +160,32 @@ final class TrainingEnhancementTests: XCTestCase {
         XCTAssertEqual(try context.fetchCount(FetchDescriptor<SessionFeedback>()), 1)
     }
 
+    @MainActor func testDifferentWeightConventionsHaveIndependentRecordsAndSuggestions() throws {
+        let context = try makeContext(), session = fixture(context, weight: 40)
+        let first = try XCTUnwrap(context.fetch(FetchDescriptor<LoggedSet>()).first)
+        context.insert(SetMeasurement(setID: first.id, conventionRaw: "total"))
+        let exerciseID = SeedCatalog.stableID(namespace: 1, code: 1)
+        let later = WorkoutSession(start: session.start.addingTimeInterval(60), end: session.end?.addingTimeInterval(60), statusRaw: "completed")
+        let movement = SessionExercise(sessionID: later.id, exerciseID: exerciseID)
+        let oneHand = LoggedSet(sessionExerciseID: movement.id, weightKg: 20, reps: 10, isCompleted: true, completedAt: later.end)
+        context.insert(later); context.insert(movement); context.insert(oneHand)
+        context.insert(SetMeasurement(setID: oneHand.id, conventionRaw: "perHand"))
+        context.insert(ExercisePreference(exerciseID: exerciseID, conventionRaw: "perHand")); try context.save()
+        try PRService.rebuild(context: context)
+        XCTAssertTrue(try context.fetch(FetchDescriptor<PersonalRecord>()).contains { $0.setID == oneHand.id && $0.kindRaw == "weight" && $0.value == 20 })
+        XCTAssertEqual(try SmartTrainingStore.snapshot(context: context).history.map(\.weightKg), [20])
+    }
+
+    @MainActor func testSessionFeedbackIsUsedConservativelyWithoutChangingSavedRPE() throws {
+        let context = try makeContext(), session = fixture(context, weight: 50)
+        context.insert(SessionFeedback(sessionID: session.id, difficulty: 3, energy: 1, fatigueRaw: "chest")); try context.save()
+        let snapshot = try SmartTrainingStore.snapshot(context: context)
+        XCTAssertEqual(snapshot.history.first?.rpe, 9)
+        XCTAssertEqual(try context.fetch(FetchDescriptor<LoggedSet>()).first?.rpe, 8)
+        XCTAssertFalse(snapshot.exercises.contains { $0.primaryMuscles.contains(.chest) })
+        XCTAssertTrue(snapshot.recoveryExercises.contains { $0.primaryMuscles.contains(.chest) })
+    }
+
     func testWeeklyReportHandlesTwoYearsOfHistoryWithoutRescanningEverySession() {
         let exercise = UUID()
         let sessions = (0..<730).map { ReportSession(id: UUID(), date: now.addingTimeInterval(-Double($0) * 86_400)) }
