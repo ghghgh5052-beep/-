@@ -118,10 +118,10 @@ final class MainFlowTests: XCTestCase {
         let plansTab = app.tabBars.buttons["خططي"]
         XCTAssertTrue(plansTab.waitForExistence(timeout: 15))
         plansTab.tap()
-        capture(app, name: "Arabic plans")
         let addPlan = app.buttons["plans.add"]
         XCTAssertTrue(addPlan.waitForExistence(timeout: 5))
         XCTAssertTrue(addPlan.isHittable)
+        capture(app, name: "Arabic plans")
         addPlan.tap()
         let template = app.buttons["planTemplate_ppl"]
         XCTAssertTrue(template.waitForExistence(timeout: 5)); template.tap()

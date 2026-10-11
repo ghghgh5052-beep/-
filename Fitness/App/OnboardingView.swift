@@ -9,7 +9,7 @@ import SwiftUI
                 ZStack {
                     RoundedRectangle(cornerRadius: 36).fill(WateeraDesign.hero)
                     VStack(alignment: .leading, spacing: 22) {
-                        Image(systemName: "figure.strengthtraining.traditional").font(.system(size: 56, weight: .light)).foregroundStyle(Color(red: 0.53, green: 0.96, blue: 0.77)).accessibilityHidden(true)
+                        Image(systemName: "figure.strengthtraining.traditional").font(.system(size: 56, weight: .light)).foregroundStyle(WateeraDesign.heroAccent).accessibilityHidden(true)
                         Text("وتيرة").font(.largeTitle.bold())
                         Text("خطوة اليوم.\nفرق الغد.").font(.largeTitle.bold()).fixedSize(horizontal: false, vertical: true)
                     }.foregroundStyle(.white).frame(maxWidth: .infinity, alignment: .leading).padding(28)

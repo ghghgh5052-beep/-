@@ -95,8 +95,11 @@ final class SessionDeletionFlowTests: XCTestCase {
 
     @MainActor private func reveal(_ element: XCUIElement, in app: XCUIApplication, up: Bool = true) {
         for _ in 0..<18 {
-            let top = app.navigationBars.firstMatch.frame.maxY + 8
-            let bottom = app.tabBars.firstMatch.exists ? app.tabBars.firstMatch.frame.minY - 8 : app.frame.maxY - 70
+            // Hidden bars may report CGRect.null during a sheet dismissal.
+            let navBottom = app.navigationBars.firstMatch.frame.maxY
+            let tabTop = app.tabBars.firstMatch.exists ? app.tabBars.firstMatch.frame.minY : .infinity
+            let top = navBottom.isFinite ? min(max(navBottom + 8, app.frame.height * 0.1), app.frame.height * 0.4) : app.frame.height * 0.14
+            let bottom = tabTop.isFinite ? max(tabTop - 8, app.frame.height * 0.6) : app.frame.maxY - 70
             if element.exists && element.isHittable && element.frame.minY >= top && element.frame.maxY <= bottom { break }
             let direction = element.exists ? element.frame.maxY > bottom : up
             let from = app.coordinate(withNormalizedOffset: .zero).withOffset(CGVector(dx: app.frame.midX, dy: direction ? bottom - 40 : top + 50))

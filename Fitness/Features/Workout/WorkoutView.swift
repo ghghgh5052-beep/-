@@ -45,20 +45,20 @@ import UIKit
                                 HStack {
                                     Text(ArabicFormat.date(.now)).font(.subheadline).foregroundStyle(.white.opacity(0.8))
                                     Spacer()
-                                    Image(systemName: "figure.strengthtraining.traditional").font(.title).foregroundStyle(Color(red: 0.53, green: 0.96, blue: 0.77)).accessibilityHidden(true)
+                                    Image(systemName: "figure.strengthtraining.traditional").font(.title).foregroundStyle(WateeraDesign.heroAccent).accessibilityHidden(true)
                                 }
                                 Text("كل جولة تقرّبك\nمن هدفك").font(.title2.bold()).foregroundStyle(.white).fixedSize(horizontal: false, vertical: true)
                                 if let day = todaysWorkout, !day.isRest {
                                     Text("تمرين اليوم: \(day.title)").font(.headline).foregroundStyle(.white)
                                     Button { coordinator.start(day: day, context: context) } label: {
                                         Label("ابدأ تمرين اليوم", systemImage: "play.fill").frame(maxWidth: .infinity, minHeight: 44)
-                                    }.buttonStyle(WorkoutActionButtonStyle(color: Color(red: 0.53, green: 0.96, blue: 0.77), foreground: .black)).accessibilityIdentifier("workout.startToday")
+                                    }.buttonStyle(WorkoutActionButtonStyle(color: WateeraDesign.heroAccent, foreground: .black)).accessibilityIdentifier("workout.startToday")
                                 } else if todaysWorkout?.isRest == true {
                                     Label("يوم راحة في جدولك", systemImage: "moon.zzz").foregroundStyle(.white.opacity(0.8))
                                 }
                                 Button { coordinator.start(day: nil, context: context) } label: {
                                     Label("ابدأ تمرينًا حرًا", systemImage: "plus").frame(maxWidth: .infinity, minHeight: 44)
-                                }.buttonStyle(WorkoutActionButtonStyle(color: Color(red: 0.53, green: 0.96, blue: 0.77), foreground: .black)).accessibilityIdentifier("workout.start")
+                                }.buttonStyle(WorkoutActionButtonStyle(color: WateeraDesign.heroAccent, foreground: .black)).accessibilityIdentifier("workout.start")
                                 Button { showingSmartWorkout = true } label: {
                                     Label("اقترح لي تمرينًا", systemImage: "sparkles").frame(maxWidth: .infinity, minHeight: 38)
                                 }.buttonStyle(WorkoutActionButtonStyle(prominent: false, color: .white)).accessibilityIdentifier("workout.smart")

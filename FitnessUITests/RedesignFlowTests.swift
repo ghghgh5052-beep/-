@@ -25,6 +25,13 @@ final class RedesignFlowTests: XCTestCase {
         continueAfterFailure = false
         let app = launch()
         capture(app, "Modern Arabic dashboard")
+        let calendar = app.buttons["dashboard.calendar"]
+        reveal(calendar, app: app); calendar.tap()
+        XCTAssertTrue(app.navigationBars["تقويم الإنجاز"].waitForExistence(timeout: 5))
+        XCTAssertFalse(app.navigationBars["الأرقام الشخصية"].exists)
+        capture(app, "Modern Arabic monthly achievement grid")
+        app.navigationBars["تقويم الإنجاز"].buttons.firstMatch.tap()
+        XCTAssertTrue(app.navigationBars["التمرين"].waitForExistence(timeout: 5))
         let start = app.buttons["workout.start"]; reveal(start, app: app); start.tap()
         let finish = app.buttons["workout.finish"]; reveal(finish, app: app); finish.tap()
         app.alerts.buttons["إنهاء وحفظ"].tap()
@@ -46,8 +53,10 @@ final class RedesignFlowTests: XCTestCase {
     }
     @MainActor private func reveal(_ element: XCUIElement, app: XCUIApplication) {
         for _ in 0..<24 {
-            let top = app.navigationBars.firstMatch.frame.maxY + 8
-            let bottom = app.tabBars.firstMatch.exists ? app.tabBars.firstMatch.frame.minY - 8 : app.frame.maxY - 60
+            let navBottom = app.navigationBars.firstMatch.frame.maxY
+            let tabTop = app.tabBars.firstMatch.exists ? app.tabBars.firstMatch.frame.minY : .infinity
+            let top = navBottom.isFinite ? min(max(navBottom + 8, app.frame.height * 0.1), app.frame.height * 0.4) : app.frame.height * 0.14
+            let bottom = tabTop.isFinite ? max(tabTop - 8, app.frame.height * 0.6) : app.frame.maxY - 60
             if element.exists && element.isHittable && element.frame.minY >= top && element.frame.maxY <= bottom { break }
             let up = !element.exists || element.frame.maxY > bottom
             let from = CGPoint(x: app.frame.midX, y: up ? bottom - 60 : top + 70)

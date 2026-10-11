@@ -22,15 +22,15 @@ struct AchievementCard: View {
         VStack(alignment: .leading, spacing: 28) {
             HStack { Text("وتيرة").font(.largeTitle.bold()); Spacer(); Image(systemName: "dumbbell.fill").font(.largeTitle) }
             Spacer(minLength: 24)
-            Image(systemName: "checkmark.seal.fill").font(.system(size: 66)).foregroundStyle(Color(red: 0.53, green: 0.96, blue: 0.77))
+            Image(systemName: "checkmark.seal.fill").font(.system(size: 66)).foregroundStyle(WateeraDesign.heroAccent)
             Text("خطوة جديدة\nنحو هدفك").font(.system(size: 42, weight: .bold)).fixedSize(horizontal: false, vertical: true)
-            Text(title).font(.title2.bold())
+            Text(title).font(.title2.bold()).lineLimit(2)
             Text(date).font(.body).foregroundStyle(.white.opacity(0.8))
             Divider().overlay(.white.opacity(0.4))
             HStack(spacing: 24) {
                 shareMetric("المدة", duration); shareMetric("الجولات", sets); shareMetric("الحجم", volume)
             }
-            if records != "" { Label(records + " أرقام شخصية جديدة", systemImage: "trophy.fill").font(.headline).foregroundStyle(Color(red: 0.98, green: 0.84, blue: 0.54)) }
+            if records != "" { Label(records + " أرقام شخصية جديدة", systemImage: "trophy.fill").font(.headline).foregroundStyle(WateeraDesign.shareGold) }
             Spacer(minLength: 12)
             Text(AppBranding.ownerName).font(.footnote).environment(\.layoutDirection, .leftToRight)
         }.foregroundStyle(.white).padding(36).frame(width: 600, height: 800).background(WateeraDesign.hero)

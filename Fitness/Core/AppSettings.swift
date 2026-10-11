@@ -30,7 +30,7 @@ final class AppSettings {
         switch accent {
         case "blue": return WateeraDesign.blue
         case "orange": return WateeraDesign.coral
-        case "purple": return WateeraDesign.adaptive(light: 0x7352AF, dark: 0xC6A8FF)
+        case "purple": return WateeraDesign.purple
         default: return WateeraDesign.brand
         }
     }

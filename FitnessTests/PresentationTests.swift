@@ -50,6 +50,8 @@ final class PresentationTests: XCTestCase {
         XCTAssertEqual(image.size.width, 600); XCTAssertEqual(image.size.height, 800)
         XCTAssertNotNil(image.pngData())
         XCTAssertEqual(image.cgImage?.width, 1200); XCTAssertEqual(image.cgImage?.height, 1600)
+        let attachment = XCTAttachment(data: try XCTUnwrap(image.pngData()), uniformTypeIdentifier: "public.png")
+        attachment.name = "Arabic achievement card"; attachment.lifetime = .keepAlways; add(attachment)
     }
     @MainActor func testDefaultAccentHasAccessibleContrastInBothAppearances() {
         func luminance(_ color: UIColor) -> Double {
