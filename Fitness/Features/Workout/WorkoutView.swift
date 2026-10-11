@@ -463,6 +463,7 @@ import UIKit
 @MainActor private struct WorkoutSetRow: View {
     @Environment(\.modelContext) private var context
     @Environment(\.dynamicTypeSize) private var dynamicTypeSize
+    @Environment(\.accessibilityReduceMotion) private var reduceMotion
     @Environment(AppSettings.self) private var settings
     @Environment(WorkoutCoordinator.self) private var coordinator
     @Bindable var set: LoggedSet
@@ -475,8 +476,14 @@ import UIKit
     @State private var weightInputValid = true
     @State private var repsInputValid = true
     @State private var trackingInputValidity: [String: Bool] = [:]
-    private var measurement: SetMeasurement? { measurements.filter { $0.setID == set.id }.max { $0.updatedAt < $1.updatedAt } }
+    private var measurement: SetMeasurement? { measurements.max { $0.updatedAt < $1.updatedAt } }
     private var trackingMode: SetTrackingMode { measurement.flatMap { SetTrackingMode(rawValue: $0.modeRaw) } ?? .reps }
+
+    init(set: LoggedSet, exercise: SessionExercise, previous: LoggedSet?, paused: Bool) {
+        self.set = set; self.exercise = exercise; self.previous = previous; self.paused = paused
+        let id = set.id
+        _measurements = Query(filter: #Predicate<SetMeasurement> { $0.setID == id })
+    }
 
     var body: some View {
         VStack(alignment: .leading, spacing: 6) {
@@ -512,16 +519,14 @@ import UIKit
             } else {
                 HStack(spacing: 8) { indexButton; weightField; repsField; completionButton }
             }
-            if let previous, trackingMode == .reps || trackingMode == .bodyweight {
+            if let previous {
                 HStack {
                     HStack(spacing: 4) { Text("السابق:"); SetPerformanceLabel(set: previous) }
                     Spacer(minLength: 4)
                     if !set.isCompleted {
                         Button {
                             UIApplication.shared.sendAction(#selector(UIResponder.resignFirstResponder), to: nil, from: nil, for: nil)
-                            set.weightKg = previous.weightKg
-                            set.reps = previous.reps
-                            save()
+                            copyPrevious(previous)
                         } label: { Image(systemName: "arrow.down.doc").frame(minWidth: 44, minHeight: 44) }.disabled(paused).accessibilityLabel("استخدام أرقام الجلسة السابقة")
                     }
                 }.font(.caption).foregroundStyle(.secondary)
@@ -531,7 +536,7 @@ import UIKit
         .padding(.vertical, 3)
         .padding(.horizontal, 4)
         .background(set.isCompleted ? Color.green.opacity(0.08) : Color.clear, in: RoundedRectangle(cornerRadius: 12))
-        .sensoryFeedback(.success, trigger: set.isCompleted) { previous, current in !previous && current }
+        .animation(reduceMotion ? nil : .easeOut(duration: 0.18), value: set.isCompleted)
         .onChange(of: trackingMode) { _, _ in trackingInputValidity = [:] }
         .task {
             guard measurement == nil, !set.isCompleted else { return }
@@ -572,6 +577,24 @@ import UIKit
     private func trackingField(_ value: Binding<Double>, maximum: Double, label: String, identifier: String) -> some View {
         GymNumberField(value: value, decimals: 2, maximum: maximum, label: label, identifier: identifier,
             onValidityChange: { trackingInputValidity[identifier] = $0 }).disabled(paused || set.isCompleted).frame(maxWidth: 150)
+    }
+
+    private func copyPrevious(_ previous: LoggedSet) {
+        do {
+            let id = previous.id
+            let prior = try context.fetch(FetchDescriptor<SetMeasurement>(predicate: #Predicate { $0.setID == id })).first
+            let previousMode = SetTrackingMode(rawValue: prior?.modeRaw ?? "reps") ?? .reps
+            guard (previousMode == trackingMode || previousMode.supportsWeightRecords && trackingMode.supportsWeightRecords),
+                  (prior?.conventionRaw ?? "total") == (measurement?.conventionRaw ?? "total") else {
+                errorMessage = "تغيّر نوع التسجيل أو معنى الوزن؛ راجع القيم السابقة وأدخل القيم المناسبة يدويًا."; return
+            }
+            set.weightKg = previous.weightKg; set.reps = previous.reps
+            measurement?.seconds = prior?.seconds ?? 0
+            measurement?.distanceMeters = prior?.distanceMeters ?? 0
+            measurement?.assistanceKg = prior?.assistanceKg ?? 0
+            measurement?.updatedAt = .now
+            save()
+        } catch { errorMessage = "تعذر قراءة الجولة السابقة." }
     }
 
     private var indexButton: some View {

@@ -128,7 +128,8 @@ enum SmartTrainingStoreError: Error, LocalizedError {
             if let current = preferencesByID[movement.exerciseID], current.conventionRaw != convention { return nil }
             return TrainingSetHistory(sessionID: session.id, exerciseID: movement.exerciseID,
                 date: set.completedAt ?? session.end ?? session.start, weightKg: set.weightKg,
-                reps: set.reps, rpe: difficultSessions.contains(session.id) ? max(9, set.rpe ?? 0) : set.rpe, kind: set.kindRaw, isCompleted: true)
+                reps: set.reps, rpe: set.rpe, kind: set.kindRaw, isCompleted: true,
+                isDifficultSession: difficultSessions.contains(session.id))
         }.sorted {
             if $0.date != $1.date { return $0.date < $1.date }
             if $0.sessionID != $1.sessionID { return $0.sessionID.uuidString < $1.sessionID.uuidString }
@@ -139,7 +140,11 @@ enum SmartTrainingStoreError: Error, LocalizedError {
         let recentSessionIDs = Set(finished.filter { Date.now.timeIntervalSince($0.end ?? $0.start) >= 0 && Date.now.timeIntervalSince($0.end ?? $0.start) < 48 * 3600 }.map(\.id))
         let fatigued = Set(feedback.filter { recentSessionIDs.contains($0.sessionID) }.flatMap { $0.fatigueRaw.split(separator: ",").compactMap { MuscleRegion(rawValue: String($0)) } })
         let ordered = known.sorted { $0.1.id.uuidString < $1.1.id.uuidString }
-        return TrainingSnapshot(exercises: ordered.filter { !$0.0.isArchived && !avoided.contains($0.0.id) && $0.1.primaryMuscles.isDisjoint(with: fatigued) }.map { $0.1 },
+        return TrainingSnapshot(exercises: ordered.filter {
+            let mode = preferencesByID[$0.0.id].flatMap { SetTrackingMode(rawValue: $0.modeRaw) }
+            return !$0.0.isArchived && !avoided.contains($0.0.id) && (mode?.supportsWeightRecords ?? true)
+                && $0.1.primaryMuscles.isDisjoint(with: fatigued)
+        }.map { $0.1 },
             recoveryExercises: ordered.map { $0.1 }, history: history,
             unsupportedExerciseCount: definitionsByID.values.filter {
                 !$0.isArchived && ($0.isCustom || !knownIDs.contains($0.id))

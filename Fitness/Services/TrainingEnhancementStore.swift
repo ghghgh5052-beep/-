@@ -32,8 +32,8 @@ struct SessionSetEdit: Identifiable {
         let autosave = context.autosaveEnabled
         context.autosaveEnabled = false
         defer { context.autosaveEnabled = autosave }
-        do { try changes(); try commit(context) }
-        catch { context.rollback(); throw error }
+        do { try changes(); context.processPendingChanges(); try commit(context) }
+        catch { context.processPendingChanges(); context.rollback(); throw error }
     }
 
     static func defaultMode(exerciseID: UUID) -> SetTrackingMode {
@@ -94,7 +94,11 @@ struct SessionSetEdit: Identifiable {
             && SetTrackingMode(rawValue: $0.modeRaw) != nil && LoadConvention(rawValue: $0.conventionRaw) != nil }) else {
             throw TrainingEditError.invalid
         }
-        try transaction(context: context, commit: commit) {
+        let originalSession = WorkoutSessionRecord(session)
+        let originalSets = sets.map { ($0, LoggedSetRecord($0)) }
+        let originalMeasurements = try context.fetch(FetchDescriptor<SetMeasurement>())
+            .filter { setsByID[$0.setID] != nil }.map { ($0, SetMeasurementRecord($0)) }
+        do { try transaction(context: context, commit: commit) {
             session.title = title.trimmingCharacters(in: .whitespacesAndNewlines)
             session.start = start; session.end = start.addingTimeInterval(duration)
             session.accumulatedPause = 0; session.pausedAt = nil; session.pauseEventsRaw = ""
@@ -116,6 +120,13 @@ struct SessionSetEdit: Identifiable {
             // Move unedited timestamps too, so dated edits change charts, recovery and PR chronology consistently.
             for set in sets where set.isCompleted { set.completedAt = session.end; set.updatedAt = .now }
             try PRService.rebuild(context: context, saveChanges: false)
+        } } catch {
+            // SwiftData rollback can leave already-observed scalar properties stale on iOS 18.
+            // Restore those live references too; rollback has already restored inserts/deletions.
+            originalSession.apply(to: session)
+            for (model, record) in originalSets { record.apply(to: model) }
+            for (model, record) in originalMeasurements { record.apply(to: model) }
+            throw error
         }
     }
 

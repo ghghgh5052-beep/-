@@ -43,7 +43,9 @@ struct WorkoutActionButtonStyle: ButtonStyle {
         case "timed": return ArabicFormat.duration(value?.seconds ?? 0, arabic: settings.useArabicDigits)
         case "distance": return ArabicFormat.number(value?.distanceMeters ?? 0, arabic: settings.useArabicDigits) + " متر • " + ArabicFormat.duration(value?.seconds ?? 0, arabic: settings.useArabicDigits)
         case "assisted": return "مساعدة " + ArabicFormat.weight(value?.assistanceKg ?? 0, settings: settings) + " × " + ArabicFormat.integer(set.reps, arabic: settings.useArabicDigits)
-        default: return ArabicFormat.weight(set.weightKg, settings: settings) + " × " + ArabicFormat.integer(set.reps, arabic: settings.useArabicDigits)
+        default:
+            let numbers = ArabicFormat.weight(set.weightKg, settings: settings) + " × " + ArabicFormat.integer(set.reps, arabic: settings.useArabicDigits)
+            return value.map { numbers + " • " + (LoadConvention(rawValue: $0.conventionRaw)?.arabicName ?? "الوزن الكلي") } ?? numbers
         }
     }
 }

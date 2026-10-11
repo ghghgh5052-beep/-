@@ -177,12 +177,15 @@ struct TrainingSetHistory: Equatable, Sendable {
     let rpe: Double?
     let kind: String
     let isCompleted: Bool
+    let isDifficultSession: Bool
 
     init(sessionID: UUID, exerciseID: UUID, date: Date, weightKg: Double,
-         reps: Int, rpe: Double? = nil, kind: String = "working", isCompleted: Bool = true) {
+         reps: Int, rpe: Double? = nil, kind: String = "working", isCompleted: Bool = true,
+         isDifficultSession: Bool = false) {
         self.sessionID = sessionID; self.exerciseID = exerciseID; self.date = date
         self.weightKg = weightKg; self.reps = reps; self.rpe = rpe
         self.kind = kind; self.isCompleted = isCompleted
+        self.isDifficultSession = isDifficultSession
     }
 
     func isValid(at now: Date) -> Bool {
@@ -302,11 +305,13 @@ enum SmartTrainingEngine {
                           reason: "بعد انقطاع يتجاوز ثلاثة أسابيع، اقتراح أخف من آخر وزن للعمل. راجع قدرتك قبل اعتماده.")
         }
         let adverse = latestSession.contains {
-            $0.kind == "failure" || ($0.rpe ?? 0) >= 9
+            $0.kind == "failure" || ($0.rpe ?? 0) >= 9 || $0.isDifficultSession
         }
         if adverse {
             return result(weight: base, reps: max(range.lowerBound, priorReps - 1),
-                          reason: "آخر جلسة تضمنت جهدًا مرتفعًا أو وصولًا للفشل؛ نحافظ على الوزن ونخفف التكرارات المقترحة.")
+                          reason: latestSession.contains(where: \.isDifficultSession)
+                            ? "أبلغت عن جلسة صعبة أو طاقة منخفضة؛ نحافظ على الوزن ونخفف التكرارات المقترحة."
+                            : "آخر جلسة تضمنت جهدًا مرتفعًا أو وصولًا للفشل؛ نحافظ على الوزن ونخفف التكرارات المقترحة.")
         }
         guard age <= 7 * 86_400 else {
             return result(weight: base, reps: priorReps,

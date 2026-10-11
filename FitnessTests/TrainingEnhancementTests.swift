@@ -78,9 +78,16 @@ final class TrainingEnhancementTests: XCTestCase {
         enum Failure: Error { case diskFull }
         let context = try makeContext(), session = fixture(context, weight: 50)
         try context.save(); try PRService.rebuild(context: context)
+        let originalTitle = session.title
+        let set = try XCTUnwrap(context.fetch(FetchDescriptor<LoggedSet>()).first)
+        context.insert(SetMeasurement(setID: set.id)); try context.save()
+        let changed = SessionSetEdit(id: set.id, weightKg: 70, reps: 8, rpe: 9, kindRaw: "working", seconds: 0, distanceMeters: 0, assistanceKg: 0, modeRaw: "reps", conventionRaw: "perHand")
         let before = Set(try context.fetch(FetchDescriptor<PersonalRecord>()).map(\.id))
-        XCTAssertThrowsError(try TrainingEnhancementStore.edit(session: session, title: "تجريبية", start: session.start, duration: 60, notes: "", excluded: true, edits: [], context: context, commit: { _ in throw Failure.diskFull }))
+        XCTAssertThrowsError(try TrainingEnhancementStore.edit(session: session, title: "تجريبية", start: session.start, duration: 60, notes: "", excluded: true, edits: [changed], context: context, commit: { _ in throw Failure.diskFull }))
         XCTAssertEqual(session.statusRaw, "completed")
+        XCTAssertEqual(session.title, originalTitle)
+        XCTAssertEqual(set.weightKg, 50)
+        XCTAssertEqual(try context.fetch(FetchDescriptor<SetMeasurement>()).first?.conventionRaw, "total")
         XCTAssertEqual(Set(try context.fetch(FetchDescriptor<PersonalRecord>()).map(\.id)), before)
     }
 
@@ -180,7 +187,8 @@ final class TrainingEnhancementTests: XCTestCase {
         let context = try makeContext(), session = fixture(context, weight: 50)
         context.insert(SessionFeedback(sessionID: session.id, difficulty: 3, energy: 1, fatigueRaw: "chest")); try context.save()
         let snapshot = try SmartTrainingStore.snapshot(context: context)
-        XCTAssertEqual(snapshot.history.first?.rpe, 9)
+        XCTAssertEqual(snapshot.history.first?.rpe, 8)
+        XCTAssertEqual(snapshot.history.first?.isDifficultSession, true)
         XCTAssertEqual(try context.fetch(FetchDescriptor<LoggedSet>()).first?.rpe, 8)
         XCTAssertFalse(snapshot.exercises.contains { $0.primaryMuscles.contains(.chest) })
         XCTAssertTrue(snapshot.recoveryExercises.contains { $0.primaryMuscles.contains(.chest) })

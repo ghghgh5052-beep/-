@@ -1,5 +1,13 @@
 # Validation record
 
+## Training enhancements (1.3.0 / build 5)
+
+This revision adds saved-session editing and exclusion, movement/equipment alternatives, corresponding-day weekly reports and sharing, configured multiweek double progression, session feedback, timed/distance/bodyweight/assistance measurements, three equipment profiles, and sequential start/end exercise illustrations. Native button feedback and Reduce Motion handling, Arabic summaries, Siri rest/pause/report actions, and mode-aware export/import accompany these changes. Weight conventions are separated in exercise advice, records, goals and charts. No entitlement, bundle identifier or backend change is introduced; account authentication and Apple Watch remain deferred.
+
+V4 migration, edit/rollback integrity, replacement history, typed measurements, feedback, progression/report calculations, JSON/CSV, and a 21,900-set report dataset have native XCTest coverage. New UI flows exercise saved-session exclusion/restoration and timed-set logging with illustrated playback. The CI runs all unit/UI tests on a small iPhone simulator and UI flows again on a large iPhone in dark mode with Western digits. Results must match the delivered source commit; the delivery folder's VERIFICATION.md records the exact run and counts. Historical results below are not evidence for this revision.
+
+The short exercise preview alternates the existing start and end illustrations; it is not continuous technique video or a substitute for human coaching review. The report dataset test verifies functional aggregation, not measured physical-device launch performance. Physical Face ID/haptics, background notifications, third-party signing and two-device CloudKit remain device acceptance checks.
+
 ## Session deletion update (1.2.1 / build 4)
 
 The source adds completed-session deletion from the summary or RTL history swipe, and active/paused-session discard. One saved operation removes UUID-linked sets and movements and rebuilds PR history from surviving sessions. Errors roll back the deletion; unrelated edits are saved first. Smart-training history, progress queries and widget snapshots use the remaining sessions. Discard stops rest notifications and the live activity. No schema or entitlement change is required.

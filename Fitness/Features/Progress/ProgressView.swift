@@ -17,15 +17,24 @@ import Charts
 
     private var finished: [WorkoutSession] { sessions.filter { $0.statusRaw == "completed" } }
     private var cutoff: Date { Calendar.current.date(byAdding: .day, value: -range, to: Date()) ?? Date() }
+    private var selectedConvention: String {
+        guard let selectedExercise else { return "total" }
+        if let preference = trackingPreferences.filter({ $0.exerciseID == selectedExercise }).max(by: { $0.updatedAt < $1.updatedAt }) {
+            return preference.conventionRaw
+        }
+        let itemIDs = Set(movements.filter { $0.exerciseID == selectedExercise }.map(\.id))
+        let setIDs = Set(sets.filter { itemIDs.contains($0.sessionExerciseID) }.map(\.id))
+        return measurements.filter { setIDs.contains($0.setID) }.max { $0.updatedAt < $1.updatedAt }?.conventionRaw ?? "total"
+    }
     private var samples: [LiftSample] {
         guard let selectedExercise else { return [] }
         let movementMap = Dictionary(movements.filter { $0.exerciseID == selectedExercise }.map { ($0.id, $0.sessionID) }, uniquingKeysWith: { first, _ in first })
         let sessionMap = Dictionary(finished.filter { $0.start >= cutoff }.map { ($0.id, $0) }, uniquingKeysWith: { first, _ in first })
         let details = Dictionary(measurements.map { ($0.setID, $0) }, uniquingKeysWith: { first, second in first.updatedAt >= second.updatedAt ? first : second })
-        let convention = trackingPreferences.filter { $0.exerciseID == selectedExercise }.max { $0.updatedAt < $1.updatedAt }?.conventionRaw
+        let convention = selectedConvention
         let grouped = Dictionary(grouping: sets.filter { movementMap[$0.sessionExerciseID] != nil && $0.kindRaw != "warmup"
             && (details[$0.id].map { ["reps", "bodyweight"].contains($0.modeRaw) } ?? true)
-            && (convention == nil || (details[$0.id]?.conventionRaw ?? "total") == convention) }) { movementMap[$0.sessionExerciseID] ?? UUID() }
+            && (details[$0.id]?.conventionRaw ?? "total") == convention }) { movementMap[$0.sessionExerciseID] ?? UUID() }
         return grouped.compactMap { sessionID, entries in
             guard let session = sessionMap[sessionID], !entries.isEmpty else { return nil }
             return LiftSample(id: sessionID, date: session.start,
@@ -150,6 +159,7 @@ import Charts
                         }.pickerStyle(.segmented)
                     }
                     if !samples.isEmpty {
+                        Text(LoadConvention(rawValue: selectedConvention)?.arabicName ?? "الوزن الكلي").font(.caption).foregroundStyle(.secondary)
                         Chart(samples) { sample in
                             LineMark(x: .value("التاريخ", sample.date), y: .value("القيمة", settings.displayWeight(chartKind == 0 ? sample.oneRM : chartKind == 1 ? sample.top : sample.volume)))
                                 .interpolationMethod(.linear).foregroundStyle(settings.color)
@@ -222,6 +232,7 @@ func muscleName(_ raw: String) -> String {
     @Environment(AppSettings.self) private var settings
     @Query(sort: \PersonalRecord.achievedAt, order: .reverse) private var records: [PersonalRecord]
     @Query private var exercises: [Exercise]
+    @Query private var measurements: [SetMeasurement]
     var body: some View {
         List {
             if records.isEmpty { EmptyState(title: "أرقامك القادمة تبدأ الآن", message: "تُسجَّل الأرقام الجديدة تلقائيًا عند إكمال جلسة.", symbol: "trophy") }
@@ -234,6 +245,8 @@ func muscleName(_ raw: String) -> String {
                         Text(recordLabel(record.kindRaw) + ": " + ArabicFormat.weight(record.value, settings: settings))
                     }
                     Text(ArabicFormat.date(record.achievedAt)).font(.caption).foregroundStyle(.secondary)
+                    Text(LoadConvention(rawValue: measurements.filter { $0.setID == record.setID }.max { $0.updatedAt < $1.updatedAt }?.conventionRaw ?? "total")?.arabicName ?? "الوزن الكلي")
+                        .font(.caption).foregroundStyle(.secondary)
                 }.padding(.vertical, 4)
             }
         }.navigationTitle("الأرقام الشخصية")

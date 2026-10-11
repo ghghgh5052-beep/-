@@ -12,7 +12,9 @@ final class EnhancementFlowTests: XCTestCase {
         let title = app.textFields["session.edit.title"]
         XCTAssertTrue(title.waitForExistence(timeout: 5))
         let excluded = app.switches["session.edit.excluded"]
-        reveal(excluded, in: app); excluded.tap()
+        reveal(excluded, in: app)
+        excluded.coordinate(withNormalizedOffset: CGVector(dx: 0.1, dy: 0.5)).tap()
+        XCTAssertEqual(excluded.value as? String, "1")
         capture(app, name: "Arabic saved session editor exclusion")
         app.buttons["session.edit.save"].tap()
         XCTAssertTrue(app.staticTexts["جلسة تجريبية محفوظة"].waitForExistence(timeout: 5))
@@ -29,7 +31,10 @@ final class EnhancementFlowTests: XCTestCase {
         let history = app.buttons.matching(NSPredicate(format: "identifier BEGINSWITH %@", "workout.history.")).firstMatch
         reveal(history, in: app); history.tap()
         reveal(edit, in: app); edit.tap()
-        reveal(excluded, in: app); excluded.tap(); app.buttons["session.edit.save"].tap()
+        reveal(excluded, in: app)
+        excluded.coordinate(withNormalizedOffset: CGVector(dx: 0.1, dy: 0.5)).tap()
+        XCTAssertEqual(excluded.value as? String, "0")
+        app.buttons["session.edit.save"].tap()
         XCTAssertTrue(app.staticTexts["أحسنت، تمرينك محفوظ"].waitForExistence(timeout: 5))
         app.buttons["workout.summary.done"].tap()
         app.tabBars.buttons["تقدّمي"].tap()
@@ -44,8 +49,8 @@ final class EnhancementFlowTests: XCTestCase {
         let add = app.buttons["workout.addExercise"]
         reveal(add, in: app); add.tap()
         let search = app.searchFields.firstMatch
-        XCTAssertTrue(search.waitForExistence(timeout: 5)); search.tap(); search.typeText("بلانك")
-        let row = app.buttons.matching(NSPredicate(format: "label CONTAINS %@", "بلانك")).firstMatch
+        XCTAssertTrue(search.waitForExistence(timeout: 5)); search.tap(); search.typeText("الثبات الأمامي")
+        let row = app.buttons.matching(NSPredicate(format: "label CONTAINS %@", "الثبات الأمامي")).firstMatch
         XCTAssertTrue(row.waitForExistence(timeout: 5)); row.tap()
         let seconds = app.textFields["set.seconds.0"]
         reveal(seconds, in: app); seconds.tap(); seconds.typeText("30")

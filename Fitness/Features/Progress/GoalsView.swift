@@ -8,6 +8,8 @@ import SwiftData
     @Query(sort: \BodyMetric.date) private var metrics: [BodyMetric]
     @Query private var records: [PersonalRecord]
     @Query private var sessions: [WorkoutSession]
+    @Query private var measurements: [SetMeasurement]
+    @Query private var trackingPreferences: [ExercisePreference]
     @State private var showEditor = false
     @State private var errorMessage: String?
     var body: some View {
@@ -32,7 +34,13 @@ import SwiftData
     private func current(_ goal: FitnessGoal) -> Double {
         switch goal.kindRaw {
         case "bodyWeight": return metrics.reversed().compactMap(\.weightKg).first ?? 0
-        case "lift": return records.filter { $0.exerciseID == goal.exerciseID && $0.kindRaw == "estimated1RM" }.map(\.value).max() ?? 0
+        case "lift":
+            let candidates = records.filter { $0.exerciseID == goal.exerciseID && $0.kindRaw == "estimated1RM" }
+            let details = Dictionary(measurements.map { ($0.setID, $0) }, uniquingKeysWith: { $0.updatedAt >= $1.updatedAt ? $0 : $1 })
+            let latest = candidates.max { $0.achievedAt < $1.achievedAt }
+            let convention = trackingPreferences.filter { $0.exerciseID == goal.exerciseID }.max { $0.updatedAt < $1.updatedAt }?.conventionRaw
+                ?? latest.flatMap { $0.setID }.flatMap { details[$0]?.conventionRaw } ?? "total"
+            return candidates.filter { ($0.setID.flatMap { details[$0]?.conventionRaw } ?? "total") == convention }.map(\.value).max() ?? 0
         default:
             var calendar = Calendar(identifier: .gregorian); calendar.firstWeekday = settings.weekStart
             let start = calendar.dateInterval(of: .weekOfYear, for: Date())?.start ?? Date()

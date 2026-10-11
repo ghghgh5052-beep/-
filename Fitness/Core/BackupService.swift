@@ -170,6 +170,18 @@ enum BackupError: Error, LocalizedError {
               backup.measurements.allSatisfy({ setIDs.contains($0.setID) }),
               backup.exercisePreferences.allSatisfy({ exercises.contains($0.exerciseID) }),
               backup.progressionPrograms.allSatisfy({ exercises.contains($0.exerciseID) }) else { throw BackupError.missingReferences }
+        let setsByID = Dictionary(uniqueKeysWithValues: backup.sets.map { ($0.id, $0) })
+        for value in backup.measurements {
+            guard let set = setsByID[value.setID] else { throw BackupError.missingReferences }
+            if value.modeRaw == "timed" || value.modeRaw == "distance" {
+                guard set.weightKg == 0, set.reps == 0 else { throw BackupError.invalidValues }
+            } else if value.modeRaw == "assisted" {
+                guard set.weightKg == 0 else { throw BackupError.invalidValues }
+            }
+            if set.isCompleted {
+                guard TrainingEnhancementStore.validMeasurement(value.makeModel(), set: set.makeModel()) else { throw BackupError.invalidValues }
+            }
+        }
     }
     static func merge(_ backup: BackupEnvelope, container: ModelContainer) throws {
         let context = ModelContext(container)

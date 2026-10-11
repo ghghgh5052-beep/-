@@ -8,6 +8,7 @@ import SwiftData
     @Environment(WorkoutCoordinator.self) private var coordinator
     @State private var preferences = TrainingPreferences()
     @AppStorage("trainingPlace") private var placeKey = TrainingPlace.gym.rawValue
+    @State private var revertingPlace = false
     @State private var preview: SmartWorkoutPreview?
     @State private var showingEquipment = false
     @State private var editing: PrescriptionSelection?
@@ -108,11 +109,13 @@ import SwiftData
         .task { load() }
         .onChange(of: configurationKey) { _, _ in preview = nil }
         .onChange(of: placeKey) { previous, _ in
+            if revertingPlace { revertingPlace = false; return }
+            guard loaded else { return }
             do {
                 try SmartTrainingStore.savePreferences(preferences, context: context, key: previous)
                 preferences = try SmartTrainingStore.loadPreferences(context: context, key: placeKey)
                 preview = nil
-            } catch { placeKey = previous; errorMessage = "تعذر تبديل مكان التدريب. حاول مرة أخرى." }
+            } catch { revertingPlace = true; placeKey = previous; errorMessage = "تعذر تبديل مكان التدريب. حاول مرة أخرى." }
         }
         .arabicError($errorMessage)
     }
