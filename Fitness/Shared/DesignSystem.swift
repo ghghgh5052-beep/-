@@ -51,7 +51,7 @@ struct WateeraCard: ViewModifier {
 extension View {
     func wateeraCard(padding: CGFloat = WateeraDesign.Space.medium) -> some View { modifier(WateeraCard(padding: padding)) }
     func wateeraCanvas() -> some View {
-        scrollContentBackground(.hidden).background(WateeraDesign.canvas).toolbarBackground(.visible, for: .tabBar)
+        scrollContentBackground(.hidden).background(WateeraDesign.canvas)
     }
 }
 

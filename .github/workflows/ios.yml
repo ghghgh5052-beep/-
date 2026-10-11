@@ -20,7 +20,7 @@ jobs:
           python3 scripts/validate_project.py
           python3 scripts/tooling_tests.py
       - name: Verify guide presentation during the active rest timer
-        run: TEST_OUTPUT_DIR="$PWD/build/tests-guide" TEST_ONLY_IDENTIFIER="FitnessUITests/EnhancementFlowTests/testTimedExerciseLogsSecondsAndShowsNativeStartEndPreview" bash scripts/test_ios.sh
+        run: bash scripts/diagnose_guide_flow.sh
       - name: Run unit and main flow UI tests
         run: bash scripts/test_ios.sh
       - name: Run main flow on large iPhone in dark mode with Western digits

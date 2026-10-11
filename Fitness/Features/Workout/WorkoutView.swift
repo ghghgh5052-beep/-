@@ -227,7 +227,7 @@ private struct ActiveExerciseGuide: Identifiable {
         }
         .sheet(isPresented: $showingOrder) { WorkoutOrderSheet(sessionID: session.id, paused: paused) }
         // Present from the stable screen, not a recycling LazyVStack exercise card.
-        .sheet(item: $selectedGuide) { selection in
+        .fullScreenCover(item: $selectedGuide) { selection in
             ExerciseGuideSheet(guide: selection.guide, exerciseName: selection.name)
         }
         .sheet(isPresented: $showingCalculator) { WorkoutCalculatorSheet() }
