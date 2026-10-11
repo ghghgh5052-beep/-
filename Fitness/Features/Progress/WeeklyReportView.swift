@@ -9,7 +9,6 @@ import Charts
     @State private var report: WeeklyReport?
     @State private var errorMessage: String?
     @Environment(\.scenePhase) private var scenePhase
-    @Environment(\.dynamicTypeSize) private var typeSize
 
     var body: some View {
         ScrollView {
@@ -89,6 +88,7 @@ import Charts
 
 @MainActor struct TrackingProgressView: View {
     @Environment(AppSettings.self) private var settings
+    @Environment(\.dynamicTypeSize) private var typeSize
     @Query private var sessions: [WorkoutSession]
     @Query private var movements: [SessionExercise]
     @Query private var sets: [LoggedSet]
