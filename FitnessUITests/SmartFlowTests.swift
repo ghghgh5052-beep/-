@@ -166,7 +166,10 @@ final class SmartFlowTests: XCTestCase {
         func visibleContentBounds() -> (top: CGFloat, bottom: CGFloat) {
             let navigation = app.navigationBars["تمرين مقترح"]
             let pinnedStart = app.buttons["smart.start"]
-            if element.identifier != "smart.start", navigation.exists, pinnedStart.exists {
+            // Lazy list elements may not exist until scrolled into view. Never
+            // read an identifier or frame before checking existence.
+            if navigation.exists, pinnedStart.exists, element.exists,
+               element.identifier != "smart.start" {
                 return (navigation.frame.maxY + 4, pinnedStart.frame.minY - 16)
             }
             return (0, app.frame.maxY)
@@ -176,7 +179,8 @@ final class SmartFlowTests: XCTestCase {
             let viewport = visibleContentBounds()
             return element.frame.minY >= viewport.top && element.frame.maxY <= viewport.bottom
         }
-        for _ in 0..<12 where !isVisible() {
+        for _ in 0..<12 {
+            if isVisible() { break }
             // A dismissed sheet can leave the underlying scroll view at a previous
             // position. Scroll toward a known offscreen frame instead of past it.
             var scrollUp = up
@@ -199,7 +203,7 @@ final class SmartFlowTests: XCTestCase {
             from.press(forDuration: 0.05, thenDragTo: to, withVelocity: .slow, thenHoldForDuration: 0.05)
         }
         if !isVisible() {
-            capture(app, name: "Unreachable element " + element.identifier)
+            capture(app, name: "Unreachable scroll target")
         }
         XCTAssertTrue(element.waitForExistence(timeout: 5))
         XCTAssertTrue(element.isHittable)
