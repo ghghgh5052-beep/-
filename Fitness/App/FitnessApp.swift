@@ -128,6 +128,7 @@ import Observation
             tab = url.host == "progress" ? 3 : 0
         }
         .onChange(of: lock.isUnlocked) { _, unlocked in if unlocked { consumeShortcut() } }
+        .onChange(of: onboardingComplete) { _, complete in if complete { consumeShortcut() } }
         .onChange(of: scenePhase) { _, phase in
             if phase == .background { lock.sceneDidEnterBackground(enabled: settings.lockEnabled); do { try context.save(); _ = WidgetSnapshotService.refresh(context: context, settings: settings) } catch { startupError = "تعذر حفظ آخر تعديل." } }
             if phase == .active { _ = WidgetSnapshotService.refresh(context: context, settings: settings); consumeShortcut() }
@@ -135,7 +136,7 @@ import Observation
         .arabicError($startupError)
     }
     private func consumeShortcut() {
-        guard !protected else { return }
+        guard !protected, onboardingComplete || AppRuntime.isTesting else { return }
         if let action = UserDefaults.standard.string(forKey: "pendingWorkoutAction") {
             UserDefaults.standard.removeObject(forKey: "pendingWorkoutAction")
             switch action {

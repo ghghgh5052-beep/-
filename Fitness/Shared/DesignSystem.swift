@@ -60,7 +60,7 @@ struct WateeraButtonStyle: ButtonStyle {
     @Environment(\.isEnabled) private var enabled
     func makeBody(configuration: Configuration) -> some View {
         configuration.label.font(.headline).padding(.horizontal, 16).padding(.vertical, 12)
-            .frame(minHeight: 48)
+            .frame(maxWidth: .infinity, minHeight: 48)
             .foregroundStyle(foreground ?? (prominent ? WateeraDesign.surface : color))
             .background(prominent ? color : color.opacity(0.10), in: RoundedRectangle(cornerRadius: WateeraDesign.Radius.control))
             .opacity(enabled ? 1 : 0.45).scaleEffect(configuration.isPressed && !reduceMotion ? 0.975 : 1)

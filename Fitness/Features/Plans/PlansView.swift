@@ -181,12 +181,12 @@ import SwiftData
         let today = Calendar(identifier: .gregorian).component(.weekday, from: .now) == weekday
         return VStack(alignment: .leading, spacing: 12) {
             HStack(alignment: .firstTextBaseline) {
-                Label(PlanWeekdays.name(weekday), systemImage: day.isRest ? "moon.zzz" : "dumbbell.fill")
+                Label(ArabicWeekdays.name(weekday), systemImage: day.isRest ? "moon.zzz" : "dumbbell.fill")
                     .font(.headline).foregroundStyle(day.isRest ? Color.secondary : Color.accentColor)
                 if today { Text("اليوم").font(.caption.bold()).foregroundStyle(.tint).padding(.horizontal, 8).padding(.vertical, 3).background(Color.accentColor.opacity(0.1), in: Capsule()) }
                 Spacer()
                 Button { editingDay = day } label: { Image(systemName: "pencil").frame(minWidth: 44, minHeight: 44) }
-                    .accessibilityLabel("تعديل \(PlanWeekdays.name(weekday))")
+                    .accessibilityLabel("تعديل \(ArabicWeekdays.name(weekday))")
             }
             Text(day.isRest ? "راحة واستشفاء" : day.title).font(.title3.bold())
             if day.isRest {
@@ -247,7 +247,7 @@ import SwiftData
                 }
             } else {
             LazyVGrid(columns: Array(repeating: GridItem(.flexible(), spacing: 2), count: 7), spacing: 8) {
-                ForEach(weekdays, id: \.self) { Text(PlanWeekdays.shortName($0)).font(.caption2.bold()).foregroundStyle(.secondary) }
+                ForEach(weekdays, id: \.self) { Text(ArabicWeekdays.shortName($0)).font(.caption2.bold()).foregroundStyle(.secondary) }
                 ForEach(0..<(padding + totalDays), id: \.self) { index in
                     if index < padding { Color.clear.frame(height: 46) }
                     else {
@@ -388,16 +388,6 @@ import SwiftData
     }
 }
 
-private enum PlanWeekdays {
-    static func name(_ weekday: Int) -> String {
-        let names = ["الأحد", "الاثنين", "الثلاثاء", "الأربعاء", "الخميس", "الجمعة", "السبت"]
-        return names.indices.contains(weekday - 1) ? names[weekday - 1] : "اليوم"
-    }
-    static func shortName(_ weekday: Int) -> String {
-        let names = ["أحد", "اثنين", "ثلاثاء", "أربعاء", "خميس", "جمعة", "سبت"]
-        return names.indices.contains(weekday - 1) ? names[weekday - 1] : "يوم"
-    }
-}
 
 private struct PlanTemplate: Identifiable {
     struct Day { let title: String; let muscles: [String] }
@@ -573,7 +563,7 @@ private struct PlanTemplate: Identifiable {
                 }
             }
             .environment(\.editMode, .constant(.active))
-            .navigationTitle(PlanWeekdays.name(day.weekday))
+            .navigationTitle(ArabicWeekdays.name(day.weekday))
             .navigationBarTitleDisplayMode(.inline)
             .toolbar { ToolbarItem(placement: .confirmationAction) { Button("تم") { save(); if errorMessage == nil { dismiss() } }.bold() } }
             .sheet(isPresented: $addingExercise) {

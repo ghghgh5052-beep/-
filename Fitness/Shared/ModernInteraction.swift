@@ -10,17 +10,8 @@ import SwiftData
     }
 }
 
-struct WorkoutActionButtonStyle: ButtonStyle {
-    var prominent = true
-    var color: Color = .accentColor
-    var foreground: Color? = nil
-    @WateeraReduceMotion private var reduceMotion: Bool
-    @Environment(\.isEnabled) private var enabled
-    func makeBody(configuration: Configuration) -> some View {
-        WateeraButtonStyle(prominent: prominent, color: color, foreground: foreground).makeBody(configuration: configuration)
-            .frame(maxWidth: .infinity)
-    }
-}
+// Alias the actual style so SwiftUI installs its DynamicProperty values directly.
+typealias WorkoutActionButtonStyle = WateeraButtonStyle
 
 @MainActor struct SetPerformanceLabel: View {
     @Environment(AppSettings.self) private var settings

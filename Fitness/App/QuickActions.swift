@@ -11,8 +11,13 @@ enum WorkoutQuickAction: String, CaseIterable {
 @MainActor enum QuickActionRouter {
     @discardableResult static func enqueue(_ item: UIApplicationShortcutItem) -> Bool {
         guard let action = WorkoutQuickAction(shortcutType: item.type) else { return false }
-        if action == .today { SharedWorkoutStorage.requestStartToday() }
-        else { UserDefaults.standard.set(action.rawValue, forKey: "pendingWorkoutAction") }
+        if action == .today {
+            UserDefaults.standard.removeObject(forKey: "pendingWorkoutAction")
+            SharedWorkoutStorage.requestStartToday()
+        } else {
+            UserDefaults.standard.removeObject(forKey: "pendingStartToday")
+            UserDefaults.standard.set(action.rawValue, forKey: "pendingWorkoutAction")
+        }
         NotificationCenter.default.post(name: .workoutShortcutRequested, object: nil)
         return true
     }

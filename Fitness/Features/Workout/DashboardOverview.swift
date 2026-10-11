@@ -112,49 +112,70 @@ enum WorkoutCalendarStatus: String { case completed, missed, planned, rest, unsc
     var body: some View {
         ScrollView {
             VStack(alignment: .leading, spacing: 20) {
-                HStack {
-                    Button { offset -= 1 } label: { Image(systemName: "chevron.backward").frame(width: 44, height: 44) }.accessibilityLabel("الشهر السابق")
-                    Spacer(); Text(monthTitle).font(.title3.bold()).accessibilityAddTraits(.isHeader); Spacer()
-                    Button { offset += 1 } label: { Image(systemName: "chevron.forward").frame(width: 44, height: 44) }.accessibilityLabel("الشهر التالي")
-                }
-                VStack(spacing: 12) {
-                    // At accessibility sizes switch to a day list rather than shrinking 7 tap targets.
-                    if typeSize.isAccessibilitySize {
-                        ForEach(monthDates, id: \.self) { date in
-                            Button { selection = date } label: {
-                                HStack { Text(ArabicFormat.date(date)); Spacer(); Text(status(date).title).foregroundStyle(tint(status(date))) }.frame(minHeight: 44)
-                            }.foregroundStyle(.primary)
-                        }
-                    } else {
-                        let leading = (calendar.component(.weekday, from: first) - settings.weekStart + 7) % 7
-                        LazyVGrid(columns: Array(repeating: GridItem(.flexible(), spacing: 0), count: 7), spacing: 8) {
-                            ForEach(0..<7, id: \.self) { index in Text(PlanWeekdays.shortName((settings.weekStart - 1 + index) % 7 + 1)).font(.caption2.bold()).foregroundStyle(.secondary) }
-                            ForEach(0..<leading, id: \.self) { _ in Color.clear.frame(height: 44).accessibilityHidden(true) }
-                            ForEach(monthDates, id: \.self) { date in
-                                Button { selection = date } label: {
-                                    VStack(spacing: 3) {
-                                        Text(ArabicFormat.integer(calendar.component(.day, from: date), arabic: settings.useArabicDigits)).font(.subheadline.weight(calendar.isDateInToday(date) ? .bold : .medium))
-                                        Image(systemName: status(date) == .completed ? "checkmark" : status(date) == .missed ? "minus" : status(date) == .rest ? "moon.fill" : "circle.fill").font(.system(size: 7, weight: .bold))
-                                    }.foregroundStyle(tint(status(date))).frame(maxWidth: .infinity, minHeight: 44)
-                                        .background(calendar.isDate(date, inSameDayAs: selection) ? tint(status(date)).opacity(0.12) : .clear, in: RoundedRectangle(cornerRadius: 12))
-                                        .overlay { RoundedRectangle(cornerRadius: 12).strokeBorder(calendar.isDate(date, inSameDayAs: selection) ? tint(status(date)) : .clear, lineWidth: 1) }
-                                }.buttonStyle(WateeraCardButtonStyle()).accessibilityLabel(ArabicFormat.date(date) + "، " + status(date).title)
-                            }
-                        }
-                    }
-                }.padding(.vertical, 16).background(WateeraDesign.surface, in: RoundedRectangle(cornerRadius: 24))
-                ViewThatFits(in: .horizontal) {
-                    HStack(spacing: 18) { legend }; VStack(alignment: .leading, spacing: 10) { legend }
-                }
-                SectionHeading(title: ArabicFormat.date(selection), subtitle: status(selection).title)
-                let selected = sessions.filter { $0.statusRaw == "completed" && calendar.isDate($0.start, inSameDayAs: selection) }
-                ForEach(selected) { session in
-                    NavigationLink { SessionHistoryView(session: session) } label: { DestinationRow(title: session.title, subtitle: ArabicFormat.duration(session.activeDuration(), arabic: settings.useArabicDigits), symbol: "checkmark.circle") }.buttonStyle(WateeraCardButtonStyle())
-                }
-                if selected.isEmpty { Text("لا توجد جلسة مكتملة مسجّلة في هذا اليوم.").foregroundStyle(.secondary).font(.subheadline) }
+                monthNavigation
+                monthBody.padding(.vertical, 16).background(WateeraDesign.surface, in: RoundedRectangle(cornerRadius: 24))
+                ViewThatFits(in: .horizontal) { HStack(spacing: 18) { legend }; VStack(alignment: .leading, spacing: 10) { legend } }
+                selectedDayContent
                 Text("الأيام المجدولة والمفوّتة تُعرض وفق خطتك الحالية. تغيير الخطة قد يغيّر هذه العلامات، ولا يغيّر سجلات الجلسات.").font(.caption).foregroundStyle(.secondary)
             }.padding(18)
         }.wateeraCanvas().navigationTitle("تقويم الإنجاز").navigationBarTitleDisplayMode(.inline).accessibilityIdentifier("dashboard.calendar.screen")
+    }
+    private var monthNavigation: some View {
+        HStack {
+            Button { offset -= 1 } label: { Image(systemName: "chevron.backward").frame(width: 44, height: 44) }.accessibilityLabel("الشهر السابق")
+            Spacer()
+            Text(monthTitle).font(.title3.bold()).accessibilityAddTraits(.isHeader)
+            Spacer()
+            Button { offset += 1 } label: { Image(systemName: "chevron.forward").frame(width: 44, height: 44) }.accessibilityLabel("الشهر التالي")
+        }
+    }
+    @ViewBuilder private var monthBody: some View {
+        if typeSize.isAccessibilitySize {
+            VStack(spacing: 12) {
+                ForEach(monthDates, id: \.self) { date in
+                    Button { selection = date } label: {
+                        VStack(alignment: .leading, spacing: 6) {
+                            Text(ArabicFormat.date(date)).font(.headline)
+                            Text(status(date).title).font(.subheadline).foregroundStyle(tint(status(date)))
+                        }.frame(maxWidth: .infinity, minHeight: 44, alignment: .leading).padding(.horizontal, 16)
+                    }.foregroundStyle(.primary)
+                }
+            }
+        } else { calendarGrid }
+    }
+    private var calendarGrid: some View {
+        let leading = (calendar.component(.weekday, from: first) - settings.weekStart + 7) % 7
+        return LazyVGrid(columns: Array(repeating: GridItem(.flexible(), spacing: 0), count: 7), spacing: 8) {
+            ForEach(0..<7, id: \.self) { index in
+                Text(ArabicWeekdays.shortName((settings.weekStart - 1 + index) % 7 + 1)).font(.caption2.bold()).foregroundStyle(.secondary)
+            }
+            ForEach(0..<leading, id: \.self) { _ in Color.clear.frame(height: 44).accessibilityHidden(true) }
+            ForEach(monthDates, id: \.self) { date in calendarDay(date) }
+        }
+    }
+    private func calendarDay(_ date: Date) -> some View {
+        let state = status(date)
+        let selected = calendar.isDate(date, inSameDayAs: selection)
+        let symbol = state == .completed ? "checkmark" : state == .missed ? "minus" : state == .rest ? "moon.fill" : "circle.fill"
+        return Button { selection = date } label: {
+            VStack(spacing: 3) {
+                Text(ArabicFormat.integer(calendar.component(.day, from: date), arabic: settings.useArabicDigits)).font(.subheadline.weight(calendar.isDateInToday(date) ? .bold : .medium))
+                Image(systemName: symbol).font(.system(size: 7, weight: .bold))
+            }.foregroundStyle(tint(state)).frame(maxWidth: .infinity, minHeight: 44)
+                .background(selected ? tint(state).opacity(0.12) : .clear, in: RoundedRectangle(cornerRadius: 12))
+                .overlay { RoundedRectangle(cornerRadius: 12).strokeBorder(selected ? tint(state) : .clear, lineWidth: 1) }
+        }.buttonStyle(WateeraCardButtonStyle()).accessibilityLabel(ArabicFormat.date(date) + "، " + state.title)
+            .accessibilityAddTraits(selected ? [.isSelected] : [])
+    }
+    private var selectedDayContent: some View {
+        let selected = sessions.filter { $0.statusRaw == "completed" && calendar.isDate($0.start, inSameDayAs: selection) }
+        return VStack(alignment: .leading, spacing: 16) {
+            SectionHeading(title: ArabicFormat.date(selection), subtitle: status(selection).title)
+            ForEach(selected) { session in
+                NavigationLink { SessionHistoryView(session: session) } label: { DestinationRow(title: session.title, subtitle: ArabicFormat.duration(session.activeDuration(), arabic: settings.useArabicDigits), symbol: "checkmark.circle") }.buttonStyle(WateeraCardButtonStyle())
+            }
+            if selected.isEmpty { Text("لا توجد جلسة مكتملة مسجّلة في هذا اليوم.").foregroundStyle(.secondary).font(.subheadline) }
+        }
     }
     @ViewBuilder private var legend: some View {
         Label("منجز", systemImage: "checkmark.circle.fill").foregroundStyle(settings.color)

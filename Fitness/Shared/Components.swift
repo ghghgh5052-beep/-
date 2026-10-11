@@ -1,6 +1,17 @@
 import SwiftUI
 import UIKit
 
+enum ArabicWeekdays {
+    static func name(_ weekday: Int) -> String {
+        let names = ["الأحد", "الاثنين", "الثلاثاء", "الأربعاء", "الخميس", "الجمعة", "السبت"]
+        return names.indices.contains(weekday - 1) ? names[weekday - 1] : "اليوم"
+    }
+    static func shortName(_ weekday: Int) -> String {
+        let names = ["أحد", "اثنين", "ثلاثاء", "أربعاء", "خميس", "جمعة", "سبت"]
+        return names.indices.contains(weekday - 1) ? names[weekday - 1] : "يوم"
+    }
+}
+
 @MainActor struct StatCard: View {
     let title: String
     let value: String
