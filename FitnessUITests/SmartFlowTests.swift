@@ -163,27 +163,47 @@ final class SmartFlowTests: XCTestCase {
     }
 
     @MainActor private func reveal(_ element: XCUIElement, in app: XCUIApplication, up: Bool = true) {
-        for _ in 0..<12 where !element.exists || !element.isHittable {
+        func visibleContentBounds() -> (top: CGFloat, bottom: CGFloat) {
+            let navigation = app.navigationBars["تمرين مقترح"]
+            let pinnedStart = app.buttons["smart.start"]
+            if element.identifier != "smart.start", navigation.exists, pinnedStart.exists {
+                return (navigation.frame.maxY + 4, pinnedStart.frame.minY - 16)
+            }
+            return (0, app.frame.maxY)
+        }
+        func isVisible() -> Bool {
+            guard element.exists, element.isHittable else { return false }
+            let viewport = visibleContentBounds()
+            return element.frame.minY >= viewport.top && element.frame.maxY <= viewport.bottom
+        }
+        for _ in 0..<12 where !isVisible() {
             // A dismissed sheet can leave the underlying scroll view at a previous
             // position. Scroll toward a known offscreen frame instead of past it.
             var scrollUp = up
             if element.exists {
                 let bounds = element.frame
                 if bounds.height > 0, bounds.midY.isFinite {
-                    scrollUp = bounds.midY > app.frame.midY
+                    let viewport = visibleContentBounds()
+                    scrollUp = bounds.midY > (viewport.top + viewport.bottom) / 2
                 }
             }
             // Short, slow drags avoid oscillating past a small target on SE.
             // Holding before release also stops momentum at the destination.
-            let from = app.coordinate(withNormalizedOffset: CGVector(dx: 0.5, dy: scrollUp ? 0.70 : 0.40))
-            let to = app.coordinate(withNormalizedOffset: CGVector(dx: 0.5, dy: scrollUp ? 0.40 : 0.70))
+            let viewport = visibleContentBounds()
+            let lower = max(viewport.top, 0.1 * app.frame.height)
+            let upper = min(viewport.bottom, 0.85 * app.frame.height)
+            let fromY = lower + (upper - lower) * (scrollUp ? 0.75 : 0.35)
+            let toY = lower + (upper - lower) * (scrollUp ? 0.35 : 0.75)
+            let from = app.coordinate(withNormalizedOffset: CGVector(dx: 0.5, dy: fromY / app.frame.height))
+            let to = app.coordinate(withNormalizedOffset: CGVector(dx: 0.5, dy: toY / app.frame.height))
             from.press(forDuration: 0.05, thenDragTo: to, withVelocity: .slow, thenHoldForDuration: 0.05)
         }
-        if !element.exists || !element.isHittable {
+        if !isVisible() {
             capture(app, name: "Unreachable element " + element.identifier)
         }
         XCTAssertTrue(element.waitForExistence(timeout: 5))
         XCTAssertTrue(element.isHittable)
+        XCTAssertTrue(isVisible(), "Scroll actions must reveal the whole target above pinned controls")
     }
 
     @MainActor private func allowNotificationIfShown() {
