@@ -15,7 +15,7 @@ import Charts
     @State private var chartKind = 0
     @State private var volumePeriod = 0
     @Environment(\.dynamicTypeSize) private var typeSize
-    @Environment(\.accessibilityReduceMotion) private var reduceMotion
+    @WateeraReduceMotion private var reduceMotion: Bool
     @State private var formula = OneRepMaxFormula.epley
 
     private var finished: [WorkoutSession] { sessions.filter { $0.statusRaw == "completed" } }
@@ -114,16 +114,16 @@ import Charts
                     } else { trainingCharts }
                     exerciseProgress
                     SectionHeading(title: "الصورة الكاملة")
-                    NavigationLink { WeeklyReportView() } label: { DestinationRow(title: "تقريرك الأسبوعي", subtitle: "جلساتك وحجم التدريب والالتزام", symbol: "chart.bar.doc.horizontal") }.buttonStyle(.plain).accessibilityIdentifier("progress.weeklyReport")
-                    NavigationLink { PersonalRecordsView() } label: { DestinationRow(title: "الأرقام الشخصية", subtitle: "سجل إنجازاتك، تمرينًا بعد تمرين", symbol: "trophy.fill") }.buttonStyle(.plain).accessibilityIdentifier("progress.records")
-                    NavigationLink { TrackingProgressView() } label: { DestinationRow(title: "تقدم الوقت والمسافة والمساعدة", subtitle: "كل طرق تسجيلك، في مكان واحد", symbol: "stopwatch") }.buttonStyle(.plain).accessibilityIdentifier("progress.tracking")
-                    NavigationLink { MuscleRecoveryView() } label: { DestinationRow(title: "خريطة العضلات والتعافي التقديري", subtitle: "توازن تدريبك عبر مجموعات العضلات", symbol: "figure.stand") }.buttonStyle(.plain).accessibilityIdentifier("progress.recovery")
-                    NavigationLink { BodyMetricsView() } label: { DestinationRow(title: "قياسات الجسم", subtitle: "اتجاه الوزن والقياسات والمتوسطات", symbol: "scalemass") }.buttonStyle(.plain)
-                    NavigationLink { ProgressPhotosView() } label: { DestinationRow(title: "صور التقدم", subtitle: "قارن رحلتك بصورة", symbol: "photo.on.rectangle.angled") }.buttonStyle(.plain)
-                    NavigationLink { GoalsView() } label: { DestinationRow(title: "أهدافي", subtitle: "خطوة واضحة نحو هدفك التالي", symbol: "target") }.buttonStyle(.plain)
+                    NavigationLink { WeeklyReportView() } label: { DestinationRow(title: "تقريرك الأسبوعي", subtitle: "جلساتك وحجم التدريب والالتزام", symbol: "chart.bar.doc.horizontal") }.buttonStyle(WateeraCardButtonStyle()).accessibilityIdentifier("progress.weeklyReport")
+                    NavigationLink { PersonalRecordsView() } label: { DestinationRow(title: "الأرقام الشخصية", subtitle: "سجل إنجازاتك، تمرينًا بعد تمرين", symbol: "trophy.fill") }.buttonStyle(WateeraCardButtonStyle()).accessibilityIdentifier("progress.records")
+                    NavigationLink { TrackingProgressView() } label: { DestinationRow(title: "تقدم الوقت والمسافة والمساعدة", subtitle: "كل طرق تسجيلك، في مكان واحد", symbol: "stopwatch") }.buttonStyle(WateeraCardButtonStyle()).accessibilityIdentifier("progress.tracking")
+                    NavigationLink { MuscleRecoveryView() } label: { DestinationRow(title: "خريطة العضلات والتعافي التقديري", subtitle: "توازن تدريبك عبر مجموعات العضلات", symbol: "figure.stand") }.buttonStyle(WateeraCardButtonStyle()).accessibilityIdentifier("progress.recovery")
+                    NavigationLink { BodyMetricsView() } label: { DestinationRow(title: "قياسات الجسم", subtitle: "اتجاه الوزن والقياسات والمتوسطات", symbol: "scalemass") }.buttonStyle(WateeraCardButtonStyle())
+                    NavigationLink { ProgressPhotosView() } label: { DestinationRow(title: "صور التقدم", subtitle: "قارن رحلتك بصورة", symbol: "photo.on.rectangle.angled") }.buttonStyle(WateeraCardButtonStyle())
+                    NavigationLink { GoalsView() } label: { DestinationRow(title: "أهدافي", subtitle: "خطوة واضحة نحو هدفك التالي", symbol: "target") }.buttonStyle(WateeraCardButtonStyle())
                     if !finished.isEmpty { SectionHeading(title: "جلساتك الأخيرة", subtitle: "آخر مئة جلسة") }
                     ForEach(finished.prefix(100)) { session in
-                        NavigationLink { SessionHistoryView(session: session) } label: { DestinationRow(title: session.title, subtitle: ArabicFormat.date(session.start), symbol: "checkmark.circle") }.buttonStyle(.plain)
+                        NavigationLink { SessionHistoryView(session: session) } label: { DestinationRow(title: session.title, subtitle: ArabicFormat.date(session.start), symbol: "checkmark.circle") }.buttonStyle(WateeraCardButtonStyle())
                     }
                 }.padding(WateeraDesign.Space.page)
             }.wateeraCanvas().navigationTitle("تقدّمك").accessibilityIdentifier("progress.screen")

@@ -14,7 +14,7 @@ struct WorkoutActionButtonStyle: ButtonStyle {
     var prominent = true
     var color: Color = .accentColor
     var foreground: Color? = nil
-    @Environment(\.accessibilityReduceMotion) private var reduceMotion
+    @WateeraReduceMotion private var reduceMotion: Bool
     @Environment(\.isEnabled) private var enabled
     func makeBody(configuration: Configuration) -> some View {
         WateeraButtonStyle(prominent: prominent, color: color, foreground: foreground).makeBody(configuration: configuration)

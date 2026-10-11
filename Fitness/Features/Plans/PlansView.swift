@@ -2,6 +2,7 @@ import SwiftUI
 import SwiftData
 
 @MainActor struct PlansView: View {
+    @Environment(\.dynamicTypeSize) private var typeSize
     @Environment(\.modelContext) private var context
     @Environment(AppSettings.self) private var settings
     @Environment(WorkoutCoordinator.self) private var coordinator
@@ -136,6 +137,7 @@ import SwiftData
     }
 
     private func planHeader(_ plan: WorkoutPlan) -> some View {
+        VStack(alignment: .leading, spacing: 12) {
         HStack(alignment: .top) {
             Menu {
                 ForEach(availablePlans) { candidate in
@@ -170,14 +172,8 @@ import SwiftData
             } label: { Image(systemName: "ellipsis.circle").font(.title2).frame(minWidth: 44, minHeight: 44) }
             .accessibilityLabel("خيارات الخطة")
         }
-        .padding(20)
-        .padding(.bottom, plan.isActive ? 20 : 0)
-        .background(WateeraDesign.surface, in: RoundedRectangle(cornerRadius: WateeraDesign.Radius.card))
-        .overlay(alignment: .bottomLeading) {
-            if plan.isActive {
-                Label("الخطة الحالية", systemImage: "checkmark.circle.fill").font(.caption.bold()).foregroundStyle(settings.color).padding(.horizontal, 20).padding(.bottom, 14)
-            }
-        }
+        if plan.isActive { Label("الخطة الحالية", systemImage: "checkmark.circle.fill").font(.caption.bold()).foregroundStyle(settings.color) }
+        }.wateeraCard()
     }
 
     private func scheduleCard(_ day: PlanDay, weekday: Int) -> some View {
@@ -237,6 +233,19 @@ import SwiftData
                 Spacer()
                 Button { monthOffset += 1 } label: { Image(systemName: "chevron.forward").frame(minWidth: 44, minHeight: 44) }.accessibilityLabel("الشهر التالي")
             }
+            if typeSize.isAccessibilitySize {
+                ForEach(1...totalDays, id: \.self) { number in
+                    let date = calendar.date(byAdding: .day, value: number - 1, to: first) ?? first
+                    let scheduled = scheduledDay(for: date, plan: plan)
+                    Button { selectedDate = date } label: {
+                        VStack(alignment: .leading, spacing: 6) {
+                            Text(ArabicFormat.date(date)).font(.headline)
+                            Text(scheduled?.isRest == false ? scheduled?.title ?? "تمرين" : "راحة").font(.subheadline).foregroundStyle(.secondary)
+                        }.frame(maxWidth: .infinity, minHeight: 44, alignment: .leading).padding(12)
+                            .background(calendar.isDate(date, inSameDayAs: selectedDate) ? settings.color.opacity(0.12) : .clear, in: RoundedRectangle(cornerRadius: 14))
+                    }.buttonStyle(.plain).accessibilityAddTraits(calendar.isDate(date, inSameDayAs: selectedDate) ? [.isSelected] : [])
+                }
+            } else {
             LazyVGrid(columns: Array(repeating: GridItem(.flexible(), spacing: 2), count: 7), spacing: 8) {
                 ForEach(weekdays, id: \.self) { Text(PlanWeekdays.shortName($0)).font(.caption2.bold()).foregroundStyle(.secondary) }
                 ForEach(0..<(padding + totalDays), id: \.self) { index in
@@ -260,6 +269,7 @@ import SwiftData
                             .accessibilityAddTraits(selected ? [.isSelected] : [])
                     }
                 }
+            }
             }
         }
         .padding(14)

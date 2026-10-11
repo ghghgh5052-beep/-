@@ -482,7 +482,7 @@ import UIKit
 @MainActor private struct WorkoutSetRow: View {
     @Environment(\.modelContext) private var context
     @Environment(\.dynamicTypeSize) private var dynamicTypeSize
-    @Environment(\.accessibilityReduceMotion) private var reduceMotion
+    @WateeraReduceMotion private var reduceMotion: Bool
     @Environment(AppSettings.self) private var settings
     @Environment(WorkoutCoordinator.self) private var coordinator
     @Bindable var set: LoggedSet

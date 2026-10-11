@@ -4,7 +4,7 @@ import UIKit
 /// Native start/end playback uses the existing catalog poses, never invents interpolated joint anatomy.
 /// The artwork keeps its physical orientation independently of the surrounding RTL controls.
 @MainActor struct ExerciseMotionPreview: View {
-    @Environment(\.accessibilityReduceMotion) private var reduceMotion
+    @WateeraReduceMotion private var reduceMotion: Bool
     @Environment(\.scenePhase) private var scenePhase
     let guide: ExerciseGuide
     let exerciseName: String

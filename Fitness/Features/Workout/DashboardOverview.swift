@@ -43,7 +43,7 @@ struct DashboardSnapshot {
             }.wateeraCard(padding: 16).accessibilityElement(children: .combine)
             NavigationLink { WorkoutCalendarView() } label: {
                 DestinationRow(title: "تقويم إنجازك", subtitle: "شاهد أيام التمرين والراحة خلال الشهر", symbol: "calendar.badge.checkmark")
-            }.buttonStyle(.plain).accessibilityIdentifier("dashboard.calendar")
+            }.buttonStyle(WateeraCardButtonStyle()).accessibilityIdentifier("dashboard.calendar")
             if let record = records.first(where: { record in summary.completed.contains { $0.id == record.sessionID } }) {
                 NavigationLink { PersonalRecordsView() } label: {
                     HStack(spacing: 12) {
@@ -56,9 +56,9 @@ struct DashboardSnapshot {
                         Spacer(minLength: 4)
                         Text(record.kindRaw == "reps" ? ArabicFormat.integer(Int(record.value), arabic: settings.useArabicDigits) : ArabicFormat.weight(record.value, settings: settings)).font(.headline).foregroundStyle(WateeraDesign.gold)
                     }.wateeraCard()
-                }.buttonStyle(.plain).accessibilityIdentifier("dashboard.record")
+                }.buttonStyle(WateeraCardButtonStyle()).accessibilityIdentifier("dashboard.record")
             } else {
-                NavigationLink { PersonalRecordsView() } label: { DestinationRow(title: "أرقامك الشخصية", subtitle: "تُسجَّل تلقائيًا بعد إكمال جلساتك", symbol: "trophy") }.buttonStyle(.plain)
+                NavigationLink { PersonalRecordsView() } label: { DestinationRow(title: "أرقامك الشخصية", subtitle: "تُسجَّل تلقائيًا بعد إكمال جلساتك", symbol: "trophy") }.buttonStyle(WateeraCardButtonStyle())
             }
         }
     }
@@ -138,7 +138,7 @@ enum WorkoutCalendarStatus: String { case completed, missed, planned, rest, unsc
                                     }.foregroundStyle(tint(status(date))).frame(maxWidth: .infinity, minHeight: 44)
                                         .background(calendar.isDate(date, inSameDayAs: selection) ? tint(status(date)).opacity(0.12) : .clear, in: RoundedRectangle(cornerRadius: 12))
                                         .overlay { RoundedRectangle(cornerRadius: 12).strokeBorder(calendar.isDate(date, inSameDayAs: selection) ? tint(status(date)) : .clear, lineWidth: 1) }
-                                }.buttonStyle(.plain).accessibilityLabel(ArabicFormat.date(date) + "، " + status(date).title)
+                                }.buttonStyle(WateeraCardButtonStyle()).accessibilityLabel(ArabicFormat.date(date) + "، " + status(date).title)
                             }
                         }
                     }
@@ -149,7 +149,7 @@ enum WorkoutCalendarStatus: String { case completed, missed, planned, rest, unsc
                 SectionHeading(title: ArabicFormat.date(selection), subtitle: status(selection).title)
                 let selected = sessions.filter { $0.statusRaw == "completed" && calendar.isDate($0.start, inSameDayAs: selection) }
                 ForEach(selected) { session in
-                    NavigationLink { SessionHistoryView(session: session) } label: { DestinationRow(title: session.title, subtitle: ArabicFormat.duration(session.activeDuration(), arabic: settings.useArabicDigits), symbol: "checkmark.circle") }.buttonStyle(.plain)
+                    NavigationLink { SessionHistoryView(session: session) } label: { DestinationRow(title: session.title, subtitle: ArabicFormat.duration(session.activeDuration(), arabic: settings.useArabicDigits), symbol: "checkmark.circle") }.buttonStyle(WateeraCardButtonStyle())
                 }
                 if selected.isEmpty { Text("لا توجد جلسة مكتملة مسجّلة في هذا اليوم.").foregroundStyle(.secondary).font(.subheadline) }
                 Text("الأيام المجدولة والمفوّتة تُعرض وفق خطتك الحالية. تغيير الخطة قد يغيّر هذه العلامات، ولا يغيّر سجلات الجلسات.").font(.caption).foregroundStyle(.secondary)

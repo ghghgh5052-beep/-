@@ -4,7 +4,7 @@ import SwiftData
 @MainActor struct MuscleRecoveryView: View {
     @Environment(\.modelContext) private var context
     @Environment(\.scenePhase) private var scenePhase
-    @Environment(\.accessibilityReduceMotion) private var reduceMotion
+    @WateeraReduceMotion private var reduceMotion: Bool
     @Environment(AppSettings.self) private var settings
     @State private var recoveries: [MuscleRecovery] = []
     @State private var selected: MuscleRegion = .chest

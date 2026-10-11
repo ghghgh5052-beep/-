@@ -1,6 +1,16 @@
 import SwiftUI
 import UIKit
 
+/// The system Reduce Motion value is read-only. UI fixtures exercise the same conservative
+/// rendering path without trying to mutate a system-owned environment key.
+@propertyWrapper struct WateeraReduceMotion: DynamicProperty {
+    @Environment(\.accessibilityReduceMotion) private var systemValue
+    init() {}
+    var wrappedValue: Bool {
+        systemValue || (ProcessInfo.processInfo.arguments.contains("-ui-testing") && ProcessInfo.processInfo.environment["FITNESS_TEST_REDUCE_MOTION"] == "1")
+    }
+}
+
 /// All visual tokens live here. Semantic colors adapt without rewriting stored preferences.
 enum WateeraDesign {
     enum Space { static let xs: CGFloat = 6; static let small: CGFloat = 12; static let medium: CGFloat = 20; static let large: CGFloat = 28; static let page: CGFloat = 18 }
@@ -46,7 +56,7 @@ struct WateeraButtonStyle: ButtonStyle {
     var prominent = true
     var color: Color = WateeraDesign.brand
     var foreground: Color? = nil
-    @Environment(\.accessibilityReduceMotion) private var reduceMotion
+    @WateeraReduceMotion private var reduceMotion: Bool
     @Environment(\.isEnabled) private var enabled
     func makeBody(configuration: Configuration) -> some View {
         configuration.label.font(.headline).padding(.horizontal, 16).padding(.vertical, 12)
@@ -55,6 +65,16 @@ struct WateeraButtonStyle: ButtonStyle {
             .background(prominent ? color : color.opacity(0.10), in: RoundedRectangle(cornerRadius: WateeraDesign.Radius.control))
             .opacity(enabled ? 1 : 0.45).scaleEffect(configuration.isPressed && !reduceMotion ? 0.975 : 1)
             .animation(reduceMotion ? nil : .spring(response: 0.3, dampingFraction: 0.75), value: configuration.isPressed)
+    }
+}
+
+struct WateeraCardButtonStyle: ButtonStyle {
+    @WateeraReduceMotion private var reduceMotion: Bool
+    func makeBody(configuration: Configuration) -> some View {
+        configuration.label.contentShape(RoundedRectangle(cornerRadius: WateeraDesign.Radius.card))
+            .scaleEffect(configuration.isPressed && !reduceMotion ? 0.985 : 1)
+            .opacity(configuration.isPressed ? 0.85 : 1)
+            .animation(reduceMotion ? nil : .spring(response: 0.3, dampingFraction: 0.8), value: configuration.isPressed)
     }
 }
 

@@ -62,9 +62,6 @@ import Observation
                 .transformEnvironment(\.dynamicTypeSize) { value in
                     if AppRuntime.isTesting && ProcessInfo.processInfo.environment["FITNESS_TEST_LARGE_TYPE"] == "1" { value = .accessibility5 }
                 }
-                .transformEnvironment(\.accessibilityReduceMotion) { value in
-                    if AppRuntime.isTesting && ProcessInfo.processInfo.environment["FITNESS_TEST_REDUCE_MOTION"] == "1" { value = true }
-                }
         }
     }
 }

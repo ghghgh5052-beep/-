@@ -44,7 +44,7 @@ struct AchievementCard: View {
 struct CompletionBadge: View {
     let celebrate: Bool
     let hasRecords: Bool
-    @Environment(\.accessibilityReduceMotion) private var reduceMotion
+    @WateeraReduceMotion private var reduceMotion: Bool
     @State private var appeared = false
     var body: some View {
         ZStack {
