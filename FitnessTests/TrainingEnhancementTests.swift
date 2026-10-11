@@ -4,6 +4,13 @@ import XCTest
 @testable import Fitness
 
 final class TrainingEnhancementTests: XCTestCase {
+    func testSystemSaveErrorsNeverExposeEnglishAndTrainingErrorsKeepTheirReason() {
+        let system = NSError(domain: "NSCocoaErrorDomain", code: 640, userInfo: [NSLocalizedDescriptionKey: "The disk is full"])
+        let message = TrainingEditError.arabicMessage(for: system)
+        XCTAssertFalse(message.isEmpty)
+        XCTAssertNil(message.range(of: "[A-Za-z]", options: .regularExpression))
+        XCTAssertTrue(TrainingEditError.arabicMessage(for: TrainingEditError.loggedExercise).contains("جولات مكتملة"))
+    }
     private let now = Date(timeIntervalSince1970: 1_800_000_000)
 
     func testDoubleProgressionRequiresEverySetAndRecordedEffort() {

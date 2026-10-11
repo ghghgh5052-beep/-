@@ -3,6 +3,9 @@ import SwiftData
 
 enum TrainingEditError: LocalizedError {
     case invalid, inactive, loggedExercise
+    static func arabicMessage(for error: Error) -> String {
+        (error as? TrainingEditError)?.errorDescription ?? "تعذر حفظ التعديل. أعد المحاولة."
+    }
     var errorDescription: String? {
         switch self {
         case .invalid: return "راجع القيم والتاريخ قبل الحفظ؛ لم تتغير بياناتك."

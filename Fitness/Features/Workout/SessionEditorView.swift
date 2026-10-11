@@ -103,7 +103,7 @@ import SwiftData
                 notes: notes, excluded: excluded, edits: edits, context: context)
             WidgetSnapshotService.refresh(context: context, settings: settings)
             onSaved?(); dismiss()
-        } catch { errorMessage = error.localizedDescription }
+        } catch { errorMessage = TrainingEditError.arabicMessage(for: error) }
     }
 }
 

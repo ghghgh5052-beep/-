@@ -140,7 +140,7 @@ import SwiftData
                         do {
                             try TrainingEnhancementStore.replace(item: item, with: definition, context: context)
                             coordinator.refreshActivity(); dismiss()
-                        } catch { errorMessage = error.localizedDescription }
+                        } catch { errorMessage = TrainingEditError.arabicMessage(for: error) }
                     } label: {
                         HStack(spacing: 12) {
                             if let guide = ExerciseGuides.guide(for: candidate.id) { ExerciseGuideThumbnail(guide: guide) }
