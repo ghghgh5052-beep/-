@@ -2,6 +2,7 @@ import SwiftUI
 import SwiftData
 
 @MainActor struct LibraryView: View {
+    @Environment(AppSettings.self) private var settings
     @Environment(\.modelContext) private var context
     @Environment(\.dynamicTypeSize) private var dynamicTypeSize
     @Query(sort: \Exercise.name) private var exercises: [Exercise]
@@ -26,6 +27,10 @@ import SwiftData
         NavigationStack {
             List {
                 Section {
+                    VStack(alignment: .leading, spacing: 6) {
+                        Text("تعرّف على كل حركة").font(.title2.bold())
+                        Text(ArabicFormat.integer(exercises.filter { !$0.isArchived }.count, arabic: settings.useArabicDigits) + " تمرينًا • رسوم البداية والنهاية متاحة دون اتصال").font(.subheadline).foregroundStyle(.secondary)
+                    }.padding(.vertical, 8)
                     if dynamicTypeSize.isAccessibilitySize {
                         VStack(alignment: .leading, spacing: 10) { filterControls }
                     } else {
@@ -43,6 +48,7 @@ import SwiftData
                             } label: {
                                 ExerciseLibraryRow(exercise: exercise)
                             }
+                            .listRowBackground(WateeraDesign.surface)
                             .accessibilityIdentifier("exercise.library.\(exercise.id.uuidString)")
                             .swipeActions(edge: .leading, allowsFullSwipe: true) {
                                 Button {
@@ -58,6 +64,7 @@ import SwiftData
                     }
                 }
             }
+            .wateeraCanvas()
             .navigationTitle("التمارين")
             .searchable(text: $search, prompt: "اسم التمرين أو العضلة")
             .toolbar {
@@ -99,7 +106,7 @@ import SwiftData
             Label(selection.wrappedValue == "الكل" ? title : selection.wrappedValue, systemImage: "line.3.horizontal.decrease")
                 .font(.subheadline)
                 .lineLimit(1)
-                .frame(minHeight: 44)
+                .frame(minHeight: 44).padding(.horizontal, 10).background(WateeraDesign.inset, in: Capsule())
         }
     }
 
@@ -134,7 +141,7 @@ import SwiftData
                 Image(systemName: "star.fill").foregroundStyle(.orange).accessibilityLabel("مفضّل")
             }
         }
-        .padding(.vertical, 3)
+        .padding(.vertical, 8)
     }
 }
 
@@ -174,6 +181,7 @@ import SwiftData
                     .accessibilityIdentifier("exercise.picker.\(exercise.id.uuidString)")
                 }
             }
+            .wateeraCanvas()
             .navigationTitle("اختيار تمرين")
             .searchable(text: $search, prompt: "ابحث في المكتبة")
             .toolbar {
@@ -257,6 +265,7 @@ import SwiftData
                 Text("تبقى سجلات هذا التمرين محفوظة في تاريخك.")
             }
         }
+        .wateeraCanvas()
         .navigationTitle("تفاصيل التمرين")
         .navigationBarTitleDisplayMode(.inline)
         .toolbar { ToolbarItem(placement: .topBarTrailing) { Button("تعديل") { showingEditor = true } } }
@@ -337,6 +346,7 @@ import SwiftData
                         .environment(\.layoutDirection, .leftToRight)
                 }
             }
+            .wateeraCanvas()
             .navigationTitle(exercise == nil ? "تمرين جديد" : "تعديل التمرين")
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {

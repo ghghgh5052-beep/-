@@ -10,16 +10,13 @@ ENTITLEMENTS="$PRODUCTS/signing/Fitness.resolved.entitlements"
 [[ -f "$SOURCE" && -f "$ENTITLEMENTS" ]]
 # Sign only isolated executable copies. The archive and unsigned IPA remain untouched.
 cp "$SOURCE" "$FIXTURES/without-integrations"
-cp "$SOURCE" "$FIXTURES/with-integrations"
 /usr/bin/codesign --force --sign - "$FIXTURES/without-integrations"
-/usr/bin/codesign --force --sign - --generate-entitlement-der \
-  --entitlements "$ENTITLEMENTS" "$FIXTURES/with-integrations"
+python3 -c 'import plistlib,sys; assert plistlib.load(open(sys.argv[1],"rb")) == {}, "Local entitlements must be empty"' "$ENTITLEMENTS"
 xcrun swiftc -swift-version 5 -warnings-as-errors -parse-as-library \
   "$ROOT/Fitness/Core/SigningCapabilities.swift" "$ROOT/scripts/SigningSmoke.swift" \
   -o "$CHECKS/SigningSmoke"
-CONTAINER="$(/usr/libexec/PlistBuddy -c 'Print :com.apple.developer.icloud-container-identifiers:0' "$ENTITLEMENTS")"
-GROUP="$(/usr/libexec/PlistBuddy -c 'Print :com.apple.security.application-groups:0' "$ENTITLEMENTS")"
+CONTAINER="iCloud.com.personal.Wateera"
+GROUP="group.com.personal.Wateera"
 "$CHECKS/SigningSmoke" "$SOURCE" none "$CONTAINER" "$GROUP"
 "$CHECKS/SigningSmoke" "$FIXTURES/without-integrations" none "$CONTAINER" "$GROUP"
-"$CHECKS/SigningSmoke" "$FIXTURES/with-integrations" full "$CONTAINER" "$GROUP"
 python3 "$ROOT/scripts/verify_ipa.py" "$PRODUCTS/Wateera-unsigned.ipa"

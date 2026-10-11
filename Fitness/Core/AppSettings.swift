@@ -28,10 +28,10 @@ final class AppSettings {
 
     var color: Color {
         switch accent {
-        case "blue": return .blue
-        case "orange": return .orange
-        case "purple": return .purple
-        default: return Color(red: 0.06, green: 0.64, blue: 0.48)
+        case "blue": return WateeraDesign.blue
+        case "orange": return WateeraDesign.coral
+        case "purple": return WateeraDesign.adaptive(light: 0x7352AF, dark: 0xC6A8FF)
+        default: return WateeraDesign.brand
         }
     }
     var colorScheme: ColorScheme? {

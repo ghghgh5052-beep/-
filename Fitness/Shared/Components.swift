@@ -10,14 +10,13 @@ import UIKit
     var body: some View {
         VStack(alignment: .leading, spacing: compact ? 8 : 10) {
             Label(compact ? (compactTitle ?? title) : title, systemImage: symbol)
-                .font(compact ? .caption : .subheadline).foregroundStyle(.secondary)
+                .font(compact ? .caption : .subheadline).foregroundStyle(WateeraDesign.brand)
                 .lineLimit(compact ? 2 : nil)
                 .frame(minHeight: compact ? 28 : nil, alignment: .leading)
-            Text(value).font(compact ? .headline : .title2.bold()).minimumScaleFactor(0.65).lineLimit(2)
+            Text(value).font(compact ? .headline : WateeraDesign.TypeStyle.metric).monospacedDigit().minimumScaleFactor(0.75).lineLimit(2)
         }
         .frame(maxWidth: .infinity, alignment: .leading)
-        .padding(compact ? 10 : 16)
-        .background(.quaternary.opacity(0.5), in: RoundedRectangle(cornerRadius: 20))
+        .wateeraCard(padding: compact ? 12 : 18)
         .accessibilityElement(children: .combine)
         .accessibilityLabel(title + "، " + value)
     }
@@ -28,8 +27,12 @@ import UIKit
     let message: String
     let symbol: String
     var body: some View {
-        ContentUnavailableView(title, systemImage: symbol, description: Text(message))
-            .padding(.vertical, 20)
+        VStack(spacing: 16) {
+            Image(systemName: symbol).font(.system(size: 34, weight: .medium)).foregroundStyle(WateeraDesign.brand)
+                .frame(width: 80, height: 80).background(WateeraDesign.brand.opacity(0.09), in: RoundedRectangle(cornerRadius: 26)).accessibilityHidden(true)
+            Text(title).font(.title3.bold()).accessibilityAddTraits(.isHeader)
+            Text(message).font(.subheadline).foregroundStyle(.secondary).multilineTextAlignment(.center).fixedSize(horizontal: false, vertical: true)
+        }.frame(maxWidth: .infinity).padding(.vertical, 24).padding(.horizontal, 18)
     }
 }
 

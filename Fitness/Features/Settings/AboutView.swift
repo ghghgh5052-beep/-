@@ -47,6 +47,7 @@ enum AppBranding {
                     .font(.caption).foregroundStyle(.secondary)
             }
         }
+        .wateeraCanvas()
         .navigationTitle("عن وتيرة")
         .navigationBarTitleDisplayMode(.inline)
     }

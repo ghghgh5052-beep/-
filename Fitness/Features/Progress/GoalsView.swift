@@ -28,7 +28,7 @@ import SwiftData
                 for index in offsets where goals.indices.contains(index) { context.delete(goals[index]) }
                 do { try context.save() } catch { errorMessage = "تعذر حذف الهدف." }
             }
-        }.navigationTitle("أهدافي").toolbar { Button("إضافة", systemImage: "plus") { showEditor = true } }
+        }.wateeraCanvas().navigationTitle("أهدافي").toolbar { Button("إضافة", systemImage: "plus") { showEditor = true } }
             .sheet(isPresented: $showEditor) { NavigationStack { GoalEditor(goal: nil) } }.arabicError($errorMessage)
     }
     private func current(_ goal: FitnessGoal) -> Double {
@@ -85,7 +85,7 @@ import SwiftData
             NumericField(title: kind == "weeklyWorkouts" ? "عدد الجلسات" : "الوزن المستهدف (" + settings.weightLabel + ")", value: $target)
             Toggle("موعد مستهدف", isOn: $hasDeadline)
             if hasDeadline { DatePicker("الموعد", selection: $deadline, displayedComponents: .date).environment(\.calendar, Calendar(identifier: .gregorian)) }
-        }.navigationTitle(goal == nil ? "هدف جديد" : "تعديل الهدف")
+        }.wateeraCanvas().navigationTitle(goal == nil ? "هدف جديد" : "تعديل الهدف")
             .toolbar { ToolbarItem(placement: .confirmationAction) { Button("حفظ") { save() } }; ToolbarItem(placement: .cancellationAction) { Button("إلغاء") { dismiss() } } }
             .onAppear {
                 if let goal { title = goal.title; kind = goal.kindRaw; target = ArabicFormat.number(goal.kindRaw == "weeklyWorkouts" ? goal.targetValue : settings.displayWeight(goal.targetValue), arabic: settings.useArabicDigits); exerciseID = goal.exerciseID; hasDeadline = goal.deadline != nil; deadline = goal.deadline ?? Date() }

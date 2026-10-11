@@ -20,24 +20,17 @@
 			);
 			"runOnlyForDeploymentPostprocessing" = 0;
 		};
-		"02BBF35FC65F5B767C0E0636" = {
-			"isa" = "PBXBuildFile";
-			"fileRef" = "07474934634FF715CA7535A4";
-		};
 		"02EC1B65C2B2B7555A8E69CF" = {
 			"isa" = "PBXFileReference";
 			"lastKnownFileType" = "sourcecode.swift";
 			"path" = "Fitness/Features/Smart/SmartWorkoutView.swift";
 			"sourceTree" = "<group>";
 		};
-		"04308E09A2F00249BCFF9D1F" = {
-			"isa" = "PBXSourcesBuildPhase";
-			"buildActionMask" = 2147483647;
-			"files" = (
-				"F602DC732A863DFC29D43495",
-				"090B18B1974DB9C4C9E024E8",
-			);
-			"runOnlyForDeploymentPostprocessing" = 0;
+		"046760D4EE05C21D25A7BECE" = {
+			"isa" = "PBXFileReference";
+			"lastKnownFileType" = "sourcecode.swift";
+			"path" = "Fitness/Features/Workout/DashboardOverview.swift";
+			"sourceTree" = "<group>";
 		};
 		"05054E38746275849F66E080" = {
 			"isa" = "PBXFileReference";
@@ -70,13 +63,6 @@
 			};
 			"name" = "Release";
 		};
-		"06EA0BEE744FBD4B9CEE34BF" = {
-			"isa" = "PBXContainerItemProxy";
-			"containerPortal" = "244210E48437B6556980A702";
-			"proxyType" = 1;
-			"remoteGlobalIDString" = "1699864EFA20327B49193EB6";
-			"remoteInfo" = "FitnessWidgets";
-		};
 		"07474934634FF715CA7535A4" = {
 			"isa" = "PBXFileReference";
 			"lastKnownFileType" = "text.xml";
@@ -93,10 +79,6 @@
 		"0883AAE4D46827E570032B05" = {
 			"isa" = "PBXBuildFile";
 			"fileRef" = "0514190CFE0886DBA806DC45";
-		};
-		"090B18B1974DB9C4C9E024E8" = {
-			"isa" = "PBXBuildFile";
-			"fileRef" = "F08BF740DFA7D0514C7E31DA";
 		};
 		"0990F8EE9A0EA70E29692D1C" = {
 			"isa" = "PBXBuildFile";
@@ -150,6 +132,7 @@
 				"984EC7B8F8FA90EEDB716DA3",
 				"1DBB5FE401445F547C7E8976",
 				"B5DD6CE095C80D53296CFC6C",
+				"3C1E8A85EB024C6BD83040D1",
 				"ABF9500C42FB789326475A05",
 				"CDC98DEFE7075F7C8AFA4C95",
 				"59B5E00533FAA4704A66AE80",
@@ -177,10 +160,6 @@
 			"productReference" = "07CC04704987DAEA61B4AA8A";
 			"productType" = "com.apple.product-type.bundle.ui-testing";
 		};
-		"136F613483BD7B3AC1F30B9E" = {
-			"isa" = "PBXBuildFile";
-			"fileRef" = "A17894E9718EA370ED10C0F4";
-		};
 		"1483C3F706351F056B0209B1" = {
 			"isa" = "PBXFileReference";
 			"lastKnownFileType" = "sourcecode.swift";
@@ -190,23 +169,6 @@
 		"166F4DF1C17B2BD9D76BA370" = {
 			"isa" = "PBXBuildFile";
 			"fileRef" = "FB8A7BF51482F9DDD7D00B58";
-		};
-		"1699864EFA20327B49193EB6" = {
-			"isa" = "PBXNativeTarget";
-			"buildConfigurationList" = "25ACA40CA1C45D51A8C03B20";
-			"buildPhases" = (
-				"04308E09A2F00249BCFF9D1F",
-				"C85474DFCA9ED8CBEE4BB6BA",
-				"FD9C9A91039FACC98A74F9B4",
-			);
-			"buildRules" = (
-			);
-			"dependencies" = (
-			);
-			"name" = "FitnessWidgets";
-			"productName" = "FitnessWidgets";
-			"productReference" = "342CD7427D0DACB39ACFDAB6";
-			"productType" = "com.apple.product-type.app-extension";
 		};
 		"18A938EB1F17E355D063A29B" = {
 			"isa" = "PBXBuildFile";
@@ -260,10 +222,6 @@
 			"path" = "Config/Fitness.entitlements";
 			"sourceTree" = "<group>";
 		};
-		"1FF230346C0F2B2926D612DE" = {
-			"isa" = "PBXBuildFile";
-			"fileRef" = "1BFFF990FA8A25246CE4EAE5";
-		};
 		"2053571DDF5315FCF7E094BE" = {
 			"isa" = "XCBuildConfiguration";
 			"baseConfigurationReference" = "587BC806C8F58721B021912A";
@@ -291,9 +249,6 @@
 					"D8701D5EA7B64691847615F1" = {
 						"CreatedOnToolsVersion" = "16.0";
 					};
-					"1699864EFA20327B49193EB6" = {
-						"CreatedOnToolsVersion" = "16.0";
-					};
 					"0CF687998310C9D99CAC77E9" = {
 						"CreatedOnToolsVersion" = "16.0";
 					};
@@ -316,7 +271,6 @@
 			"projectRoot" = "";
 			"targets" = (
 				"D8701D5EA7B64691847615F1",
-				"1699864EFA20327B49193EB6",
 				"0CF687998310C9D99CAC77E9",
 				"10D7C9A75F81669C99179D04",
 			);
@@ -332,15 +286,6 @@
 			"lastKnownFileType" = "sourcecode.swift";
 			"path" = "Fitness/Features/Progress/GoalsView.swift";
 			"sourceTree" = "<group>";
-		};
-		"25ACA40CA1C45D51A8C03B20" = {
-			"isa" = "XCConfigurationList";
-			"buildConfigurations" = (
-				"93E1669807B27A21875915A7",
-				"98AF88CE12A70DF41A34B466",
-			);
-			"defaultConfigurationIsVisible" = 0;
-			"defaultConfigurationName" = "Release";
 		};
 		"2A078FD04D77D66C6C2C400B" = {
 			"isa" = "XCConfigurationList";
@@ -383,6 +328,7 @@
 			"files" = (
 				"EBB925B7023A1C8DF68934F0",
 				"D024F448A414587D82E64D30",
+				"37C3D1353F6C5D88A4FFE025",
 				"2B8FBEE9FAE200E7EB94E0FB",
 				"9D8C4CB4448B1E250AA7FF45",
 			);
@@ -397,13 +343,6 @@
 		"331F7E7A99539A441C118A4F" = {
 			"isa" = "PBXBuildFile";
 			"fileRef" = "9E88AFB09EEBBBB308A98BFB";
-		};
-		"342CD7427D0DACB39ACFDAB6" = {
-			"isa" = "PBXFileReference";
-			"explicitFileType" = "wrapper.app-extension";
-			"includeInIndex" = 0;
-			"path" = "FitnessWidgets.appex";
-			"sourceTree" = "BUILT_PRODUCTS_DIR";
 		};
 		"36011C4B8A9C32130DE11409" = {
 			"isa" = "XCBuildConfiguration";
@@ -422,6 +361,10 @@
 				"TEST_TARGET_NAME" = "Fitness";
 			};
 			"name" = "Release";
+		};
+		"37C3D1353F6C5D88A4FFE025" = {
+			"isa" = "PBXBuildFile";
+			"fileRef" = "916C45622E9FFD02249F2E25";
 		};
 		"381F31954856152A1D13261F" = {
 			"isa" = "PBXFileReference";
@@ -447,9 +390,17 @@
 			"path" = "FitnessTests/BackupTests.swift";
 			"sourceTree" = "<group>";
 		};
+		"39719D5A3597F0EDDB6BF385" = {
+			"isa" = "PBXBuildFile";
+			"fileRef" = "4FDD91580BAAEADCD398383C";
+		};
 		"39AF22AF1819DDA388951EFA" = {
 			"isa" = "PBXBuildFile";
 			"fileRef" = "4BC35DC8DFB1B78803FF7EEF";
+		};
+		"3C1E8A85EB024C6BD83040D1" = {
+			"isa" = "PBXBuildFile";
+			"fileRef" = "E631E186FA67AB9DE7320FD7";
 		};
 		"3CB503123BF6ABD8BB2BD7FC" = {
 			"isa" = "PBXFileReference";
@@ -468,10 +419,6 @@
 			"lastKnownFileType" = "sourcecode.swift";
 			"path" = "Fitness/Core/SmartTraining.swift";
 			"sourceTree" = "<group>";
-		};
-		"41477369EB116BB930ACE1F3" = {
-			"isa" = "PBXBuildFile";
-			"fileRef" = "F08BF740DFA7D0514C7E31DA";
 		};
 		"4416F70C8101D6BE0ACE657F" = {
 			"isa" = "PBXResourcesBuildPhase";
@@ -495,25 +442,28 @@
 			"defaultConfigurationIsVisible" = 0;
 			"defaultConfigurationName" = "Release";
 		};
+		"47AB2CC740D7585DE2B6D483" = {
+			"isa" = "PBXFileReference";
+			"lastKnownFileType" = "sourcecode.swift";
+			"path" = "Fitness/Features/Workout/AchievementCard.swift";
+			"sourceTree" = "<group>";
+		};
 		"494CD3D7C8C54C5634F92E71" = {
 			"isa" = "PBXFileReference";
 			"lastKnownFileType" = "sourcecode.swift";
 			"path" = "FitnessTests/PersistenceTests.swift";
 			"sourceTree" = "<group>";
 		};
-		"49D455C8BD15EFEBF9BB6E30" = {
-			"isa" = "PBXBuildFile";
-			"fileRef" = "342CD7427D0DACB39ACFDAB6";
-			"settings" = {
-				"ATTRIBUTES" = (
-					"RemoveHeadersOnCopy",
-				);
-			};
-		};
 		"4BC35DC8DFB1B78803FF7EEF" = {
 			"isa" = "PBXFileReference";
 			"lastKnownFileType" = "sourcecode.swift";
 			"path" = "Fitness/Features/Progress/WeeklyReportView.swift";
+			"sourceTree" = "<group>";
+		};
+		"4FDD91580BAAEADCD398383C" = {
+			"isa" = "PBXFileReference";
+			"lastKnownFileType" = "sourcecode.swift";
+			"path" = "Fitness/App/QuickActions.swift";
 			"sourceTree" = "<group>";
 		};
 		"53F97FB6B28D89D0DF108AA0" = {
@@ -528,10 +478,9 @@
 			"path" = "FitnessUITests/SessionDeletionFlowTests.swift";
 			"sourceTree" = "<group>";
 		};
-		"564B9226C170CA11CDCB3B33" = {
-			"isa" = "PBXTargetDependency";
-			"target" = "1699864EFA20327B49193EB6";
-			"targetProxy" = "06EA0BEE744FBD4B9CEE34BF";
+		"566BAC8AE1A88DE391B83E2B" = {
+			"isa" = "PBXBuildFile";
+			"fileRef" = "47AB2CC740D7585DE2B6D483";
 		};
 		"572BB6D3EEF2ACD6B0A76AF7" = {
 			"isa" = "XCBuildConfiguration";
@@ -618,7 +567,6 @@
 			"isa" = "PBXGroup";
 			"children" = (
 				"8C7330CACFE886B4029CFAE4",
-				"342CD7427D0DACB39ACFDAB6",
 				"74AC70F4700729D69F65A50F",
 				"07CC04704987DAEA61B4AA8A",
 			);
@@ -639,6 +587,12 @@
 			"includeInIndex" = 0;
 			"path" = "FitnessTests.xctest";
 			"sourceTree" = "BUILT_PRODUCTS_DIR";
+		};
+		"7587B742AD85E0111B06DDFE" = {
+			"isa" = "PBXFileReference";
+			"lastKnownFileType" = "sourcecode.swift";
+			"path" = "Fitness/Services/LocalIntegrationAdapters.swift";
+			"sourceTree" = "<group>";
 		};
 		"781D35F38FECD44C2ECE6698" = {
 			"isa" = "PBXBuildFile";
@@ -679,7 +633,8 @@
 			"buildActionMask" = 2147483647;
 			"files" = (
 				"678904EE2BE2D5FDA4CAF6B4",
-				"C2FD5191A103CB85A50A4306",
+				"CF5C907188B26E915DFA7A77",
+				"39719D5A3597F0EDDB6BF385",
 				"5B5992C7010691EB6092FB40",
 				"00B9B19DBCB312B5363AC683",
 				"C5D7FA9F9EF52A11525CDE18",
@@ -706,36 +661,30 @@
 				"1ED9ADE4FD094EBD49C9EA89",
 				"7D61A4B5532EE76BC3332D30",
 				"EACD60FF91D19C058CFB54E1",
+				"566BAC8AE1A88DE391B83E2B",
+				"FCE6C9DC3E6A6085E992029A",
 				"1AFC36B753FE212243B8B218",
 				"18A938EB1F17E355D063A29B",
 				"9BF33274A547910014EDFA52",
-				"136F613483BD7B3AC1F30B9E",
-				"916DEEB44AB78546B40402A0",
+				"F6E6B5204EDABD5F7562C301",
 				"AF483BA74508E3879D6C9A5E",
 				"2F61EF5D79CC97ADC360AE43",
 				"A91B1D7C162064ABFF8E84C1",
-				"D64C8595B84FF07B0CCBEC50",
 				"A377E5EF5904191D2445CAE7",
-				"1FF230346C0F2B2926D612DE",
 				"01FCECD1A9942D74984614CF",
 				"6A8510CBE8A3263662C505C7",
+				"EE804767CF6CF5012DAC0C82",
 				"781D35F38FECD44C2ECE6698",
 				"58EB6E261A50877A071B5722",
 				"166F4DF1C17B2BD9D76BA370",
-				"41477369EB116BB930ACE1F3",
 			);
 			"runOnlyForDeploymentPostprocessing" = 0;
 		};
-		"8336626A588BFF7E48225BCB" = {
-			"isa" = "PBXCopyFilesBuildPhase";
-			"buildActionMask" = 2147483647;
-			"dstPath" = "";
-			"dstSubfolderSpec" = 13;
-			"files" = (
-				"49D455C8BD15EFEBF9BB6E30",
-			);
-			"name" = "Embed App Extensions";
-			"runOnlyForDeploymentPostprocessing" = 0;
+		"836CA27167B6C481BD2B629E" = {
+			"isa" = "PBXFileReference";
+			"lastKnownFileType" = "text";
+			"path" = "Config/DeferredSources.json";
+			"sourceTree" = "<group>";
 		};
 		"87A53662CE330BC84DB05B6E" = {
 			"isa" = "XCBuildConfiguration";
@@ -813,9 +762,11 @@
 			"isa" = "PBXBuildFile";
 			"fileRef" = "31D8E6147E52899B87674B84";
 		};
-		"916DEEB44AB78546B40402A0" = {
-			"isa" = "PBXBuildFile";
-			"fileRef" = "38CA885666E316E20EBB009B";
+		"916C45622E9FFD02249F2E25" = {
+			"isa" = "PBXFileReference";
+			"lastKnownFileType" = "sourcecode.swift";
+			"path" = "FitnessUITests/RedesignFlowTests.swift";
+			"sourceTree" = "<group>";
 		};
 		"923941DD7493740E640A59F9" = {
 			"isa" = "PBXTargetDependency";
@@ -827,26 +778,6 @@
 			"lastKnownFileType" = "sourcecode.swift";
 			"path" = "Fitness/Shared/ExerciseGuideView.swift";
 			"sourceTree" = "<group>";
-		};
-		"93E1669807B27A21875915A7" = {
-			"isa" = "XCBuildConfiguration";
-			"baseConfigurationReference" = "587BC806C8F58721B021912A";
-			"buildSettings" = {
-				"PRODUCT_NAME" = "$(TARGET_NAME)";
-				"SDKROOT" = "iphoneos";
-				"SUPPORTED_PLATFORMS" = "iphoneos iphonesimulator";
-				"SUPPORTS_MACCATALYST" = "NO";
-				"SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD" = "NO";
-				"GENERATE_INFOPLIST_FILE" = "NO";
-				"LD_RUNPATH_SEARCH_PATHS" = "$(inherited) @executable_path/Frameworks @executable_path/../../Frameworks";
-				"PRODUCT_BUNDLE_IDENTIFIER" = "$(WIDGET_BUNDLE_IDENTIFIER)";
-				"PRODUCT_MODULE_NAME" = "FitnessWidgets";
-				"INFOPLIST_FILE" = "FitnessWidgets/Info.plist";
-				"CODE_SIGN_ENTITLEMENTS" = "Config/FitnessWidgets.entitlements";
-				"APPLICATION_EXTENSION_API_ONLY" = "YES";
-				"SKIP_INSTALL" = "YES";
-			};
-			"name" = "Debug";
 		};
 		"96140E02CA932CF7740B03F5" = {
 			"isa" = "PBXFileReference";
@@ -869,26 +800,6 @@
 			"lastKnownFileType" = "text.plist.xml";
 			"path" = "FitnessWidgets/Info.plist";
 			"sourceTree" = "<group>";
-		};
-		"98AF88CE12A70DF41A34B466" = {
-			"isa" = "XCBuildConfiguration";
-			"baseConfigurationReference" = "587BC806C8F58721B021912A";
-			"buildSettings" = {
-				"PRODUCT_NAME" = "$(TARGET_NAME)";
-				"SDKROOT" = "iphoneos";
-				"SUPPORTED_PLATFORMS" = "iphoneos iphonesimulator";
-				"SUPPORTS_MACCATALYST" = "NO";
-				"SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD" = "NO";
-				"GENERATE_INFOPLIST_FILE" = "NO";
-				"LD_RUNPATH_SEARCH_PATHS" = "$(inherited) @executable_path/Frameworks @executable_path/../../Frameworks";
-				"PRODUCT_BUNDLE_IDENTIFIER" = "$(WIDGET_BUNDLE_IDENTIFIER)";
-				"PRODUCT_MODULE_NAME" = "FitnessWidgets";
-				"INFOPLIST_FILE" = "FitnessWidgets/Info.plist";
-				"CODE_SIGN_ENTITLEMENTS" = "Config/FitnessWidgets.entitlements";
-				"APPLICATION_EXTENSION_API_ONLY" = "YES";
-				"SKIP_INSTALL" = "YES";
-			};
-			"name" = "Release";
 		};
 		"98DCFE2F1E0891E3EE59E06E" = {
 			"isa" = "PBXContainerItemProxy";
@@ -960,12 +871,15 @@
 		"AA0596BBDB4DCC95D5D4F10C" = {
 			"isa" = "PBXGroup";
 			"children" = (
+				"836CA27167B6C481BD2B629E",
 				"1FE4289D6104DF89DCACA003",
 				"FE3EC1D93220AF81B80CA654",
 				"381F31954856152A1D13261F",
 				"8CF60E86EE39E39493D41271",
 				"587BC806C8F58721B021912A",
 				"C38E18CC299D72A52C979381",
+				"E91A7CAFAD0D5402EBAF6E98",
+				"4FDD91580BAAEADCD398383C",
 				"978A309BE4D34A226976F113",
 				"BAB069C21F8537E12785765D",
 				"DB59185D4CB3DA43395B5006",
@@ -993,6 +907,8 @@
 				"9D5E9420696B537F02AD20B5",
 				"02EC1B65C2B2B7555A8E69CF",
 				"DF9E56CC90FF80F635D121AC",
+				"47AB2CC740D7585DE2B6D483",
+				"046760D4EE05C21D25A7BECE",
 				"3D3A0425EEDDB351859B6457",
 				"53F97FB6B28D89D0DF108AA0",
 				"31D8E6147E52899B87674B84",
@@ -1001,6 +917,7 @@
 				"6CC7BC08993DD9AA20C57F6F",
 				"A17894E9718EA370ED10C0F4",
 				"38CA885666E316E20EBB009B",
+				"7587B742AD85E0111B06DDFE",
 				"B443ED7EFF83950FFD2D826D",
 				"AB2FE8479448CFB6EF8472D8",
 				"6F21F4047E5A9711F638FDB9",
@@ -1009,6 +926,7 @@
 				"1BFFF990FA8A25246CE4EAE5",
 				"7C14CE1335DA8BC756A6D586",
 				"9E5748D5F8047FB167FDAB1F",
+				"B26B1223672B51DB98535973",
 				"93BC7E9CE236925713C89310",
 				"9C430F567C022424F79F7CDE",
 				"FB8A7BF51482F9DDD7D00B58",
@@ -1017,6 +935,7 @@
 				"3127F2DF7C5FA22F8A6DC6DC",
 				"8EE21803167E9353254B4070",
 				"494CD3D7C8C54C5634F92E71",
+				"E631E186FA67AB9DE7320FD7",
 				"05054E38746275849F66E080",
 				"7C59A5F5235F288C7F384420",
 				"88E2942AE42FCDDE1F30EA67",
@@ -1025,6 +944,7 @@
 				"AAF7C9E3C3F6C3892620EB6A",
 				"F9BF45DE7C813E23F47EA382",
 				"5B0C0032240DCE747BD4ACBF",
+				"916C45622E9FFD02249F2E25",
 				"55DE824D6B4556E816C97994",
 				"A71A5FAA8BF8CD18E840AB35",
 				"1483C3F706351F056B0209B1",
@@ -1064,6 +984,12 @@
 			);
 			"runOnlyForDeploymentPostprocessing" = 0;
 		};
+		"B26B1223672B51DB98535973" = {
+			"isa" = "PBXFileReference";
+			"lastKnownFileType" = "sourcecode.swift";
+			"path" = "Fitness/Shared/DesignSystem.swift";
+			"sourceTree" = "<group>";
+		};
 		"B443ED7EFF83950FFD2D826D" = {
 			"isa" = "PBXFileReference";
 			"lastKnownFileType" = "sourcecode.swift";
@@ -1096,10 +1022,6 @@
 			);
 			"runOnlyForDeploymentPostprocessing" = 0;
 		};
-		"C2FD5191A103CB85A50A4306" = {
-			"isa" = "PBXBuildFile";
-			"fileRef" = "978A309BE4D34A226976F113";
-		};
 		"C38E18CC299D72A52C979381" = {
 			"isa" = "PBXFileReference";
 			"lastKnownFileType" = "sourcecode.swift";
@@ -1116,17 +1038,13 @@
 			"path" = "Fitness/Features/Smart/ExerciseAdviceView.swift";
 			"sourceTree" = "<group>";
 		};
-		"C85474DFCA9ED8CBEE4BB6BA" = {
-			"isa" = "PBXResourcesBuildPhase";
-			"buildActionMask" = 2147483647;
-			"files" = (
-				"02BBF35FC65F5B767C0E0636",
-			);
-			"runOnlyForDeploymentPostprocessing" = 0;
-		};
 		"CDC98DEFE7075F7C8AFA4C95" = {
 			"isa" = "PBXBuildFile";
 			"fileRef" = "7C59A5F5235F288C7F384420";
+		};
+		"CF5C907188B26E915DFA7A77" = {
+			"isa" = "PBXBuildFile";
+			"fileRef" = "E91A7CAFAD0D5402EBAF6E98";
 		};
 		"D024F448A414587D82E64D30" = {
 			"isa" = "PBXBuildFile";
@@ -1142,10 +1060,6 @@
 			"isa" = "PBXBuildFile";
 			"fileRef" = "D8EB72A485BEA14308803FDD";
 		};
-		"D64C8595B84FF07B0CCBEC50" = {
-			"isa" = "PBXBuildFile";
-			"fileRef" = "D0CA5E5250F4ADE5942186D6";
-		};
 		"D75CC73EE8F13ECA77A6CDED" = {
 			"isa" = "PBXFileReference";
 			"lastKnownFileType" = "sourcecode.swift";
@@ -1159,12 +1073,10 @@
 				"81A54C3FBF2192C096AD6447",
 				"C1831888895C1730947BFC4F",
 				"FDCE9580D7356AC388168E37",
-				"8336626A588BFF7E48225BCB",
 			);
 			"buildRules" = (
 			);
 			"dependencies" = (
-				"564B9226C170CA11CDCB3B33",
 			);
 			"name" = "Fitness";
 			"productName" = "Fitness";
@@ -1205,10 +1117,22 @@
 			"path" = "Fitness/Features/Smart/TrainingOptionsView.swift";
 			"sourceTree" = "<group>";
 		};
+		"E631E186FA67AB9DE7320FD7" = {
+			"isa" = "PBXFileReference";
+			"lastKnownFileType" = "sourcecode.swift";
+			"path" = "FitnessTests/PresentationTests.swift";
+			"sourceTree" = "<group>";
+		};
 		"E65AF423B244042ABE0D737B" = {
 			"isa" = "PBXFileReference";
 			"lastKnownFileType" = "sourcecode.swift";
 			"path" = "Fitness/Features/Settings/AboutView.swift";
+			"sourceTree" = "<group>";
+		};
+		"E91A7CAFAD0D5402EBAF6E98" = {
+			"isa" = "PBXFileReference";
+			"lastKnownFileType" = "sourcecode.swift";
+			"path" = "Fitness/App/OnboardingView.swift";
 			"sourceTree" = "<group>";
 		};
 		"EA130D6319C884176F672524" = {
@@ -1254,6 +1178,10 @@
 			"path" = "FitnessTests/SmartTrainingTests.swift";
 			"sourceTree" = "<group>";
 		};
+		"EE804767CF6CF5012DAC0C82" = {
+			"isa" = "PBXBuildFile";
+			"fileRef" = "B26B1223672B51DB98535973";
+		};
 		"EECFB3FA6DCFAF66F0866C62" = {
 			"isa" = "PBXBuildFile";
 			"fileRef" = "79F6DC424ECD6C90A518EEB0";
@@ -1268,9 +1196,9 @@
 			"path" = "Fitness/Shared/WorkoutActivityAttributes.swift";
 			"sourceTree" = "<group>";
 		};
-		"F602DC732A863DFC29D43495" = {
+		"F6E6B5204EDABD5F7562C301" = {
 			"isa" = "PBXBuildFile";
-			"fileRef" = "1483C3F706351F056B0209B1";
+			"fileRef" = "7587B742AD85E0111B06DDFE";
 		};
 		"F9BF45DE7C813E23F47EA382" = {
 			"isa" = "PBXFileReference";
@@ -1296,12 +1224,9 @@
 			"path" = "Fitness/Features/Progress/BodyMetricsView.swift";
 			"sourceTree" = "<group>";
 		};
-		"FD9C9A91039FACC98A74F9B4" = {
-			"isa" = "PBXFrameworksBuildPhase";
-			"buildActionMask" = 2147483647;
-			"files" = (
-			);
-			"runOnlyForDeploymentPostprocessing" = 0;
+		"FCE6C9DC3E6A6085E992029A" = {
+			"isa" = "PBXBuildFile";
+			"fileRef" = "046760D4EE05C21D25A7BECE";
 		};
 		"FDCE9580D7356AC388168E37" = {
 			"isa" = "PBXFrameworksBuildPhase";

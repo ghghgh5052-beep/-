@@ -70,7 +70,7 @@ import SwiftData
                 Button(action: generate) {
                     Label(preview == nil ? "اقترح تمريني" : "أعد اقتراح التمرين", systemImage: "sparkles")
                         .font(.headline).frame(maxWidth: .infinity, minHeight: 44)
-                }.buttonStyle(.borderedProminent)
+                }.buttonStyle(WateeraButtonStyle(color: .accentColor))
                     .disabled(!loaded || preferences.equipment.isEmpty)
                     .accessibilityIdentifier("smart.generate")
                 if preferences.equipment.isEmpty {
@@ -88,6 +88,7 @@ import SwiftData
                 }.listRowBackground(Color.clear)
             }
         }
+        .wateeraCanvas()
         .navigationTitle("تمرين مقترح")
         .navigationBarTitleDisplayMode(.inline)
         .toolbar {
@@ -316,7 +317,7 @@ private struct PrescriptionSelection: Identifiable {
                     }
                 }
             }
-        }.navigationTitle("الأدوات المتاحة").navigationBarTitleDisplayMode(.inline)
+        }.wateeraCanvas().navigationTitle("الأدوات المتاحة").navigationBarTitleDisplayMode(.inline)
             .toolbar { ToolbarItem(placement: .confirmationAction) { Button("تم") { dismiss() } } }
     }
 }
@@ -363,7 +364,7 @@ private struct PrescriptionSelection: Identifiable {
             } header: { Text(prescription.name) } footer: {
                 Text("اترك الوزن فارغًا لاختياره أثناء التمرين. التعديلات تخص هذه الجلسة المقترحة فقط؛ السبب المعروض يشرح أرقام الاقتراح الأصلي.")
             }
-        }.navigationTitle("تعديل الاقتراح").navigationBarTitleDisplayMode(.inline)
+        }.wateeraCanvas().navigationTitle("تعديل الاقتراح").navigationBarTitleDisplayMode(.inline)
             .toolbar {
                 ToolbarItem(placement: .cancellationAction) { Button("إلغاء") { dismiss() } }
                 ToolbarItem(placement: .confirmationAction) {

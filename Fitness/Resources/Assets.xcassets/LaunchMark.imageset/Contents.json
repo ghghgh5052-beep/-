@@ -3,6 +3,16 @@
     {
       "filename": "LaunchMark.png",
       "idiom": "universal"
+    },
+    {
+      "filename": "LaunchMark-dark.png",
+      "idiom": "universal",
+      "appearances": [
+        {
+          "appearance": "luminosity",
+          "value": "dark"
+        }
+      ]
     }
   ],
   "info": {

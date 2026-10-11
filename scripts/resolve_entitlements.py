@@ -8,13 +8,13 @@ ROOT=Path(__file__).resolve().parents[1]
 settings=json.loads(Path(sys.argv[1]).read_text())
 if len(sys.argv) > 3:
     settings.extend(json.loads(Path(sys.argv[3]).read_text()))
-expected={'Fitness','FitnessWidgets'}
+expected={'Fitness'}
 if not expected.issubset({target['target'] for target in settings}):
-    raise SystemExit('Both shipping targets must have native build settings before signing manifests can be exported')
+    raise SystemExit('The shipping app must have native build settings before exporting its signing manifest')
 destination=Path(sys.argv[2]); destination.mkdir(parents=True,exist_ok=True)
 for target in settings:
     name=target['target']
-    if name not in ['Fitness','FitnessWidgets']: continue
+    if name != 'Fitness': continue
     values=target['buildSettings']
     text=(ROOT/values['CODE_SIGN_ENTITLEMENTS']).read_text()
     for _ in range(10):

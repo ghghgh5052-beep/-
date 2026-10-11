@@ -43,10 +43,8 @@ import Charts
                         .chartYAxis { AxisMarks(position: .leading) { value in AxisGridLine(); AxisValueLabel { if let n = value.as(Double.self) { Text(ArabicFormat.number(n, arabic: settings.useArabicDigits)) } } } }
                         .frame(height: 220)
                     Text("الخط البرتقالي: متوسط آخر سبع قراءات.").font(.caption).foregroundStyle(.secondary)
-                } else { EmptyState(title: "تابع تغيرات جسمك", message: "أضف قياسًا أو استورد الوزن من تطبيق الصحة.", symbol: "scalemass") }
-                if settings.healthEnabled {
-                    Button("قراءة الوزن من تطبيق الصحة") { Task { await importHealthWeight() } }
-                }
+                } else { EmptyState(title: "تابع تغيرات جسمك", message: "أضف قياسًا جديدًا وتابع اتجاه التغيّر بمرور الوقت.", symbol: "scalemass") }
+
             }
             Section("القياسات المسجلة") {
                 ForEach(metrics.reversed()) { metric in
@@ -63,23 +61,12 @@ import Charts
                     do { try context.save() } catch { errorMessage = "تعذر حذف القياس." }
                 }
             }
-        }.navigationTitle("قياسات الجسم")
+        }.wateeraCanvas().navigationTitle("قياسات الجسم")
             .toolbar { Button("إضافة", systemImage: "plus") { showEditor = true } }
             .sheet(isPresented: $showEditor) { NavigationStack { MetricEditor(metric: nil) } }
             .arabicError($errorMessage)
     }
-    private func importHealthWeight() async {
-        // The explicit HealthKit permission action is owned by the settings screen.
-        do {
-            let results = try await HealthService.shared.readBodyWeights()
-            for reading in results {
-                if !metrics.contains(where: { abs($0.date.timeIntervalSince(reading.date)) < 1 && $0.weightKg == reading.kilograms }) {
-                    context.insert(BodyMetric(id: reading.id, date: reading.date, weightKg: reading.kilograms))
-                }
-            }
-            try context.save()
-        } catch { errorMessage = "تعذر قراءة الوزن. راجع صلاحية تطبيق الصحة ثم حاول مرة أخرى." }
-    }
+
 }
 private struct MetricPoint: Identifiable { let id: UUID; let date: Date; let value: Double }
 
@@ -110,7 +97,7 @@ private struct MetricPoint: Identifiable { let id: UUID; let date: Date; let val
                 NumericField(title: "الذراع", value: $arm); NumericField(title: "الأرداف", value: $hips); NumericField(title: "الفخذ", value: $thigh)
             }
             Text("يمكنك ترك أي قياس لا تحتاج إليه فارغًا.").font(.caption).foregroundStyle(.secondary)
-        }.navigationTitle(metric == nil ? "قياس جديد" : "تعديل القياس")
+        }.wateeraCanvas().navigationTitle(metric == nil ? "قياس جديد" : "تعديل القياس")
             .toolbar { ToolbarItem(placement: .confirmationAction) { Button("حفظ") { save() } }; ToolbarItem(placement: .cancellationAction) { Button("إلغاء") { dismiss() } } }
             .onAppear {
                 guard let metric else { return }

@@ -43,14 +43,14 @@ import Charts
                                          lift.currentWeight == lift.previousWeight && lift.currentReps > lift.previousReps ? "تكرارات أكثر عند الوزن نفسه" : "راجع الجهد وعدد الجولات مع الأرقام")
                                         .font(.caption).foregroundStyle(.secondary)
                                 } else { Text("لا توجد جولة سابقة بنفس نوع التسجيل ومعنى الوزن للمقارنة.").font(.caption).foregroundStyle(.secondary) }
-                            }.padding().background(Color(uiColor: .secondarySystemGroupedBackground), in: RoundedRectangle(cornerRadius: 20))
+                            }.padding().background(WateeraDesign.surface, in: RoundedRectangle(cornerRadius: WateeraDesign.Radius.card))
                         }
                     }
                     ShareLink(item: shareText(report)) { Label("مشاركة ملخص الأسبوع", systemImage: "square.and.arrow.up").frame(maxWidth: .infinity, minHeight: 44) }
                         .buttonStyle(.bordered).accessibilityIdentifier("report.share")
                 }
             }.padding()
-        }.background(Color(uiColor: .systemGroupedBackground))
+        }.background(WateeraDesign.canvas)
             .navigationTitle("تقريرك الأسبوعي").navigationBarTitleDisplayMode(.inline)
             .task { refresh() }.refreshable { refresh() }
             .onChange(of: completedWeek) { _, _ in refresh() }
@@ -65,7 +65,7 @@ import Charts
                 VStack(alignment: .leading, spacing: 10) { values(current, previous, weight: weight) }
             }
         }.padding().frame(maxWidth: .infinity, alignment: .leading)
-            .background(Color(uiColor: .secondarySystemGroupedBackground), in: RoundedRectangle(cornerRadius: 20))
+            .background(WateeraDesign.surface, in: RoundedRectangle(cornerRadius: WateeraDesign.Radius.card))
     }
     @ViewBuilder private func values(_ current: Double, _ previous: Double, weight: Bool) -> some View {
         VStack(alignment: .leading, spacing: 4) { Text("الحالي").font(.caption).foregroundStyle(.secondary); Text(weight ? ArabicFormat.weight(current, settings: settings) : ArabicFormat.number(current, decimals: 0, arabic: settings.useArabicDigits)).font(.title2.bold()) }
@@ -135,6 +135,6 @@ import Charts
                 }
             } else { EmptyState(title: "سجّل جولات من هذا النوع", message: "تظهر الجلسات المكتملة المحتسبة في تقدمك هنا.", symbol: "chart.xyaxis.line") }
             Text(mode == .assisted ? "يُعرض أقل وزن مساعدة في الجلسة. راجع التكرارات معه؛ وزن المساعدة لا يُحتسب كوزن مرفوع." : "يُعرض مجموع الوقت أو المسافة للجولات المكتملة دون الإحماء.").font(.caption).foregroundStyle(.secondary)
-        }.navigationTitle("الوقت والمسافة والمساعدة").navigationBarTitleDisplayMode(.inline)
+        }.wateeraCanvas().navigationTitle("الوقت والمسافة والمساعدة").navigationBarTitleDisplayMode(.inline)
     }
 }

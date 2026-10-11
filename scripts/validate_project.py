@@ -44,7 +44,7 @@ def validate():
     objects=data['objects']; project=objects[data['rootObject']]
     assert project['isa']=='PBXProject'
     targets={objects[t]['name']:objects[t] for t in project['targets']}
-    assert set(targets)=={'Fitness','FitnessWidgets','FitnessTests','FitnessUITests'}
+    assert set(targets)=={'Fitness','FitnessTests','FitnessUITests'}, 'The local delivery must contain one shipping app and no extension target'
     for identifier, item in objects.items():
         assert re.fullmatch('[0-9A-F]{24}',identifier)
         if item['isa']=='PBXFileReference' and item['sourceTree']=='<group>':
@@ -55,20 +55,21 @@ def validate():
             for reference in item.get(key,[]): assert reference in objects,f'Dangling {key}'
     def sources(name):
         return {objects[objects[file]['fileRef']]['path'] for phase in targets[name]['buildPhases'] if objects[phase]['isa']=='PBXSourcesBuildPhase' for file in objects[phase]['files']}
-    app={str(p.relative_to(ROOT)).replace('\\','/') for p in (ROOT/'Fitness').rglob('*.swift')}
+    deferred=set(json.loads((ROOT/'Config/DeferredSources.json').read_text()))
+    app={str(p.relative_to(ROOT)).replace('\\','/') for p in (ROOT/'Fitness').rglob('*.swift')}-deferred
     assert sources('Fitness')==app,'Run python3 scripts/generate_project.py after adding app source files'
-    assert sources('FitnessWidgets')=={'Fitness/Shared/WorkoutActivityAttributes.swift'}|{str(p.relative_to(ROOT)).replace('\\','/') for p in (ROOT/'FitnessWidgets').glob('*.swift')}
+    assert not (sources('Fitness') & deferred), 'Deferred integration source must not compile into the local delivery'
     for name in ['FitnessTests','FitnessUITests']:
         assert sources(name)=={str(p.relative_to(ROOT)).replace('\\','/') for p in (ROOT/name).glob('*.swift')},'Stale test membership'
     embed=[objects[p] for p in targets['Fitness']['buildPhases'] if objects[p]['isa']=='PBXCopyFilesBuildPhase']
-    assert len(embed)==1 and embed[0]['dstSubfolderSpec']=='13' and len(embed[0]['files'])==1
+    assert not embed, 'Local-only IPA must not embed widgets or other extensions'
     for path in list((ROOT/'Config').glob('*.entitlements'))+list(ROOT.glob('Fitness*/Info.plist'))+list((ROOT/'Fitness/Resources').glob('*.plist'))+list((ROOT/'Fitness/Resources').glob('*.xcprivacy')):
         plistlib.loads(path.read_bytes())
     info=plistlib.loads((ROOT/'Fitness/Resources/Info.plist').read_bytes())
-    widget=plistlib.loads((ROOT/'FitnessWidgets/Info.plist').read_bytes())
-    assert info['CFBundleDevelopmentRegion']==widget['CFBundleDevelopmentRegion']=='ar'
-    assert info['SharedAppGroup']==widget['SharedAppGroup']=='$(APP_GROUP_IDENTIFIER)'
-    assert 'remote-notification' in info['UIBackgroundModes']
+    assert info['CFBundleDevelopmentRegion']=='ar'
+    assert not any(key in info for key in ['SharedAppGroup','CloudKitContainerIdentifier','NSSupportsLiveActivities','NSHealthShareUsageDescription','NSHealthUpdateUsageDescription','UIBackgroundModes'])
+    assert plistlib.loads((ROOT/'Config/Fitness.entitlements').read_bytes())=={}, 'No additional entitlement is allowed'
+    assert len(info['UIApplicationShortcutItems'])==3
     ET.parse(ROOT/'Wateera.xcodeproj/xcshareddata/xcschemes/Wateera.xcscheme')
     icon=ROOT/'Fitness/Resources/Assets.xcassets/AppIcon.appiconset/AppIcon-1024.png'
     header=icon.read_bytes()[:33]
@@ -101,7 +102,7 @@ def validate():
     for p in (ROOT/'Fitness').rglob('*.swift'):
         text=p.read_text(encoding='utf-8')
         assert not re.search(r'\btry!|\bas!|fatalError\s*\(|preconditionFailure\s*\(',text),f'Unsafe production path: {p}'
-    print(f'Validated project graph, {len(app)} app sources, embedded extension, Arabic plists, entitlements, scheme, opaque 1024px icon, and 66 reviewed exercise canvases.')
+    print(f'Validated local project, {len(app)} app sources, no extensions/extra entitlements, Arabic plists, scheme, opaque 1024px icon, and 66 reviewed exercise canvases.')
 
 if __name__=='__main__':
     try: validate()

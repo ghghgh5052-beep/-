@@ -14,6 +14,7 @@ import UIKit
     @State private var showingSmartWorkout = false
     @State private var deletingHistorySession: WorkoutSession?
     @State private var confirmingHistoryDelete = false
+    @State private var celebrating = false
 
     private var activeSession: WorkoutSession? {
         sessions.first { $0.id == coordinator.activeSessionID && ["active", "paused"].contains($0.statusRaw) }
@@ -40,24 +41,30 @@ import UIKit
                     List {
                         Section {
                             VStack(alignment: .leading, spacing: 16) {
-                                Label("كل جولة تقرّبك من هدفك", systemImage: "figure.strengthtraining.traditional").font(.title3.bold())
-                                Text(ArabicFormat.date(.now)).foregroundStyle(.secondary)
+                                HStack {
+                                    Text(ArabicFormat.date(.now)).font(.subheadline).foregroundStyle(.white.opacity(0.8))
+                                    Spacer()
+                                    Image(systemName: "figure.strengthtraining.traditional").font(.title).foregroundStyle(Color(red: 0.53, green: 0.96, blue: 0.77)).accessibilityHidden(true)
+                                }
+                                Text("كل جولة تقرّبك\nمن هدفك").font(.title2.bold()).foregroundStyle(.white).fixedSize(horizontal: false, vertical: true)
                                 if let day = todaysWorkout, !day.isRest {
-                                    Text("تمرين اليوم: \(day.title)").font(.headline)
+                                    Text("تمرين اليوم: \(day.title)").font(.headline).foregroundStyle(.white)
                                     Button { coordinator.start(day: day, context: context) } label: {
-                                        Label("ابدأ تمرين اليوم", systemImage: "play.fill").frame(maxWidth: .infinity, minHeight: 32)
-                                    }.buttonStyle(WorkoutActionButtonStyle(color: settings.color)).accessibilityIdentifier("workout.startToday")
+                                        Label("ابدأ تمرين اليوم", systemImage: "play.fill").frame(maxWidth: .infinity, minHeight: 44)
+                                    }.buttonStyle(WorkoutActionButtonStyle(color: Color(red: 0.53, green: 0.96, blue: 0.77), foreground: .black)).accessibilityIdentifier("workout.startToday")
                                 } else if todaysWorkout?.isRest == true {
-                                    Label("يوم راحة في جدولك", systemImage: "moon.zzz").foregroundStyle(.secondary)
+                                    Label("يوم راحة في جدولك", systemImage: "moon.zzz").foregroundStyle(.white.opacity(0.8))
                                 }
                                 Button { coordinator.start(day: nil, context: context) } label: {
-                                    Label("ابدأ تمرينًا حرًا", systemImage: "plus").frame(maxWidth: .infinity, minHeight: 32)
-                                }.buttonStyle(WorkoutActionButtonStyle(prominent: false, color: settings.color)).accessibilityIdentifier("workout.start")
+                                    Label("ابدأ تمرينًا حرًا", systemImage: "plus").frame(maxWidth: .infinity, minHeight: 44)
+                                }.buttonStyle(WorkoutActionButtonStyle(color: Color(red: 0.53, green: 0.96, blue: 0.77), foreground: .black)).accessibilityIdentifier("workout.start")
                                 Button { showingSmartWorkout = true } label: {
                                     Label("اقترح لي تمرينًا", systemImage: "sparkles").frame(maxWidth: .infinity, minHeight: 38)
-                                }.buttonStyle(WorkoutActionButtonStyle(prominent: false, color: settings.color)).accessibilityIdentifier("workout.smart")
-                            }.padding(.vertical, 8)
+                                }.buttonStyle(WorkoutActionButtonStyle(prominent: false, color: .white)).accessibilityIdentifier("workout.smart")
+                            }.padding(22).background(WateeraDesign.hero, in: RoundedRectangle(cornerRadius: WateeraDesign.Radius.hero))
                         }
+                        .listRowBackground(Color.clear).listRowInsets(EdgeInsets(top: 8, leading: 0, bottom: 4, trailing: 0)).listRowSeparator(.hidden)
+                        Section { DashboardOverview() }.listRowBackground(Color.clear).listRowInsets(EdgeInsets(top: 4, leading: 0, bottom: 4, trailing: 0)).listRowSeparator(.hidden)
                         if sessions.contains(where: { ["completed", "excluded"].contains($0.statusRaw) }) {
                             Section("جلساتك السابقة") {
                                 ForEach(sessions.filter { ["completed", "excluded"].contains($0.statusRaw) }) { session in
@@ -89,6 +96,7 @@ import UIKit
                     }
                 }
             }
+            .wateeraCanvas()
             .navigationTitle(activeSession == nil ? "التمرين" : "جلسة التمرين")
             .navigationBarTitleDisplayMode(activeSession == nil ? .large : .inline)
             .toolbar {
@@ -96,7 +104,7 @@ import UIKit
                     ToolbarItem(placement: .topBarTrailing) { Button { showingCalculator = true } label: { Image(systemName: "plus.forwardslash.minus") }.accessibilityLabel("حاسبات الأوزان والإحماء") }
                 }
             }
-            .sheet(item: $historySession) { session in WorkoutSummaryView(session: session) }
+            .sheet(item: $historySession, onDismiss: { celebrating = false }) { session in WorkoutSummaryView(session: session, celebrate: celebrating) }
             .sheet(isPresented: $showingCalculator) { WorkoutCalculatorSheet() }
             .sheet(isPresented: $showingSmartWorkout) { NavigationStack { SmartWorkoutView() } }
             .alert("حذف الجلسة؟", isPresented: $confirmingHistoryDelete) {
@@ -110,7 +118,7 @@ import UIKit
                 Text(SessionDeletionCopy.message(healthExported: deletingHistorySession?.healthExported == true))
             }
             .onChange(of: coordinator.activeSessionID) { previous, current in
-                if current == nil, let previous, let ended = sessions.first(where: { $0.id == previous && $0.statusRaw == "completed" }) { historySession = ended }
+                if current == nil, let previous, let ended = sessions.first(where: { $0.id == previous && $0.statusRaw == "completed" }) { celebrating = true; historySession = ended }
             }
             .alert("تنبيه التمرين", isPresented: Binding(get: { coordinator.errorMessage != nil }, set: { if !$0 { coordinator.errorMessage = nil } })) {
                 Button("حسنًا", role: .cancel) { coordinator.errorMessage = nil }
@@ -135,6 +143,8 @@ import UIKit
     @State private var confirmingFinish = false
     @State private var confirmingDiscard = false
     @State private var errorMessage: String?
+    @Environment(\.scenePhase) private var scenePhase
+    @AppStorage("keepScreenAwake") private var keepScreenAwake = true
 
     private var items: [SessionExercise] { sessionExercises.filter { $0.sessionID == session.id }.sorted { $0.order < $1.order } }
     private var completedSets: [LoggedSet] {
@@ -169,8 +179,13 @@ import UIKit
                 }.buttonStyle(.bordered).tint(.red).disabled(coordinator.isBusy).accessibilityIdentifier("workout.discard")
             }.padding()
         }
-        .background(Color(uiColor: .systemGroupedBackground))
+        .background(WateeraDesign.canvas)
         .scrollDismissesKeyboard(.interactively)
+        .onAppear { updateIdleTimer() }
+        .onDisappear { UIApplication.shared.isIdleTimerDisabled = false }
+        .onChange(of: scenePhase) { _, _ in updateIdleTimer() }
+        .onChange(of: session.statusRaw) { _, _ in updateIdleTimer() }
+        .onChange(of: keepScreenAwake) { _, _ in updateIdleTimer() }
         .toolbar {
             ToolbarItemGroup(placement: .keyboard) {
                 Spacer()
@@ -240,7 +255,7 @@ import UIKit
                     else { coordinator.pause(context: context) }
                 } label: {
                     Label(paused ? "استئناف" : "إيقاف", systemImage: paused ? "play.fill" : "pause.fill")
-                        .font(.subheadline.bold()).frame(minHeight: 32)
+                        .font(.subheadline.bold()).frame(minHeight: 44)
                 }.buttonStyle(.bordered).accessibilityIdentifier("workout.pause")
             }
             if dynamicTypeSize.isAccessibilitySize {
@@ -248,7 +263,11 @@ import UIKit
             } else {
                 HStack(spacing: 12) { summaryStats }
             }
-        }
+        }.wateeraCard()
+    }
+
+    private func updateIdleTimer() {
+        UIApplication.shared.isIdleTimerDisabled = keepScreenAwake && scenePhase == .active && session.statusRaw == "active"
     }
 
     @ViewBuilder private var summaryStats: some View {
@@ -266,7 +285,7 @@ import UIKit
                 if dynamicTypeSize.isAccessibilitySize {
                     VStack(alignment: .leading, spacing: 14) {
                         Label(remaining > 0 ? "وقت الراحة" : "حان موعد الجولة التالية", systemImage: "timer").font(.headline)
-                        Text(ArabicFormat.duration(remaining, arabic: settings.useArabicDigits)).font(.title.monospacedDigit().bold())
+                        Text(ArabicFormat.duration(remaining, arabic: settings.useArabicDigits)).font(.largeTitle.monospacedDigit().bold())
                         HStack { restActions(remaining: remaining) }
                     }.frame(maxWidth: .infinity, alignment: .leading)
                 } else {
@@ -274,7 +293,7 @@ import UIKit
                         Image(systemName: "timer").font(.title2).accessibilityHidden(true)
                         VStack(alignment: .leading, spacing: 5) {
                             Text(remaining > 0 ? "وقت الراحة" : "حان موعد الجولة التالية").font(.subheadline.bold())
-                            Text(ArabicFormat.duration(remaining, arabic: settings.useArabicDigits)).font(.title.monospacedDigit().bold())
+                            Text(ArabicFormat.duration(remaining, arabic: settings.useArabicDigits)).font(.largeTitle.monospacedDigit().bold())
                         }
                         Spacer(minLength: 0)
                         restActions(remaining: remaining)
@@ -282,7 +301,7 @@ import UIKit
                 }
             }
             .padding(16).foregroundStyle(.tint)
-            .background(Color.accentColor.opacity(0.1), in: RoundedRectangle(cornerRadius: 20))
+            .background(settings.color.opacity(0.12), in: RoundedRectangle(cornerRadius: WateeraDesign.Radius.card))
             .accessibilityElement(children: .contain)
         }
     }
@@ -382,14 +401,14 @@ import UIKit
                 WorkoutSetRow(set: set, exercise: exercise, previous: previousSets.indices.contains(set.order) ? previousSets[set.order] : nil, paused: paused)
             }
             HStack(spacing: 12) {
-                Button { addSet(copy: false) } label: { Label("جولة", systemImage: "plus").frame(maxWidth: .infinity, minHeight: 32) }
+                Button { addSet(copy: false) } label: { Label("جولة", systemImage: "plus").frame(maxWidth: .infinity, minHeight: 44) }
                     .accessibilityLabel("إضافة جولة لـ \(exercise.name)")
-                Button { addSet(copy: true) } label: { Label("نسخ الأخيرة", systemImage: "doc.on.doc").frame(maxWidth: .infinity, minHeight: 32) }
+                Button { addSet(copy: true) } label: { Label("نسخ الأخيرة", systemImage: "doc.on.doc").frame(maxWidth: .infinity, minHeight: 44) }
                     .accessibilityLabel("نسخ آخر جولة لـ \(exercise.name)")
             }.buttonStyle(.bordered).font(.subheadline).disabled(paused)
         }
         .padding(16)
-        .background(Color(uiColor: .secondarySystemGroupedBackground), in: RoundedRectangle(cornerRadius: 20))
+        .background(WateeraDesign.surface, in: RoundedRectangle(cornerRadius: WateeraDesign.Radius.card))
         .sheet(isPresented: $showingGuide) {
             if let guide = ExerciseGuides.guide(for: exercise.exerciseID) {
                 ExerciseGuideSheet(guide: guide, exerciseName: exercise.name)
@@ -406,7 +425,7 @@ import UIKit
                         Stepper("الراحة: \(ArabicFormat.duration(TimeInterval(exercise.restSeconds), arabic: settings.useArabicDigits))", value: $exercise.restSeconds, in: 0...900, step: 15)
                         TextField("اسم السوبرست أو الدائرة", text: $exercise.groupID)
                     } header: { Text("الراحة والمجموعات") } footer: { Text("استخدم الاسم نفسه في التمارين المرتبطة؛ يُعرض الاسم أثناء التسجيل والترتيب.") }
-                }.navigationTitle(exercise.name).navigationBarTitleDisplayMode(.inline)
+                }.wateeraCanvas().navigationTitle(exercise.name).navigationBarTitleDisplayMode(.inline)
                     .toolbar { ToolbarItem(placement: .confirmationAction) { Button("تم") { save(); showingDetails = false } } }
                     .onChange(of: exercise.notes) { _, _ in save() }
                     .onChange(of: exercise.groupID) { _, _ in save() }
@@ -567,7 +586,7 @@ import UIKit
                             deleteSet()
                         }.disabled(set.isCompleted)
                     }
-                }.navigationTitle("تفاصيل الجولة").navigationBarTitleDisplayMode(.inline)
+                }.wateeraCanvas().navigationTitle("تفاصيل الجولة").navigationBarTitleDisplayMode(.inline)
                     .toolbar { ToolbarItem(placement: .confirmationAction) { Button("تم") { save(); showingDetails = false } } }
                     .onChange(of: set.kindRaw) { _, _ in save() }
             }
@@ -792,6 +811,9 @@ enum SetKindLabels {
     @State private var showingEdit = false
     @State private var showingFeedback = false
     let session: WorkoutSession
+    var celebrate = false
+    @State private var sharedAchievement: SharedAchievement?
+    @State private var shareError: String?
     @Query private var exercises: [SessionExercise]
     @Query private var sets: [LoggedSet]
     @Query private var records: [PersonalRecord]
@@ -806,7 +828,8 @@ enum SetKindLabels {
             List {
                 Section {
                     VStack(alignment: .leading, spacing: 10) {
-                        Label(session.statusRaw == "excluded" ? "جلسة تجريبية محفوظة" : "أحسنت، تمرينك محفوظ", systemImage: session.statusRaw == "excluded" ? "testtube.2" : "checkmark.seal.fill").font(.title2.bold()).foregroundStyle(.green)
+                        CompletionBadge(celebrate: celebrate && session.statusRaw == "completed", hasRecords: records.contains { $0.sessionID == session.id })
+                        Text(session.statusRaw == "excluded" ? "جلسة تجريبية محفوظة" : "أحسنت، تمرينك محفوظ").font(.title2.bold()).foregroundStyle(settings.color)
                         Text(session.title).font(.headline)
                         Text(ArabicFormat.date(session.start)).foregroundStyle(.secondary)
                     }.padding(.vertical, 12)
@@ -815,6 +838,9 @@ enum SetKindLabels {
                     LabeledContent("حجم التدريب", value: ArabicFormat.weight(WorkoutMath.volume(sets: completed.filter { $0.kindRaw != "warmup" }), settings: settings))
                 }
                 Section {
+                    if session.statusRaw == "completed" {
+                        Button { shareAchievement() } label: { Label("شارك إنجازك", systemImage: "square.and.arrow.up").frame(minHeight: 44) }.accessibilityIdentifier("workout.summary.share")
+                    }
                     Button { showingEdit = true } label: { Label("تعديل الجلسة أو استبعادها", systemImage: "square.and.pencil") }.accessibilityIdentifier("workout.summary.edit")
                     Button { showingFeedback = true } label: { Label("تقييم الجهد والطاقة", systemImage: "slider.horizontal.3") }.accessibilityIdentifier("workout.summary.feedback")
                 }
@@ -856,9 +882,12 @@ enum SetKindLabels {
                     Text("حذف الجلسة يزيل جولاتها من تاريخك وحسابات تقدمك.")
                 }
             }
+            .wateeraCanvas()
             .navigationTitle("ملخص التمرين").navigationBarTitleDisplayMode(.inline)
             .sheet(isPresented: $showingEdit) { SessionEditorView(session: session) }
             .sheet(isPresented: $showingFeedback) { SessionFeedbackView(sessionID: session.id) }
+            .sheet(item: $sharedAchievement) { AchievementShareSheet(achievement: $0).presentationDetents([.medium, .large]) }
+            .arabicError($shareError)
             .toolbar { ToolbarItem(placement: .confirmationAction) { Button("تم") { dismiss() }.bold().accessibilityIdentifier("workout.summary.done") } }
             .alert("حذف الجلسة؟", isPresented: $confirmingDelete) {
                 Button("حذف الجلسة", role: .destructive) {
@@ -875,6 +904,18 @@ enum SetKindLabels {
                 Button("تراجع", role: .cancel) {}
             } message: { Text(SessionDeletionCopy.message(healthExported: session.healthExported)) }
         }
+    }
+    private func shareAchievement() {
+        let count = records.filter { $0.sessionID == session.id }.count
+        let card = AchievementCard(title: session.title, date: ArabicFormat.date(session.start),
+                                   duration: ArabicFormat.duration(session.activeDuration(), arabic: settings.useArabicDigits),
+                                   volume: ArabicFormat.weight(WorkoutMath.volume(sets: completed.filter { $0.kindRaw != "warmup" }), settings: settings),
+                                   sets: ArabicFormat.integer(completed.count, arabic: settings.useArabicDigits),
+                                   records: count > 0 ? ArabicFormat.integer(count, arabic: settings.useArabicDigits) : "")
+        let renderer = ImageRenderer(content: card.environment(\.colorScheme, .dark).environment(\.dynamicTypeSize, .large))
+        renderer.scale = 2
+        guard let image = renderer.uiImage else { shareError = "تعذر تجهيز بطاقة الإنجاز. حاول مرة أخرى."; return }
+        sharedAchievement = SharedAchievement(image: image)
     }
 }
 
@@ -953,6 +994,7 @@ private enum SessionDeletionCopy {
                     } header: { Text("جولات الإحماء المقترحة") } footer: { Text("هذه نقطة بداية قابلة للتعديل. لا يُحتسب الإحماء في الأرقام الشخصية.") }
                 }
             }
+            .wateeraCanvas()
             .navigationTitle("حاسبات التمرين").navigationBarTitleDisplayMode(.inline)
             .toolbar { ToolbarItem(placement: .confirmationAction) { Button("تم") { dismiss() } } }
             .onAppear {

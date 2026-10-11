@@ -4,15 +4,17 @@ import LocalAuthentication
 
 @MainActor struct SettingsView: View {
     @Environment(AppSettings.self) private var settings
-    @Environment(SyncStatusService.self) private var sync
     @Environment(AppLockService.self) private var lock
     @Environment(\.modelContext) private var context
     @State private var errorMessage: String?
-    @State private var steps: Double?
+    @AppStorage("keepScreenAwake") private var keepScreenAwake = true
     var body: some View {
         @Bindable var preferences = settings
         NavigationStack {
             Form {
+                Section {
+                    Label("وتيرة يناسب يومك", systemImage: "slider.horizontal.3").font(.title2.bold()).padding(.vertical, 12)
+                }
                 Section("العرض") {
                     Picker("شكل الأرقام", selection: $preferences.useArabicDigits) { Text("٠١٢٣ — عربية هندية").tag(true); Text("0123 — غربية").tag(false) }
                     Picker("المظهر", selection: $preferences.theme) { Text("حسب النظام").tag("system"); Text("فاتح").tag("light"); Text("داكن").tag("dark") }
@@ -32,29 +34,11 @@ import LocalAuthentication
                     Toggle("قفل صور التقدم", isOn: Binding(get: { settings.photoLockEnabled }, set: { value in Task { await changeLock(value, photos: true) } }))
                     Text("يستخدم القفل بصمة الوجه أو رمز قفل الجهاز. تُضبط إعدادات القفل لكل جهاز.").font(.caption).foregroundStyle(.secondary)
                 }
-                Section("تطبيق الصحة") {
-                    Toggle("ربط تطبيق الصحة", isOn: Binding(get: { settings.healthEnabled }, set: { value in Task { await setHealth(value) } }))
-                    if let steps { Text("خطوات اليوم: " + ArabicFormat.integer(Int(steps), arabic: settings.useArabicDigits)) }
-                    if settings.healthEnabled {
-                        Button("تحديث خطوات اليوم") { Task { await readSteps() } }
-                        Button("إعادة محاولة تصدير الجلسات") { Task { await retryWorkouts() } }
-                    }
-                    Text("قراءة الوزن والخطوات، وكتابة الجلسات المكتملة بعد موافقتك. يمكنك إدارة الصلاحيات في تطبيق الصحة.").font(.caption).foregroundStyle(.secondary)
-                }
-                Section("مزامنة آي كلاود") {
-                    Label(sync.statusText, systemImage: sync.state == .localOnly ? "iphone" : "icloud")
-                        .accessibilityElement(children: .combine)
-                        .accessibilityLabel(sync.statusText)
+                Section("على جهازك") {
+                    Label("البيانات محفوظة على هذا الجهاز", systemImage: "internaldrive")
                         .accessibilityIdentifier("settings.sync.status")
-                    if sync.state != .localOnly {
-                        if let imported = sync.lastImport { Text("آخر استقبال: " + ArabicFormat.date(imported)).font(.caption) }
-                        if let exported = sync.lastExport { Text("آخر إرسال: " + ArabicFormat.date(exported)).font(.caption) }
-                        Button("فحص حساب آي كلاود") { Task { await sync.refreshAccount() } }
-                    }
-                    Text(sync.state == .localOnly
-                         ? "يمكنك متابعة التمرين وحفظ تقدمك دون اتصال. مزامنة آي كلاود غير متاحة حاليًا."
-                         : "تعمل بياناتك محليًا دون اتصال. عند توفر آي كلاود تُزامَن البيانات والصور في حاويتك الخاصة. لا يعني انتهاء إرسال واحد وصول كل البيانات إلى الأجهزة الأخرى.")
-                        .font(.caption).foregroundStyle(.secondary)
+                    Text("تمارينك وقياساتك وصورك متاحة دون اتصال. احتفظ بنسخة احتياطية من قسم بياناتك.").font(.caption).foregroundStyle(.secondary)
+                    Toggle("إبقاء الشاشة مضاءة أثناء التمرين", isOn: $keepScreenAwake)
                 }
                 Section("بياناتك") { NavigationLink("تصدير واستيراد ونسخ احتياطي", destination: BackupView()) }
                 Section("عن وتيرة") {
@@ -68,7 +52,7 @@ import LocalAuthentication
                     }.accessibilityIdentifier("settings.about")
                     Text("الإصدار " + ArabicFormat.digits(Bundle.main.object(forInfoDictionaryKey: "CFBundleShortVersionString") as? String ?? "1.0", arabic: settings.useArabicDigits)).font(.caption)
                 }
-            }.navigationTitle("الإعدادات")
+            }.wateeraCanvas().navigationTitle("الإعدادات")
                 .onChange(of: settings.useArabicDigits) { _, _ in _ = WidgetSnapshotService.refresh(context: context, settings: settings) }
                 .onChange(of: settings.weekStart) { _, _ in _ = WidgetSnapshotService.refresh(context: context, settings: settings) }
                 .onChange(of: settings.saveError) { _, message in if let message { errorMessage = message } }
@@ -87,20 +71,7 @@ import LocalAuthentication
             if photos { settings.photoLockEnabled = enabled } else { settings.lockEnabled = enabled }
         } catch { errorMessage = "لم يتغير إعداد القفل. تأكد من تفعيل رمز قفل الجهاز." }
     }
-    private func setHealth(_ value: Bool) async {
-        if !value { settings.healthEnabled = false; return }
-        if await HealthService.shared.requestAuthorization() { settings.healthEnabled = true; await readSteps() }
-        else { errorMessage = HealthService.shared.errorMessage ?? "تعذر طلب صلاحيات تطبيق الصحة على هذا الجهاز." }
-    }
-    private func readSteps() async {
-        do { steps = try await HealthService.shared.stepsToday() } catch { errorMessage = "تعذر قراءة الخطوات. راجع صلاحيات تطبيق الصحة." }
-    }
-    private func retryWorkouts() async {
-        do {
-            let sessions = try context.fetch(FetchDescriptor<WorkoutSession>()).filter { $0.statusRaw == "completed" && !$0.healthExported }
-            for session in sessions { if try await HealthService.shared.writeCompletedWorkout(session) { session.healthExported = true; session.updatedAt = Date(); try context.save() } }
-        } catch { errorMessage = "تعذر تصدير بعض الجلسات. يمكنك المحاولة مرة أخرى دون تكرار الجلسات المحفوظة." }
-    }
+
 }
 
 func dayName(_ weekday: Int) -> String {
@@ -130,7 +101,7 @@ func dayName(_ weekday: Int) -> String {
                 do { try context.save(); Task { await schedule() } } catch { errorMessage = "تعذر حذف التذكير." }
             }
             Text("التذكيرات محلية. الصوت يعتمد على إعدادات الإشعارات والتركيز في جهازك.").font(.caption).foregroundStyle(.secondary)
-        }.navigationTitle("التذكيرات").toolbar { Button("إضافة", systemImage: "plus") { adding = true } }
+        }.wateeraCanvas().navigationTitle("التذكيرات").toolbar { Button("إضافة", systemImage: "plus") { adding = true } }
             .sheet(isPresented: $adding) { NavigationStack { ReminderEditor(reminder: nil) } }
             .arabicError($errorMessage)
     }
@@ -163,7 +134,7 @@ func reminderTitle(_ kind: String) -> String {
                 }
             }
             Toggle("مفعّل", isOn: $enabled)
-        }.navigationTitle("إعداد التذكير")
+        }.wateeraCanvas().navigationTitle("إعداد التذكير")
             .toolbar { ToolbarItem(placement: .confirmationAction) { Button("حفظ") { Task { await save() } } }; ToolbarItem(placement: .cancellationAction) { Button("إلغاء") { dismiss() } } }
             .onAppear {
                 guard let reminder else { return }

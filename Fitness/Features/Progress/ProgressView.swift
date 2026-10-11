@@ -13,6 +13,9 @@ import Charts
     @State private var selectedExercise: UUID?
     @State private var range = 90
     @State private var chartKind = 0
+    @State private var volumePeriod = 0
+    @Environment(\.dynamicTypeSize) private var typeSize
+    @Environment(\.accessibilityReduceMotion) private var reduceMotion
     @State private var formula = OneRepMaxFormula.epley
 
     private var finished: [WorkoutSession] { sessions.filter { $0.statusRaw == "completed" } }
@@ -40,10 +43,12 @@ import Charts
             return LiftSample(id: sessionID, date: session.start,
                               oneRM: entries.map { estimate($0.weightKg, $0.reps) }.max() ?? 0,
                               top: entries.map(\.weightKg).max() ?? 0,
-                              volume: entries.reduce(0) { $0 + $1.weightKg * Double($1.reps) })
+                              volume: entries.reduce(0) { $0 + $1.weightKg * Double($1.reps) }, reps: entries.map(\.reps).max() ?? 0)
         }.sorted { $0.date < $1.date }
     }
-    private var weekly: [WeekSample] {
+    private var weekly: [WeekSample] { periodSamples(.weekOfYear) }
+    private var monthly: [WeekSample] { periodSamples(.month) }
+    private func periodSamples(_ component: Calendar.Component) -> [WeekSample] {
         var calendar = Calendar(identifier: .gregorian)
         calendar.firstWeekday = settings.weekStart
         let recent = finished.filter { $0.start >= cutoff }
@@ -52,17 +57,19 @@ import Charts
         var volumes: [Date: Double] = [:]
         var counts: [Date: Int] = [:]
         for session in recent {
-            let week = calendar.dateInterval(of: .weekOfYear, for: session.start)?.start ?? calendar.startOfDay(for: session.start)
+            let week = calendar.dateInterval(of: component, for: session.start)?.start ?? calendar.startOfDay(for: session.start)
             counts[week, default: 0] += 1
         }
         for entry in sets where entry.kindRaw != "warmup" {
             guard let id = exerciseSession[entry.sessionExerciseID], let session = sessionMap[id] else { continue }
-            let week = calendar.dateInterval(of: .weekOfYear, for: session.start)?.start ?? calendar.startOfDay(for: session.start)
+            let week = calendar.dateInterval(of: component, for: session.start)?.start ?? calendar.startOfDay(for: session.start)
             volumes[week, default: 0] += entry.weightKg * Double(entry.reps)
         }
-        let current = calendar.dateInterval(of: .weekOfYear, for: Date())?.start ?? Date()
-        return (0..<max(1, range / 7)).reversed().compactMap { offset in
-            guard let date = calendar.date(byAdding: .weekOfYear, value: -offset, to: current) else { return nil }
+        let current = calendar.dateInterval(of: component, for: Date())?.start ?? Date()
+        let first = calendar.dateInterval(of: component, for: cutoff)?.start ?? cutoff
+        let count = max(1, (calendar.dateComponents([component], from: first, to: current).value(for: component) ?? 0) + 1)
+        return (0..<count).reversed().compactMap { offset in
+            guard let date = calendar.date(byAdding: component, value: -offset, to: current) else { return nil }
             return WeekSample(date: date, volume: volumes[date] ?? 0, workouts: counts[date] ?? 0)
         }
     }
@@ -93,96 +100,103 @@ import Charts
     var body: some View {
         NavigationStack {
             ScrollView {
-                VStack(alignment: .leading, spacing: 22) {
-                    HStack {
+                VStack(alignment: .leading, spacing: 20) {
+                    SectionHeading(title: "جهدك يتحوّل إلى أرقام", subtitle: "قارن نفسك بأمس، واحتفل بما تحقّق")
+                    LazyVGrid(columns: Array(repeating: GridItem(.flexible(), spacing: 12), count: typeSize.isAccessibilitySize ? 1 : 2), spacing: 12) {
                         StatCard(title: "جلسات مكتملة", value: ArabicFormat.integer(finished.count, arabic: settings.useArabicDigits), symbol: "checkmark.seal").accessibilityIdentifier("progress.completed")
                         StatCard(title: "أسابيع متواصلة", value: ArabicFormat.integer(streak, arabic: settings.useArabicDigits), symbol: "flame")
                     }
                     Picker("الفترة", selection: $range) {
-                        Text("شهر").tag(30); Text("ثلاثة أشهر").tag(90); Text("سنة").tag(365); Text("سنتان").tag(730)
-                    }.pickerStyle(.segmented)
-                    NavigationLink { WeeklyReportView() } label: {
-                        Label("تقريرك الأسبوعي", systemImage: "chart.bar.doc.horizontal").frame(maxWidth: .infinity, minHeight: 44, alignment: .leading)
-                    }.buttonStyle(.bordered).accessibilityIdentifier("progress.weeklyReport")
-                    NavigationLink { TrackingProgressView() } label: {
-                        Label("تقدم الوقت والمسافة والمساعدة", systemImage: "stopwatch").frame(maxWidth: .infinity, minHeight: 44, alignment: .leading)
-                    }.buttonStyle(.bordered).accessibilityIdentifier("progress.tracking")
-                    NavigationLink { MuscleRecoveryView() } label: {
-                        Label("خريطة العضلات والتعافي التقديري", systemImage: "figure.stand")
-                            .frame(maxWidth: .infinity, minHeight: 44, alignment: .leading)
-                    }.buttonStyle(.bordered).accessibilityIdentifier("progress.recovery")
+                        Text("شهر").tag(30); Text(ArabicFormat.integer(3, arabic: settings.useArabicDigits) + " أشهر").tag(90); Text("سنة").tag(365); Text("سنتان").tag(730)
+                    }.pickerStyle(.menu).frame(minHeight: 44).accessibilityIdentifier("progress.range")
                     if finished.isEmpty {
-                        EmptyState(title: "كل مجموعة تصنع فرقًا", message: "أكمل أول جلسة لتظهر أحجام تدريبك وأرقامك الشخصية هنا.", symbol: "chart.xyaxis.line")
-                    } else {
-                        Text("حجم التدريب الأسبوعي").font(.headline)
-                        Chart(weekly) { item in
-                            BarMark(x: .value("الأسبوع", item.date), y: .value("الحجم", settings.displayWeight(item.volume)))
-                                .foregroundStyle(settings.color.gradient)
-                        }
-                        // Swift Charts already mirrors the horizontal scale in the RTL environment.
-                        .chartXScale(domain: .automatic())
-                        .chartXAxis { AxisMarks(values: .stride(by: .weekOfYear, count: max(1, range / 42))) { axis in
-                            AxisGridLine(); AxisValueLabel { if let date = axis.as(Date.self) { Text(shortDate(date)) } }
-                        } }
-                        .chartYAxis { AxisMarks(position: .leading) { value in
-                            AxisGridLine(); AxisValueLabel { if let number = value.as(Double.self) { Text(ArabicFormat.number(number, decimals: 0, arabic: settings.useArabicDigits)) } }
-                        } }
-                        .frame(height: 190)
-                        .accessibilityLabel("حجم التدريب حسب الأسبوع")
-                        Text("الحجم = الوزن × التكرارات، مع استبعاد الإحماء.").font(.caption).foregroundStyle(.secondary)
-                        Text("عدد الجلسات الأسبوعي").font(.headline)
-                        Chart(weekly) { item in
-                            BarMark(x: .value("الأسبوع", item.date), y: .value("الجلسات", item.workouts)).foregroundStyle(.blue.gradient)
-                        }.chartXScale(domain: .automatic()).chartXAxis { AxisMarks { value in AxisValueLabel { if let date = value.as(Date.self) { Text(shortDate(date)) } } } }
-                            .chartYAxis { AxisMarks(position: .leading) { value in AxisValueLabel { if let n = value.as(Int.self) { Text(ArabicFormat.integer(n, arabic: settings.useArabicDigits)) } } } }
-                            .frame(height: 150)
-                        Text("توزيع المجموعات على العضلات").font(.headline)
-                        ForEach(distribution) { item in
-                            HStack {
-                                Text(item.name).frame(minWidth: 80, alignment: .leading)
-                                ProgressView(value: Double(item.sets), total: Double(distribution.map(\.sets).max() ?? 1))
-                                Text(ArabicFormat.integer(item.sets, arabic: settings.useArabicDigits)).monospacedDigit()
-                            }.accessibilityElement(children: .combine)
-                        }
-                    }
-                    Text("تقدم تمرين محدد").font(.title3.bold())
-                    Picker("التمرين", selection: $selectedExercise) {
-                        Text("اختر تمرينًا").tag(Optional<UUID>.none)
-                        ForEach(exercises) { exercise in Text(exercise.name).tag(Optional(exercise.id)) }
-                    }.pickerStyle(.menu)
-                    Picker("الرسم", selection: $chartKind) {
-                        Text("أقصى تكرار تقديري").tag(0); Text("أعلى وزن").tag(1); Text("الحجم").tag(2)
-                    }.pickerStyle(.segmented)
-                    if chartKind == 0 {
-                        Picker("معادلة التقدير", selection: $formula) {
-                            ForEach(OneRepMaxFormula.allCases, id: \.self) { Text($0.arabicName).tag($0) }
-                        }.pickerStyle(.segmented)
-                    }
-                    if !samples.isEmpty {
-                        Text(LoadConvention(rawValue: selectedConvention)?.arabicName ?? "الوزن الكلي").font(.caption).foregroundStyle(.secondary)
-                        Chart(samples) { sample in
-                            LineMark(x: .value("التاريخ", sample.date), y: .value("القيمة", settings.displayWeight(chartKind == 0 ? sample.oneRM : chartKind == 1 ? sample.top : sample.volume)))
-                                .interpolationMethod(.linear).foregroundStyle(settings.color)
-                            PointMark(x: .value("التاريخ", sample.date), y: .value("القيمة", settings.displayWeight(chartKind == 0 ? sample.oneRM : chartKind == 1 ? sample.top : sample.volume))).foregroundStyle(settings.color)
-                        }.chartXScale(domain: .automatic()).chartXAxis { AxisMarks { axis in AxisValueLabel { if let d = axis.as(Date.self) { Text(shortDate(d)) } } } }
-                            .chartYAxis { AxisMarks(position: .leading) { axis in AxisGridLine(); AxisValueLabel { if let n = axis.as(Double.self) { Text(ArabicFormat.number(n, decimals: 0, arabic: settings.useArabicDigits)) } } } }
-                            .frame(height: 220)
-                        Text("تقدير أقصى تكرار بمعادلة " + formula.arabicName + ". التقدير أدق مع عشر تكرارات أو أقل.").font(.caption).foregroundStyle(.secondary)
-                    } else { Text("لا توجد مجموعات مكتملة لهذا التمرين في الفترة المحددة.").foregroundStyle(.secondary) }
-                    NavigationLink("الأرقام الشخصية", destination: PersonalRecordsView()).accessibilityIdentifier("progress.records")
-                    NavigationLink("قياسات الجسم", destination: BodyMetricsView())
-                    NavigationLink("صور التقدم", destination: ProgressPhotosView())
-                    NavigationLink("أهدافي", destination: GoalsView())
-                    Text("آخر مئة جلسة").font(.title3.bold())
+                        EmptyState(title: "كل مجموعة تصنع فرقًا", message: "أكمل أول جلسة لتظهر أحجام تدريبك وأرقامك الشخصية هنا.", symbol: "chart.xyaxis.line").wateeraCard()
+                    } else { trainingCharts }
+                    exerciseProgress
+                    SectionHeading(title: "الصورة الكاملة")
+                    NavigationLink { WeeklyReportView() } label: { DestinationRow(title: "تقريرك الأسبوعي", subtitle: "جلساتك وحجم التدريب والالتزام", symbol: "chart.bar.doc.horizontal") }.buttonStyle(.plain).accessibilityIdentifier("progress.weeklyReport")
+                    NavigationLink { PersonalRecordsView() } label: { DestinationRow(title: "الأرقام الشخصية", subtitle: "سجل إنجازاتك، تمرينًا بعد تمرين", symbol: "trophy.fill") }.buttonStyle(.plain).accessibilityIdentifier("progress.records")
+                    NavigationLink { TrackingProgressView() } label: { DestinationRow(title: "تقدم الوقت والمسافة والمساعدة", subtitle: "كل طرق تسجيلك، في مكان واحد", symbol: "stopwatch") }.buttonStyle(.plain).accessibilityIdentifier("progress.tracking")
+                    NavigationLink { MuscleRecoveryView() } label: { DestinationRow(title: "خريطة العضلات والتعافي التقديري", subtitle: "توازن تدريبك عبر مجموعات العضلات", symbol: "figure.stand") }.buttonStyle(.plain).accessibilityIdentifier("progress.recovery")
+                    NavigationLink { BodyMetricsView() } label: { DestinationRow(title: "قياسات الجسم", subtitle: "اتجاه الوزن والقياسات والمتوسطات", symbol: "scalemass") }.buttonStyle(.plain)
+                    NavigationLink { ProgressPhotosView() } label: { DestinationRow(title: "صور التقدم", subtitle: "قارن رحلتك بصورة", symbol: "photo.on.rectangle.angled") }.buttonStyle(.plain)
+                    NavigationLink { GoalsView() } label: { DestinationRow(title: "أهدافي", subtitle: "خطوة واضحة نحو هدفك التالي", symbol: "target") }.buttonStyle(.plain)
+                    if !finished.isEmpty { SectionHeading(title: "جلساتك الأخيرة", subtitle: "آخر مئة جلسة") }
                     ForEach(finished.prefix(100)) { session in
-                        NavigationLink { SessionHistoryView(session: session) } label: {
-                            HStack { VStack(alignment: .leading) { Text(session.title).foregroundStyle(.primary); Text(ArabicFormat.date(session.start)).font(.caption).foregroundStyle(.secondary) }; Spacer(); Image(systemName: "chevron.left") }
-                                .padding().background(.quaternary.opacity(0.4), in: RoundedRectangle(cornerRadius: 14))
-                        }
+                        NavigationLink { SessionHistoryView(session: session) } label: { DestinationRow(title: session.title, subtitle: ArabicFormat.date(session.start), symbol: "checkmark.circle") }.buttonStyle(.plain)
                     }
-                }.padding()
-            }.navigationTitle("تقدّمك").accessibilityIdentifier("progress.screen")
+                }.padding(WateeraDesign.Space.page)
+            }.wateeraCanvas().navigationTitle("تقدّمك").accessibilityIdentifier("progress.screen")
         }
+    }
+    private var trainingCharts: some View {
+        VStack(alignment: .leading, spacing: 20) {
+            VStack(alignment: .leading, spacing: 16) {
+                SectionHeading(title: "حجم التدريب", subtitle: "الوزن × التكرارات، دون الإحماء")
+                Picker("تجميع الحجم", selection: $volumePeriod) { Text("أسبوعي").tag(0); Text("شهري").tag(1) }.pickerStyle(.segmented).accessibilityIdentifier("progress.volumePeriod")
+                Chart(volumePeriod == 0 ? weekly : monthly) { item in
+                    BarMark(x: .value(volumePeriod == 0 ? "الأسبوع" : "الشهر", item.date), y: .value("الحجم", settings.displayWeight(item.volume)))
+                        .foregroundStyle(settings.color.gradient).cornerRadius(4)
+                        .accessibilityLabel(shortDate(item.date)).accessibilityValue(ArabicFormat.weight(item.volume, settings: settings))
+                }.chartXScale(domain: .automatic())
+                    .chartXAxis { AxisMarks(values: .stride(by: volumePeriod == 0 ? .weekOfYear : .month, count: volumePeriod == 0 ? max(1, range / 42) : max(1, range / 180))) { axis in
+                        AxisValueLabel { if let date = axis.as(Date.self) { Text(shortDate(date)) } }
+                    } }
+                    .chartYAxis { AxisMarks(position: .leading) { value in AxisGridLine(); AxisValueLabel { if let number = value.as(Double.self) { Text(ArabicFormat.number(number, decimals: 0, arabic: settings.useArabicDigits)) } } } }
+                    .frame(height: 210).accessibilityLabel(volumePeriod == 0 ? "حجم التدريب حسب الأسبوع" : "حجم التدريب حسب الشهر")
+                Text("الحجم بوحدة " + settings.weightLabel).font(.caption).foregroundStyle(.secondary)
+            }.wateeraCard()
+            VStack(alignment: .leading, spacing: 16) {
+                SectionHeading(title: "وتيرة التزامك", subtitle: "عدد الجلسات كل أسبوع")
+                Chart(weekly) { item in BarMark(x: .value("الأسبوع", item.date), y: .value("الجلسات", item.workouts)).foregroundStyle(WateeraDesign.blue.gradient).cornerRadius(4) }
+                    .chartXScale(domain: .automatic())
+                    .chartXAxis { AxisMarks { value in AxisValueLabel { if let date = value.as(Date.self) { Text(shortDate(date)) } } } }
+                    .chartYAxis { AxisMarks(position: .leading) { value in AxisGridLine(); AxisValueLabel { if let n = value.as(Int.self) { Text(ArabicFormat.integer(n, arabic: settings.useArabicDigits)) } } } }.frame(height: 150)
+            }.wateeraCard()
+            VStack(alignment: .leading, spacing: 14) {
+                SectionHeading(title: "توازن تدريبك", subtitle: "توزيع الجولات على العضلات")
+                ForEach(distribution) { item in
+                    HStack {
+                        Text(item.name).font(.subheadline).frame(minWidth: 70, alignment: .leading)
+                        ProgressView(value: Double(item.sets), total: Double(distribution.map(\.sets).max() ?? 1))
+                        Text(ArabicFormat.integer(item.sets, arabic: settings.useArabicDigits)).font(.subheadline.bold()).monospacedDigit()
+                    }.accessibilityElement(children: .combine)
+                }
+            }.wateeraCard()
+        }
+    }
+    private var exerciseProgress: some View {
+        VStack(alignment: .leading, spacing: 16) {
+            SectionHeading(title: "تقدم تمرين محدد", subtitle: "نفس التمرين، قصة تطوّر جديدة")
+            Picker("التمرين", selection: $selectedExercise) {
+                Text("اختر تمرينًا").tag(Optional<UUID>.none)
+                ForEach(exercises) { exercise in Text(exercise.name).tag(Optional(exercise.id)) }
+            }.pickerStyle(.menu).frame(minHeight: 44).accessibilityIdentifier("progress.exercise")
+            Picker("الرسم", selection: $chartKind) {
+                Text("أقصى تكرار").tag(0); Text("الوزن").tag(1); Text("الحجم").tag(2); Text("التكرارات").tag(3)
+            }.pickerStyle(.menu).frame(minHeight: 44).accessibilityIdentifier("progress.chartKind")
+            if chartKind == 0 {
+                Picker("معادلة التقدير", selection: $formula) { ForEach(OneRepMaxFormula.allCases, id: \.self) { Text($0.arabicName).tag($0) } }.pickerStyle(.segmented)
+            }
+            if !samples.isEmpty {
+                Text(chartKind == 3 ? "أعلى عدد تكرارات في الجلسة" : LoadConvention(rawValue: selectedConvention)?.arabicName ?? "الوزن الكلي").font(.caption).foregroundStyle(.secondary)
+                Chart(samples) { sample in
+                    AreaMark(x: .value("التاريخ", sample.date), y: .value("القيمة", chartValue(sample))).foregroundStyle(LinearGradient(colors: [settings.color.opacity(0.22), settings.color.opacity(0.01)], startPoint: .top, endPoint: .bottom))
+                    LineMark(x: .value("التاريخ", sample.date), y: .value("القيمة", chartValue(sample))).interpolationMethod(.linear).lineStyle(StrokeStyle(lineWidth: 3)).foregroundStyle(settings.color)
+                    PointMark(x: .value("التاريخ", sample.date), y: .value("القيمة", chartValue(sample))).foregroundStyle(settings.color)
+                        .accessibilityLabel(shortDate(sample.date)).accessibilityValue(ArabicFormat.number(chartValue(sample), arabic: settings.useArabicDigits))
+                }.chartXScale(domain: .automatic()).chartXAxis { AxisMarks { axis in AxisValueLabel { if let d = axis.as(Date.self) { Text(shortDate(d)) } } } }
+                    .chartYAxis { AxisMarks(position: .leading) { axis in AxisGridLine(); AxisValueLabel { if let n = axis.as(Double.self) { Text(ArabicFormat.number(n, decimals: 0, arabic: settings.useArabicDigits)) } } } }
+                    .frame(height: 230)
+                if chartKind == 0 { Text("تقدير أقصى تكرار بمعادلة " + formula.arabicName + ". التقدير أدق مع عشر تكرارات أو أقل.").font(.caption).foregroundStyle(.secondary) }
+                else { Text(chartKind == 3 ? "التكرارات" : "بوحدة " + settings.weightLabel).font(.caption).foregroundStyle(.secondary) }
+            } else {
+                Text(selectedExercise == nil ? "اختر تمرينًا لعرض الأوزان والتكرارات عبر الجلسات." : "لا توجد مجموعات مكتملة لهذا التمرين في الفترة المحددة.").font(.subheadline).foregroundStyle(.secondary).padding(.vertical, 12)
+            }
+        }.wateeraCard().animation(reduceMotion ? nil : .easeInOut(duration: 0.2), value: chartKind)
+    }
+    private func chartValue(_ sample: LiftSample) -> Double {
+        chartKind == 3 ? Double(sample.reps) : settings.displayWeight(chartKind == 0 ? sample.oneRM : chartKind == 1 ? sample.top : sample.volume)
     }
     private func estimate(_ weight: Double, _ reps: Int) -> Double { WorkoutMath.estimatedOneRepMax(weight: weight, reps: reps, formula: formula) }
     private func shortDate(_ date: Date) -> String {
@@ -191,7 +205,7 @@ import Charts
     }
 }
 
-private struct LiftSample: Identifiable { let id: UUID; let date: Date; let oneRM: Double; let top: Double; let volume: Double }
+private struct LiftSample: Identifiable { let id: UUID; let date: Date; let oneRM: Double; let top: Double; let volume: Double; let reps: Int }
 private struct WeekSample: Identifiable { var id: Date { date }; let date: Date; let volume: Double; let workouts: Int }
 private struct MuscleSample: Identifiable { var id: String { name }; let name: String; let sets: Int }
 
@@ -222,7 +236,7 @@ func muscleName(_ raw: String) -> String {
                 Button("تعديل الجلسة أو استبعادها") { showingEdit = true }
                 Button("تقييم الجهد والطاقة") { showingFeedback = true }
             }
-        }.navigationTitle(session.title)
+        }.wateeraCanvas().navigationTitle(session.title)
             .sheet(isPresented: $showingEdit) { SessionEditorView(session: session) }
             .sheet(isPresented: $showingFeedback) { SessionFeedbackView(sessionID: session.id) }
     }
@@ -249,7 +263,7 @@ func muscleName(_ raw: String) -> String {
                         .font(.caption).foregroundStyle(.secondary)
                 }.padding(.vertical, 4)
             }
-        }.navigationTitle("الأرقام الشخصية")
+        }.wateeraCanvas().navigationTitle("الأرقام الشخصية")
     }
     private func recordLabel(_ raw: String) -> String {
         switch raw { case "weight": return "أعلى وزن"; case "reps": return "أعلى تكرارات"; default: return "أقصى تكرار تقديري" }

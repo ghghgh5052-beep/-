@@ -46,7 +46,7 @@ import SwiftData
                         regionButton(region)
                         if region != MuscleRegion.allCases.last { Divider().padding(.horizontal, 16) }
                     }
-                }.background(Color(uiColor: .secondarySystemGroupedBackground), in: RoundedRectangle(cornerRadius: 20))
+                }.background(WateeraDesign.surface, in: RoundedRectangle(cornerRadius: WateeraDesign.Radius.card))
                 VStack(alignment: .leading, spacing: 8) {
                     Text("كيف يُحسب التقدير؟").font(.headline)
                     Text("يزداد الحمل مع عدد الجولات والجهد المرتفع والفشل العضلي، ويقل أثره تدريجيًا خلال ثلاثة أيام. تُحسب العضلات المساعدة بحمل أقل. مجموع الجولات هنا يشمل آخر سبعة أيام، وقد تدخل الجولة نفسها في أكثر من عضلة.")
@@ -61,7 +61,7 @@ import SwiftData
                     }
                 }
             }.padding()
-        }.background(Color(uiColor: .systemGroupedBackground))
+        }.background(WateeraDesign.canvas)
             .navigationTitle("استشفاء العضلات").navigationBarTitleDisplayMode(.inline)
             .toolbar {
                 ToolbarItem(placement: .topBarTrailing) {
@@ -124,7 +124,7 @@ import SwiftData
                 .accessibilityIdentifier("recovery.detail.sets")
             Text("التقدير محدّث في " + time(refreshedAt)).font(.caption).foregroundStyle(.tertiary)
         }.padding(16)
-            .background(Color(uiColor: .secondarySystemGroupedBackground), in: RoundedRectangle(cornerRadius: 20))
+            .background(WateeraDesign.surface, in: RoundedRectangle(cornerRadius: WateeraDesign.Radius.card))
             .overlay(RoundedRectangle(cornerRadius: 20).stroke(RecoveryPalette.color(recovery?.readiness).opacity(0.5), lineWidth: 1))
     }
 

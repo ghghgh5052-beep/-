@@ -1,0 +1,16 @@
+# الميزات المؤجلة — خارج حزمة النسخة المحلية
+
+هذه القائمة منفصلة عن صلاحيات النسخة الحالية، التي لا تتطلب أيًا منها. الاشتراك في خدمة إعادة توقيع التطبيقات لا يمنحنا إمكانية إدارة App IDs أو الحاويات في فريق Apple Developer الذي يصدر شهادتها. عند استئناف التكامل نحتاج فريقًا نستطيع إدارة هذه الإعدادات فيه وملفات provisioning مطابقة، أو تعاون مالك فريق الشهادة.
+
+| الميزة | ما يلزم لاحقًا |
+|---|---|
+| Widgets | هدف WidgetKit Extension ومعرّف صريح مثل `com.personal.Wateera.widgets` وملف provisioning له. لقراءة بيانات التطبيق: إنشاء App Group مثل `group.com.personal.Wateera` وتفعيلها على معرّفي التطبيق والامتداد، ثم تجديد ملفي provisioning. تضمين الامتداد وتوقيعه قبل التطبيق. |
+| Live Activities / Dynamic Island | ActivityKit، وإعداد `NSSupportsLiveActivities`، وواجهة ActivityConfiguration في امتداد WidgetKit موقّع. النشاط المحلي الأساسي لا يطلب entitlement مستقلًا لـ ActivityKit. App Group يلزم عند مشاركة ملفات البيانات، لا لمجرد تحديث Activity محلية. التحديثات عبر خادم/APNs مرحلة مستقلة تتطلب Push وخادمًا؛ غير مطلوبة للمؤقت المحلي. |
+| HealthKit | تفعيل HealthKit على App ID، إضافة `com.apple.developer.healthkit=true` إلى صلاحيات التوقيع، وتجديد provisioning، مع وصف استخدام عربي وموافقة المستخدم لكل أنواع البيانات. صلاحيات السجلات الطبية غير مطلوبة للوزن والخطوات والتمرين. |
+| iCloud / CloudKit | تفعيل iCloud/CloudKit، إنشاء حاوية خاصة مثل `iCloud.com.personal.Wateera` وربطها بالـ App ID. ملفات provisioning تتضمن خدمات CloudKit ومعرّف الحاوية والبيئة الصحيحة؛ إعداد ونشر مخطط Development إلى Production قبل توزيع توقيع إنتاجي. لتلقي تغييرات الخلفية: Push Notifications وRemote Notifications background mode وإعداد APNs مطابق. يحتاج التكامل اختبارات تعارض وفقد اتصال على أجهزة موقّعة فعليًا. |
+| Siri / Shortcuts | يمكن تقديم App Intents الحديثة الأساسية داخل هدف التطبيق دون هدف امتداد إضافي أو entitlement SiriKit، حسب نوع الاستخدام. إن استخدمنا SiriKit التقليدي نفعّل Siri capability وصلاحيتها `com.apple.developer.siri` ونجدّد provisioning، ونضيف امتداد Intents إذا احتاج التصميم. مؤجلة بالكامل بطلبك، حتى المسارات التي لا تتطلب capability. |
+| Apple Watch | هدف watchOS Companion، معرّفات صريحة منفصلة وملفات provisioning مطابقة، وربط `WKCompanionAppBundleIdentifier` بالتطبيق. WatchConnectivity لا يتطلب App Group؛ تُضاف فقط الصلاحيات التي تستخدمها الساعة فعلًا مثل HealthKit عند اختيارها. تصميم واختبارات watchOS وأجهزة موقّعة مرحلة مستقلة. |
+
+كل المعرّفات أمثلة مشتقة من معرّف التطبيق الحالي؛ لا تنشئها الآن. يجب مطابقة المعرّفات النهائية مع الفريق وملفات توقيع كل هدف قبل تضمين أي امتداد.
+
+مصادر Apple: [WidgetKit](https://developer.apple.com/documentation/widgetkit/creating-a-widget-extension)، [App Groups](https://developer.apple.com/documentation/xcode/configuring-app-groups)، [Live Activities](https://developer.apple.com/documentation/activitykit/displaying-live-data-with-live-activities)، [HealthKit](https://developer.apple.com/documentation/healthkit/setting-up-healthkit)، [CloudKit](https://developer.apple.com/documentation/cloudkit/enabling-cloudkit-in-your-app)، [App Intents](https://developer.apple.com/documentation/appintents)، [Siri entitlement](https://developer.apple.com/documentation/bundleresources/entitlements/com.apple.developer.siri)، [watchOS](https://developer.apple.com/documentation/watchos-apps).

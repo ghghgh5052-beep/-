@@ -1,4 +1,3 @@
-import AppIntents
 import XCTest
 
 final class MainFlowTests: XCTestCase {
@@ -179,7 +178,7 @@ final class MainFlowTests: XCTestCase {
         XCTAssertFalse(app.buttons["exercise.guide.done"].exists, "Permission handling must keep the workout visible")
         capture(app, name: "Arabic completed set and rest timer")
         let finish = app.buttons["workout.finish"]
-        for _ in 0..<5 where !finish.isHittable { app.swipeUp() }
+        for _ in 0..<12 where !finish.isHittable { app.swipeUp() }
         XCTAssertTrue(finish.exists); finish.tap()
         let confirm = app.buttons["إنهاء وحفظ"]
         if confirm.waitForExistence(timeout: 2) { confirm.tap() }
@@ -197,16 +196,17 @@ final class MainFlowTests: XCTestCase {
         capture(app, name: "Arabic workout progress")
         app.tabBars.buttons["التمرين"].tap()
         let history = app.buttons.matching(NSPredicate(format: "identifier BEGINSWITH %@", "workout.history.")).firstMatch
-        for _ in 0..<5 where !history.isHittable { app.swipeUp() }
+        for _ in 0..<14 where !history.isHittable { app.swipeUp() }
         XCTAssertTrue(history.waitForExistence(timeout: 5)); history.tap()
         let delete = app.buttons["workout.summary.delete"]
-        for _ in 0..<8 where !delete.isHittable { app.swipeUp() }
+        for _ in 0..<14 where !delete.isHittable { app.swipeUp() }
         XCTAssertTrue(delete.isHittable); delete.tap()
         capture(app, name: "Arabic completed session deletion confirmation")
         app.alerts.buttons["تراجع"].tap()
         XCTAssertTrue(app.buttons["workout.summary.done"].exists)
         delete.tap()
         app.alerts.buttons["workout.delete.confirm"].tap()
+        for _ in 0..<12 where !app.staticTexts["تاريخك يبدأ من هنا"].isHittable { app.swipeUp() }
         XCTAssertTrue(app.staticTexts["تاريخك يبدأ من هنا"].waitForExistence(timeout: 10))
         XCTAssertFalse(history.exists)
         app.tabBars.buttons["تقدّمي"].tap()

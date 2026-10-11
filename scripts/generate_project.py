@@ -39,12 +39,12 @@ def target(name, product_type, extension, sources, resources, settings):
     return obj('target:'+name, 'PBXNativeTarget',buildConfigurationList=configurations(name,settings),buildPhases=phases,buildRules=[],dependencies=[],name=name,productName=name,productReference=product,productType=product_type)
 
 shared = 'Fitness/Shared/WorkoutActivityAttributes.swift'
-app_sources = sorted(str(p.relative_to(ROOT)).replace('\\','/') for p in (ROOT/'Fitness').rglob('*.swift'))
+deferred_sources = set(json.loads((ROOT/'Config/DeferredSources.json').read_text()))
+app_sources = sorted(str(p.relative_to(ROOT)).replace('\\','/') for p in (ROOT/'Fitness').rglob('*.swift') if str(p.relative_to(ROOT)).replace('\\','/') not in deferred_sources)
 widget_sources = sorted(str(p.relative_to(ROOT)).replace('\\','/') for p in (ROOT/'FitnessWidgets').glob('*.swift')) + [shared]
 common=dict(PRODUCT_NAME='$(TARGET_NAME)', SDKROOT='iphoneos', SUPPORTED_PLATFORMS='iphoneos iphonesimulator', SUPPORTS_MACCATALYST='NO', SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD='NO', GENERATE_INFOPLIST_FILE='NO', LD_RUNPATH_SEARCH_PATHS='$(inherited) @executable_path/Frameworks')
 app=target('Fitness','com.apple.product-type.application','wrapper.application',app_sources,['Fitness/Resources/Assets.xcassets','Fitness/Resources/PrivacyInfo.xcprivacy'],dict(common,PRODUCT_BUNDLE_IDENTIFIER='$(BUNDLE_IDENTIFIER)',PRODUCT_MODULE_NAME='Fitness',INFOPLIST_FILE='Fitness/Resources/Info.plist',CODE_SIGN_ENTITLEMENTS='Config/Fitness.entitlements',ASSETCATALOG_COMPILER_APPICON_NAME='AppIcon',ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME='AccentColor',SKIP_INSTALL='NO'))
-widgets=target('FitnessWidgets','com.apple.product-type.app-extension','wrapper.app-extension',widget_sources,['Fitness/Resources/PrivacyInfo.xcprivacy'],dict(common,PRODUCT_BUNDLE_IDENTIFIER='$(WIDGET_BUNDLE_IDENTIFIER)',PRODUCT_MODULE_NAME='FitnessWidgets',INFOPLIST_FILE='FitnessWidgets/Info.plist',CODE_SIGN_ENTITLEMENTS='Config/FitnessWidgets.entitlements',APPLICATION_EXTENSION_API_ONLY='YES',SKIP_INSTALL='YES',LD_RUNPATH_SEARCH_PATHS='$(inherited) @executable_path/Frameworks @executable_path/../../Frameworks'))
-targets=[app,widgets]
+targets=[app]
 for name in ['FitnessTests','FitnessUITests']:
     files=sorted(str(p.relative_to(ROOT)).replace('\\','/') for p in (ROOT/name).glob('*.swift'))
     values=dict(common,PRODUCT_BUNDLE_IDENTIFIER='$(BUNDLE_IDENTIFIER).'+('tests' if name=='FitnessTests' else 'uitests'),GENERATE_INFOPLIST_FILE='YES',CODE_SIGN_ENTITLEMENTS='Config/'+name+'.entitlements',SKIP_INSTALL='YES')
@@ -53,15 +53,12 @@ for name in ['FitnessTests','FitnessUITests']:
     test=target(name,'com.apple.product-type.bundle.unit-test' if name=='FitnessTests' else 'com.apple.product-type.bundle.ui-testing','wrapper.cfbundle',files,[],values)
     targets.append(test)
 project_id=uid('project')
-for name,source,destination in [('EmbedWidgets',app,widgets),('TestHost',targets[2],app),('UITestHost',targets[3],app)]:
+for name,source,destination in [('TestHost',targets[1],app),('UITestHost',targets[2],app)]:
     proxy=obj('proxy:'+name,'PBXContainerItemProxy',containerPortal=project_id,proxyType=1,remoteGlobalIDString=destination,remoteInfo=objects[destination]['name'])
     dependency=obj('dependency:'+name,'PBXTargetDependency',target=destination,targetProxy=proxy)
     objects[source]['dependencies'].append(dependency)
-embed_build=obj('embed:widgets','PBXBuildFile',fileRef=objects[widgets]['productReference'],settings={'ATTRIBUTES':['RemoveHeadersOnCopy']})
-embed=obj('phase:embed','PBXCopyFilesBuildPhase',buildActionMask=2147483647,dstPath='',dstSubfolderSpec=13,files=[embed_build],name='Embed App Extensions',runOnlyForDeploymentPostprocessing=0)
-objects[app]['buildPhases'].append(embed)
 products=obj('group:products','PBXGroup',children=[objects[t]['productReference'] for t in targets],name='Products',sourceTree='<group>')
-files=sorted(set(app_sources+widget_sources+[str(p.relative_to(ROOT)).replace('\\','/') for folder in ['FitnessTests','FitnessUITests','Config'] for p in (ROOT/folder).glob('*') if p.is_file()]+['Fitness/Resources/Info.plist','FitnessWidgets/Info.plist','Fitness/Resources/Assets.xcassets','Fitness/Resources/PrivacyInfo.xcprivacy']))
+files=sorted(set(app_sources+widget_sources+list(deferred_sources)+[str(p.relative_to(ROOT)).replace('\\','/') for folder in ['FitnessTests','FitnessUITests','Config'] for p in (ROOT/folder).glob('*') if p.is_file()]+['Fitness/Resources/Info.plist','FitnessWidgets/Info.plist','Fitness/Resources/Assets.xcassets','Fitness/Resources/PrivacyInfo.xcprivacy']))
 main=obj('group:main','PBXGroup',children=[ref(p) for p in files]+[products],sourceTree='<group>')
 objects[project_id]=dict(isa='PBXProject',attributes={'BuildIndependentTargetsInParallel':'YES','LastUpgradeCheck':'1600','TargetAttributes':{t:{'CreatedOnToolsVersion':'16.0'} for t in targets}},buildConfigurationList=configurations('project',{'ALWAYS_SEARCH_USER_PATHS':'NO','CLANG_WARN_DOCUMENTATION_COMMENTS':'YES','CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER':'YES','GCC_WARN_64_TO_32_BIT_CONVERSION':'YES','GCC_WARN_UNDECLARED_SELECTOR':'YES','GCC_WARN_UNUSED_FUNCTION':'YES','GCC_WARN_UNUSED_VARIABLE':'YES'}),compatibilityVersion='Xcode 14.0',developmentRegion='ar',hasScannedForEncodings=0,knownRegions=['ar','Base'],mainGroup=main,productRefGroup=products,projectDirPath='',projectRoot='',targets=targets)
 
@@ -88,4 +85,4 @@ scheme=f'''<?xml version="1.0" encoding="UTF-8"?>
 <AnalyzeAction buildConfiguration="Debug"/><ArchiveAction buildConfiguration="Release" revealArchiveInOrganizer="YES"/>
 </Scheme>'''
 (schemes/'Wateera.xcscheme').write_text(scheme,encoding='utf-8')
-print(f'Generated project: {len(app_sources)} app sources, {len(widget_sources)} extension sources, {len(targets)} targets.')
+print(f'Generated project: {len(app_sources)} app sources, no embedded extensions, {len(targets)} targets.')

@@ -16,9 +16,7 @@ import Observation
     func load() {
         do {
             let testing = Self.isTesting
-            let requested = !testing && (Bundle.main.object(forInfoDictionaryKey: "CloudSyncEnabled") as? Bool ?? true)
-            let result = try PersistenceController.makeContainer(useCloudKit: requested, inMemory: testing,
-                cloudKitContainerIdentifier: Bundle.main.object(forInfoDictionaryKey: "CloudKitContainerIdentifier") as? String)
+            let result = try PersistenceController.makeContainer(useCloudKit: false, inMemory: testing)
             container = result.container
             warning = result.warning
             cloudEnabled = result.syncMode == .cloudKit
@@ -28,10 +26,10 @@ import Observation
 }
 
 @main @MainActor struct FitnessApp: App {
+    @UIApplicationDelegateAdaptor(WateeraAppDelegate.self) private var appDelegate
     @State private var runtime = AppRuntime()
     @State private var settings: AppSettings
     @State private var coordinator: WorkoutCoordinator
-    @State private var sync = SyncStatusService()
     @State private var lock = AppLockService()
     init() {
         let preferences = AppSettings()
@@ -42,31 +40,40 @@ import Observation
         WindowGroup {
             Group {
                 if let container = runtime.container {
-                    RootView(cloudEnabled: runtime.cloudEnabled)
+                    RootView()
                         .modelContainer(container)
                 } else {
-                    VStack(spacing: 20) {
-                        Image(systemName: "dumbbell.fill").font(.system(size: 54)).foregroundStyle(settings.color)
-                        if let error = runtime.errorMessage { Text(error).multilineTextAlignment(.center); Button("إعادة المحاولة") { runtime.load() } }
-                        else { SwiftUI.ProgressView("جارٍ تجهيز وتيرة…") }
-                    }.padding(32).task { if runtime.container == nil && runtime.errorMessage == nil { runtime.load() } }
+                    Group {
+                        if let error = runtime.errorMessage {
+                            VStack(spacing: 20) {
+                                EmptyState(title: "بياناتك محفوظة", message: error, symbol: "externaldrive.badge.exclamationmark")
+                                Button("إعادة المحاولة") { runtime.load() }.buttonStyle(WateeraButtonStyle())
+                            }.padding()
+                        } else { DashboardSkeleton() }
+                    }.task { if runtime.container == nil && runtime.errorMessage == nil { runtime.load() } }
                 }
-            }.environment(settings).environment(coordinator).environment(sync).environment(lock)
+            }.environment(settings).environment(coordinator).environment(lock)
                 .environment(\.locale, Locale(identifier: settings.useArabicDigits ? "ar_SA" : "ar_SA@numbers=latn"))
                 .environment(\.calendar, Calendar(identifier: .gregorian))
                 .environment(\.layoutDirection, .rightToLeft)
                 .tint(settings.color).preferredColorScheme(settings.colorScheme)
+                .foregroundStyle(WateeraDesign.ink)
+                .background(WateeraDesign.canvas)
+                .transformEnvironment(\.dynamicTypeSize) { value in
+                    if AppRuntime.isTesting && ProcessInfo.processInfo.environment["FITNESS_TEST_LARGE_TYPE"] == "1" { value = .accessibility5 }
+                }
+                .transformEnvironment(\.accessibilityReduceMotion) { value in
+                    if AppRuntime.isTesting && ProcessInfo.processInfo.environment["FITNESS_TEST_REDUCE_MOTION"] == "1" { value = true }
+                }
         }
     }
 }
 
 @MainActor struct RootView: View {
-    let cloudEnabled: Bool
     @Environment(\.modelContext) private var context
     @Environment(\.scenePhase) private var scenePhase
     @Environment(AppSettings.self) private var settings
     @Environment(WorkoutCoordinator.self) private var workout
-    @Environment(SyncStatusService.self) private var sync
     @Environment(AppLockService.self) private var lock
     @AppStorage("onboardingComplete") private var onboardingComplete = false
     @State private var tab = 0
@@ -81,7 +88,7 @@ import Observation
                 LibraryView().tabItem { Label("المكتبة", systemImage: "square.grid.2x2") }.tag(2)
                 ProgressDashboardView().tabItem { Label("تقدّمي", systemImage: "chart.xyaxis.line") }.tag(3)
                 SettingsView().tabItem { Label("الإعدادات", systemImage: "gearshape") }.tag(4)
-            }.disabled(protected).accessibilityHidden(protected)
+            }.background(WateeraDesign.canvas).disabled(protected).accessibilityHidden(protected)
                 .sensoryFeedback(.selection, trigger: tab)
                 .onChange(of: workout.activeSessionID) { _, id in if id != nil { tab = 0 } }
             if protected {
@@ -105,16 +112,6 @@ import Observation
                 try PRService.rebuild(context: context)
                 settings.bind(context: context)
                 workout.recover(context: context)
-                sync.configure(isCloudEnabled: cloudEnabled)
-                sync.onImportCompleted = {
-                    do {
-                        try PersistenceController.reconcile(context: context)
-                        settings.reload(); workout.recover(context: context)
-                        _ = WidgetSnapshotService.refresh(context: context, settings: settings)
-                        Task { if let reminders = try? context.fetch(FetchDescriptor<WorkoutReminder>()) { await NotificationService.shared.reschedule(reminders: reminders, requestPermission: false) } }
-                    }
-                    catch { startupError = "تعذر دمج بعض بيانات المزامنة. يمكنك إعادة فتح التطبيق للمحاولة." }
-                }
                 if AppRuntime.isTesting {
                     onboardingComplete = true; settings.lockEnabled = false; settings.photoLockEnabled = false
                     if let theme = ProcessInfo.processInfo.environment["FITNESS_TEST_THEME"] { settings.theme = theme }
@@ -146,6 +143,8 @@ import Observation
             UserDefaults.standard.removeObject(forKey: "pendingWorkoutAction")
             switch action {
             case "report": tab = 3; showingWeeklyReport = true
+            case "progress": tab = 3
+            case "free": tab = 0; workout.start(day: nil, context: context)
             case "skipRest": tab = 0; workout.cancelRest()
             case "pause": tab = 0; workout.pause(context: context)
             default: break
@@ -164,24 +163,5 @@ import Observation
             if let rest = allDays.first(where: { $0.planID == plan?.id && $0.weekday == weekday && $0.week == week }), rest.isRest { tab = 0; startupError = "اليوم يوم راحة في خطتك. يمكنك بدء تمرين حر."; return }
             workout.start(day: day, context: context); tab = 0
         } catch { startupError = "تعذر بدء تمرين اليوم." }
-    }
-}
-
-@MainActor struct OnboardingView: View {
-    let finish: () -> Void
-    @Environment(AppSettings.self) private var settings
-    var body: some View {
-        VStack(alignment: .leading, spacing: 28) {
-            Spacer()
-            Image(systemName: "dumbbell.fill").font(.system(size: 64)).foregroundStyle(settings.color)
-            Text("مساحتك للتمرّن\nوالتقدّم").font(.largeTitle.bold())
-            Text("وتيرة يساعدك على التخطيط وتسجيل مجموعاتك ومتابعة ما يتحسن، خطوة بخطوة.").font(.title3).foregroundStyle(.secondary)
-            Label("ابدأ بقالب وعدّله على راحتك", systemImage: "calendar")
-            Label("كل مجموعة تُحفظ أثناء تمرينك", systemImage: "checkmark.shield")
-            Label("بياناتك محفوظة على جهازك", systemImage: "lock")
-            Spacer()
-            Button("لنبدأ") { finish() }.font(.headline).frame(maxWidth: .infinity).padding().background(settings.color, in: RoundedRectangle(cornerRadius: 18)).foregroundStyle(.white)
-                .accessibilityIdentifier("onboarding.finish")
-        }.padding(28).environment(\.layoutDirection, .rightToLeft).interactiveDismissDisabled()
     }
 }

@@ -1,0 +1,8 @@
+[
+  "Fitness/App/WorkoutIntents.swift",
+  "Fitness/Services/HealthService.swift",
+  "Fitness/Services/LiveActivityService.swift",
+  "Fitness/Services/SyncStatusService.swift",
+  "Fitness/Services/WidgetSnapshotService.swift",
+  "Fitness/Shared/WorkoutActivityAttributes.swift"
+]

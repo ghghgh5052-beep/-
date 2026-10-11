@@ -21,7 +21,7 @@ import UniformTypeIdentifiers
             if busy { SwiftUI.ProgressView("جارٍ معالجة البيانات…") }
             if let status { Section { Label(status, systemImage: "checkmark.circle").foregroundStyle(settings.color) } }
             Section { Text("قد تحتوي النسخة على صور وبيانات شخصية. اختر المكان الذي تريد حفظها فيه. لا تُرسل البيانات إلى أي خادم داخل التطبيق.").font(.caption).foregroundStyle(.secondary) }
-        }.navigationTitle("بياناتك ونسخك الاحتياطية")
+        }.wateeraCanvas().navigationTitle("بياناتك ونسخك الاحتياطية")
             .fileExporter(isPresented: $exporting, document: exportFile, contentType: exportType, defaultFilename: exportFilename) { result in
                 switch result { case .success: status = "تم حفظ الملف."; case .failure: errorMessage = "تعذر حفظ الملف. اختر موقعًا آخر وحاول مرة أخرى." }
             }

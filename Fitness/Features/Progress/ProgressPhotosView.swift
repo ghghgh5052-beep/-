@@ -39,17 +39,17 @@ import ImageIO
                         }
                     }.padding()
                     if loading { SwiftUI.ProgressView("جارٍ حفظ الصورة…") }
-                    if selected.count == 2 { Button("مقارنة الصورتين") { showComparison = true }.buttonStyle(.borderedProminent).padding() }
+                    if selected.count == 2 { Button("مقارنة الصورتين") { showComparison = true }.buttonStyle(WateeraButtonStyle(color: .accentColor)).padding() }
                     if !photos.isEmpty { Text("اختر صورتين للمقارنة. اضغط مطولًا لحذف صورة.").font(.caption).foregroundStyle(.secondary).padding() }
                 }
             } else {
                 VStack(spacing: 20) {
                     Image(systemName: "lock.shield").font(.system(size: 52)).foregroundStyle(settings.color)
                     Text("صورك خاصة").font(.title2.bold())
-                    Button("فتح الصور") { Task { await unlock() } }.buttonStyle(.borderedProminent)
+                    Button("فتح الصور") { Task { await unlock() } }.buttonStyle(WateeraButtonStyle(color: .accentColor))
                 }
             }
-        }.navigationTitle("صور التقدم")
+        }.wateeraCanvas().navigationTitle("صور التقدم")
             .toolbar { if canView { PhotosPicker(selection: $pickerItem, matching: .images) { Label("إضافة صورة", systemImage: "plus") } } }
             .task { if settings.photoLockEnabled { await unlock() } }
             .onChange(of: scenePhase) { _, phase in if phase != .active { isUnlocked = false; showComparison = false; selected = [] } }
@@ -65,7 +65,7 @@ import ImageIO
                                 }.frame(maxWidth: .infinity)
                             }
                         }.padding()
-                    }.navigationTitle("مقارنة التقدم").toolbar { Button("تم") { showComparison = false } }
+                    }.wateeraCanvas().navigationTitle("مقارنة التقدم").toolbar { Button("تم") { showComparison = false } }
                 }.environment(\.layoutDirection, .rightToLeft)
             }
             .confirmationDialog("حذف الصورة نهائيًا؟", isPresented: Binding(get: { deletePhoto != nil }, set: { if !$0 { deletePhoto = nil } })) {

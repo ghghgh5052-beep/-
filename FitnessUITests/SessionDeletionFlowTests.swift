@@ -34,6 +34,7 @@ final class SessionDeletionFlowTests: XCTestCase {
         app.alerts.buttons["متابعة التمرين"].tap()
         XCTAssertTrue(app.navigationBars["جلسة التمرين"].exists)
         discard.tap(); app.alerts.buttons["workout.discard.confirm"].tap()
+        reveal(app.staticTexts["تاريخك يبدأ من هنا"], in: app)
         XCTAssertTrue(app.staticTexts["تاريخك يبدأ من هنا"].waitForExistence(timeout: 10))
         XCTAssertFalse(app.buttons["workout.summary.done"].exists)
         XCTAssertFalse(app.buttons.matching(NSPredicate(format: "identifier BEGINSWITH %@", "workout.history.")).firstMatch.exists)
@@ -74,6 +75,7 @@ final class SessionDeletionFlowTests: XCTestCase {
                                                            "حذف جلسة", "تمرين حر")).firstMatch
         XCTAssertTrue(deleteAgain.waitForExistence(timeout: 5)); deleteAgain.tap()
         app.alerts.buttons["workout.delete.confirm"].tap()
+        reveal(app.staticTexts["تاريخك يبدأ من هنا"], in: app)
         XCTAssertTrue(app.staticTexts["تاريخك يبدأ من هنا"].waitForExistence(timeout: 10))
         XCTAssertFalse(history.exists)
         capture(app, name: "Arabic empty history after session deletion")

@@ -81,19 +81,19 @@ import SwiftData
                                 showArchived = false
                                 save()
                             } label: { Label("استعادة هذه الخطة", systemImage: "arrow.uturn.backward") }
-                                .buttonStyle(.borderedProminent).frame(maxWidth: .infinity)
+                                .buttonStyle(WateeraButtonStyle(color: .accentColor)).frame(maxWidth: .infinity)
                         }
                     } else {
                         EmptyState(title: showArchived ? "لا توجد خطط مؤرشفة" : "ابدأ بخطة تناسبك", message: "اختر قالبًا جاهزًا ثم عدّل أيامك وتمارينك، أو أنشئ خطة خاصة.", symbol: "calendar.badge.plus")
                             .frame(minHeight: 280)
                         Button { showingTemplates = true } label: { Label("إنشاء خطة", systemImage: "plus") }
-                            .buttonStyle(.borderedProminent).frame(maxWidth: .infinity)
+                            .buttonStyle(WateeraButtonStyle(color: .accentColor)).frame(maxWidth: .infinity)
                             .accessibilityIdentifier("plans.add.empty")
                     }
                 }
                 .padding()
             }
-            .background(Color(uiColor: .systemGroupedBackground))
+            .background(WateeraDesign.canvas)
             .navigationTitle("خططي")
             .toolbar {
                 ToolbarItem(placement: .topBarLeading) {
@@ -170,10 +170,14 @@ import SwiftData
             } label: { Image(systemName: "ellipsis.circle").font(.title2).frame(minWidth: 44, minHeight: 44) }
             .accessibilityLabel("خيارات الخطة")
         }
-        .overlay(alignment: .bottomLeading) {
-            if plan.isActive { Text("الخطة الحالية").font(.caption).foregroundStyle(.secondary).offset(y: 20) }
-        }
+        .padding(20)
         .padding(.bottom, plan.isActive ? 20 : 0)
+        .background(WateeraDesign.surface, in: RoundedRectangle(cornerRadius: WateeraDesign.Radius.card))
+        .overlay(alignment: .bottomLeading) {
+            if plan.isActive {
+                Label("الخطة الحالية", systemImage: "checkmark.circle.fill").font(.caption.bold()).foregroundStyle(settings.color).padding(.horizontal, 20).padding(.bottom, 14)
+            }
+        }
     }
 
     private func scheduleCard(_ day: PlanDay, weekday: Int) -> some View {
@@ -201,8 +205,8 @@ import SwiftData
                         .font(.caption).foregroundStyle(.secondary)
                 }
                 if !showArchived {
-                    Button { coordinator.start(day: day, context: context) } label: { Label("ابدأ التمرين", systemImage: "play.fill").frame(maxWidth: .infinity, minHeight: 28) }
-                        .buttonStyle(.borderedProminent)
+                    Button { coordinator.start(day: day, context: context) } label: { Label("ابدأ التمرين", systemImage: "play.fill").frame(maxWidth: .infinity, minHeight: 44) }
+                        .buttonStyle(WateeraButtonStyle(color: .accentColor))
                         .disabled(coordinator.activeSessionID != nil)
                         .accessibilityIdentifier("startPlannedWorkoutButton")
                     if coordinator.activeSessionID != nil { Text("لديك تمرين جارٍ. تابعه من تبويب التمرين.").font(.caption).foregroundStyle(.secondary) }
@@ -210,7 +214,7 @@ import SwiftData
             }
         }
         .padding(16)
-        .background(Color(uiColor: .secondarySystemGroupedBackground), in: RoundedRectangle(cornerRadius: 20))
+        .background(WateeraDesign.surface, in: RoundedRectangle(cornerRadius: WateeraDesign.Radius.card))
     }
 
     private func calendar(_ plan: WorkoutPlan) -> some View {
@@ -227,11 +231,11 @@ import SwiftData
         formatter.dateFormat = "MMMM yyyy"
         return VStack(spacing: 16) {
             HStack {
-                Button { monthOffset -= 1 } label: { Image(systemName: "chevron.forward").frame(minWidth: 44, minHeight: 44) }.accessibilityLabel("الشهر السابق")
+                Button { monthOffset -= 1 } label: { Image(systemName: "chevron.backward").frame(minWidth: 44, minHeight: 44) }.accessibilityLabel("الشهر السابق")
                 Spacer()
                 Text(formatter.string(from: first)).font(.headline)
                 Spacer()
-                Button { monthOffset += 1 } label: { Image(systemName: "chevron.backward").frame(minWidth: 44, minHeight: 44) }.accessibilityLabel("الشهر التالي")
+                Button { monthOffset += 1 } label: { Image(systemName: "chevron.forward").frame(minWidth: 44, minHeight: 44) }.accessibilityLabel("الشهر التالي")
             }
             LazyVGrid(columns: Array(repeating: GridItem(.flexible(), spacing: 2), count: 7), spacing: 8) {
                 ForEach(weekdays, id: \.self) { Text(PlanWeekdays.shortName($0)).font(.caption2.bold()).foregroundStyle(.secondary) }
@@ -248,7 +252,7 @@ import SwiftData
                                 Circle().fill(scheduled?.isRest == false ? Color.accentColor : Color.secondary.opacity(0.25)).frame(width: 5, height: 5)
                             }
                             .frame(maxWidth: .infinity, minHeight: 46)
-                            .foregroundStyle(selected ? Color.white : Color.primary)
+                            .foregroundStyle(selected ? WateeraDesign.surface : WateeraDesign.ink)
                             .background(selected ? Color.accentColor : Color.clear, in: RoundedRectangle(cornerRadius: 10))
                             .overlay(RoundedRectangle(cornerRadius: 10).stroke(calendar.isDateInToday(date) && !selected ? Color.accentColor : Color.clear))
                         }.buttonStyle(.plain)
@@ -259,7 +263,7 @@ import SwiftData
             }
         }
         .padding(14)
-        .background(Color(uiColor: .secondarySystemGroupedBackground), in: RoundedRectangle(cornerRadius: 20))
+        .background(WateeraDesign.surface, in: RoundedRectangle(cornerRadius: WateeraDesign.Radius.card))
     }
 
     private func day(plan: WorkoutPlan, weekday: Int, week: Int) -> PlanDay? {
@@ -418,6 +422,7 @@ private struct PlanTemplate: Identifiable {
                 }
                 .accessibilityIdentifier("planTemplate_\(template.id)")
             }
+            .wateeraCanvas()
             .navigationTitle("اختر نقطة البداية")
             .toolbar { ToolbarItem(placement: .cancellationAction) { Button("إلغاء") { dismiss() } } }
         }
@@ -470,6 +475,7 @@ private struct PlanTemplate: Identifiable {
                     Text("عند إضافة أسابيع، تُنسخ أيام الأسبوع الأول لتبدأ منها ثم تعدّلها. أسبوع التخفيف إشارة في جدولك؛ تحدد الأوزان بنفسك.")
                 }
             }
+            .wateeraCanvas()
             .navigationTitle(isNew ? "خطة جديدة" : "تعديل الخطة").navigationBarTitleDisplayMode(.inline)
             .toolbar {
                 ToolbarItem(placement: .cancellationAction) {

@@ -59,6 +59,7 @@ import SwiftData
                     Section { Text("هذه الجلسة لها نسخة في تطبيق الصحة. تعديلها أو استبعادها هنا لا يعدّل نسخة الصحة؛ راجعها هناك إن لزم.").font(.footnote).foregroundStyle(.secondary) }
                 }
             }
+            .wateeraCanvas()
             .navigationTitle("تعديل الجلسة").navigationBarTitleDisplayMode(.inline)
             .toolbar {
                 ToolbarItem(placement: .cancellationAction) { Button("تراجع") { dismiss() } }
@@ -134,7 +135,7 @@ import SwiftData
                 } header: { Text("عضلات تشعر فيها بتعب") } footer: {
                     Text("تساعد ملاحظاتك في تخفيف الاقتراحات. تُراعى العضلات المحددة لمدة يومين بعد الجلسة؛ لا تمثل هذه الملاحظات قياسًا طبيًا للتعافي.")
                 }
-            }.navigationTitle("تقييم الجلسة").navigationBarTitleDisplayMode(.inline)
+            }.wateeraCanvas().navigationTitle("تقييم الجلسة").navigationBarTitleDisplayMode(.inline)
             .toolbar {
                 ToolbarItem(placement: .cancellationAction) { Button("تراجع") { dismiss() } }
                 ToolbarItem(placement: .confirmationAction) { Button("حفظ", action: save).accessibilityIdentifier("feedback.save") }

@@ -58,7 +58,7 @@ import SwiftData
                         }
                     } header: { Text("تدرّج منظّم") }
                 }
-            }.navigationTitle("تفضيلات التمرين").navigationBarTitleDisplayMode(.inline)
+            }.wateeraCanvas().navigationTitle("تفضيلات التمرين").navigationBarTitleDisplayMode(.inline)
             .toolbar {
                 ToolbarItem(placement: .cancellationAction) { Button("تراجع") { dismiss() } }
                 ToolbarItem(placement: .confirmationAction) { Button("حفظ", action: save).disabled(!loaded).accessibilityIdentifier("training.options.save") }
@@ -151,7 +151,7 @@ import SwiftData
                         }.frame(minHeight: 64)
                     }.accessibilityIdentifier("alternatives.\(candidate.id.uuidString)")
                 }
-            }.navigationTitle("استبدال التمرين").navigationBarTitleDisplayMode(.inline)
+            }.wateeraCanvas().navigationTitle("استبدال التمرين").navigationBarTitleDisplayMode(.inline)
             .toolbar { ToolbarItem(placement: .cancellationAction) { Button("إغلاق") { dismiss() } } }
             .task {
                 do {
