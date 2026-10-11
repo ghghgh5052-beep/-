@@ -160,13 +160,14 @@ enum BackupError: Error, LocalizedError {
               backup.goals.allSatisfy({ valid($0.targetValue) && $0.targetValue > 0 }),
               backup.preferences.allSatisfy({ ["kg","lb"].contains($0.weightUnit) && ["cm","in"].contains($0.lengthUnit) && (1...7).contains($0.weekStart) && (0...3600).contains($0.defaultRestSeconds) }),
               backup.reminders.allSatisfy({ (0...23).contains($0.hour) && (0...59).contains($0.minute) }) else { throw BackupError.invalidValues }
+        let setIDs = Set(backup.sets.map(\.id))
         let exercises = Set(backup.exercises.map(\.id)), plans = Set(backup.plans.map(\.id)), days = Set(backup.days.map(\.id)), sessions = Set(backup.sessions.map(\.id)), movements = Set(backup.sessionExercises.map(\.id))
         guard backup.days.allSatisfy({ plans.contains($0.planID) }),
               backup.planExercises.allSatisfy({ days.contains($0.dayID) && exercises.contains($0.exerciseID) }),
               backup.sessionExercises.allSatisfy({ sessions.contains($0.sessionID) && exercises.contains($0.exerciseID) }),
               backup.sets.allSatisfy({ movements.contains($0.sessionExerciseID) }),
               backup.feedback.allSatisfy({ sessions.contains($0.sessionID) }),
-              backup.measurements.allSatisfy({ Set(backup.sets.map(\.id)).contains($0.setID) }),
+              backup.measurements.allSatisfy({ setIDs.contains($0.setID) }),
               backup.exercisePreferences.allSatisfy({ exercises.contains($0.exerciseID) }),
               backup.progressionPrograms.allSatisfy({ exercises.contains($0.exerciseID) }) else { throw BackupError.missingReferences }
     }

@@ -425,6 +425,10 @@ import UIKit
         }
         .confirmationDialog("إزالة التمرين من هذه الجلسة؟", isPresented: $confirmingRemove, titleVisibility: .visible) {
             Button("إزالة التمرين وجولاته", role: .destructive) {
+                let ids = Set(sets.map(\.id))
+                do {
+                    for value in try context.fetch(FetchDescriptor<SetMeasurement>()) where ids.contains(value.setID) { context.delete(value) }
+                } catch { errorMessage = "تعذر قراءة تفاصيل الجولات؛ لم يُحذف التمرين."; return }
                 for set in sets { context.delete(set) }
                 context.delete(exercise)
                 do { try context.save(); coordinator.refreshActivity() } catch { context.rollback(); errorMessage = "تعذّر إزالة التمرين. حاول مرة أخرى." }
@@ -439,6 +443,14 @@ import UIKit
         let last = sets.last ?? previousSets.last
         let new = LoggedSet(sessionExerciseID: exercise.id, order: (sets.map(\.order).max() ?? -1) + 1, weightKg: last?.weightKg ?? 0, reps: last?.reps ?? 10, rpe: copy ? last?.rpe : nil, kindRaw: copy ? last?.kindRaw ?? "working" : "working")
         context.insert(new)
+        if copy, let last {
+            do {
+                if let prior = try context.fetch(FetchDescriptor<SetMeasurement>()).first(where: { $0.setID == last.id }) {
+                    context.insert(SetMeasurement(setID: new.id, modeRaw: prior.modeRaw, seconds: prior.seconds,
+                        distanceMeters: prior.distanceMeters, assistanceKg: prior.assistanceKg, conventionRaw: prior.conventionRaw))
+                }
+            } catch { context.delete(new); errorMessage = "تعذر نسخ الجولة؛ حاول مجددًا."; return }
+        }
         save()
     }
     private func save() {

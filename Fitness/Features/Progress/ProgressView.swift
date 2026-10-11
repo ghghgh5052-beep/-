@@ -8,6 +8,8 @@ import Charts
     @Query(sort: \SessionExercise.order) private var movements: [SessionExercise]
     @Query(filter: #Predicate<LoggedSet> { $0.isCompleted }) private var sets: [LoggedSet]
     @Query(sort: \Exercise.name) private var exercises: [Exercise]
+    @Query private var measurements: [SetMeasurement]
+    @Query private var trackingPreferences: [ExercisePreference]
     @State private var selectedExercise: UUID?
     @State private var range = 90
     @State private var chartKind = 0
@@ -19,7 +21,11 @@ import Charts
         guard let selectedExercise else { return [] }
         let movementMap = Dictionary(movements.filter { $0.exerciseID == selectedExercise }.map { ($0.id, $0.sessionID) }, uniquingKeysWith: { first, _ in first })
         let sessionMap = Dictionary(finished.filter { $0.start >= cutoff }.map { ($0.id, $0) }, uniquingKeysWith: { first, _ in first })
-        let grouped = Dictionary(grouping: sets.filter { movementMap[$0.sessionExerciseID] != nil && $0.kindRaw != "warmup" }) { movementMap[$0.sessionExerciseID] ?? UUID() }
+        let details = Dictionary(measurements.map { ($0.setID, $0) }, uniquingKeysWith: { first, second in first.updatedAt >= second.updatedAt ? first : second })
+        let convention = trackingPreferences.filter { $0.exerciseID == selectedExercise }.max { $0.updatedAt < $1.updatedAt }?.conventionRaw
+        let grouped = Dictionary(grouping: sets.filter { movementMap[$0.sessionExerciseID] != nil && $0.kindRaw != "warmup"
+            && (details[$0.id].map { ["reps", "bodyweight"].contains($0.modeRaw) } ?? true)
+            && (convention == nil || (details[$0.id]?.conventionRaw ?? "total") == convention) }) { movementMap[$0.sessionExerciseID] ?? UUID() }
         return grouped.compactMap { sessionID, entries in
             guard let session = sessionMap[sessionID], !entries.isEmpty else { return nil }
             return LiftSample(id: sessionID, date: session.start,
@@ -202,7 +208,7 @@ func muscleName(_ raw: String) -> String {
                     }
                 }
             }
-        Section {
+            Section {
                 Button("تعديل الجلسة أو استبعادها") { showingEdit = true }
                 Button("تقييم الجهد والطاقة") { showingFeedback = true }
             }

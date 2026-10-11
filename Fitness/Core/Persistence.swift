@@ -208,14 +208,17 @@ enum PRService {
         let measurements = try context.fetch(FetchDescriptor<SetMeasurement>())
         let unsupported = Set(measurements.filter { !["reps", "bodyweight"].contains($0.modeRaw) }.map(\.setID))
         let sets = try context.fetch(FetchDescriptor<LoggedSet>()).filter { $0.isCompleted && byID[$0.sessionExerciseID] != nil && !unsupported.contains($0.id) }
-        let grouped = Dictionary(grouping: sets, by: { byID[$0.sessionExerciseID]?.exerciseID })
+        let measurementsBySet = Dictionary(measurements.map { ($0.setID, $0) }, uniquingKeysWith: { first, second in first.updatedAt >= second.updatedAt ? first : second })
+        let grouped = Dictionary(grouping: sets, by: { set in
+            (byID[set.sessionExerciseID]?.exerciseID.uuidString ?? "") + ":" + (measurementsBySet[set.id]?.conventionRaw ?? "total")
+        })
         let existing = try context.fetch(FetchDescriptor<PersonalRecord>())
         var records = Dictionary(existing.map { ($0.id, $0) }, uniquingKeysWith: { first, second in
             first.updatedAt >= second.updatedAt ? first : second
         })
         var retained: Set<UUID> = []
-        for (exerciseID, exerciseSets) in grouped {
-            guard let exerciseID else { continue }
+        for (_, exerciseSets) in grouped {
+            guard let first = exerciseSets.first, let exerciseID = byID[first.sessionExerciseID]?.exerciseID else { continue }
             let snapshots = exerciseSets.map {
                 SetSnapshot(id: $0.id, weight: $0.weightKg, reps: $0.reps, kindRaw: $0.kindRaw,
                             completed: $0.isCompleted, date: $0.completedAt ?? $0.updatedAt)

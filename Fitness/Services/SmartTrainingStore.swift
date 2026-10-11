@@ -18,7 +18,7 @@ enum SmartTrainingStoreError: Error, LocalizedError {
 }
 
 @MainActor enum SmartTrainingStore {
-    static let profileKey = "smart-training"
+    nonisolated static let profileKey = "smart-training"
 
     /// Central classification prevents UI/service checks drifting when exact machines are added.
     static func requiresExternalLoad(exerciseID: UUID) -> Bool {
@@ -96,8 +96,11 @@ enum SmartTrainingStoreError: Error, LocalizedError {
         let preferences = try context.fetch(FetchDescriptor<ExercisePreference>())
         let avoided = Set(preferences.filter(\.avoid).map(\.exerciseID))
         let measurements = try context.fetch(FetchDescriptor<SetMeasurement>())
+        let measurementsByID = Dictionary(measurements.map { ($0.setID, $0) }, uniquingKeysWith: { first, second in first.updatedAt >= second.updatedAt ? first : second })
+        let preferencesByID = Dictionary(preferences.map { ($0.exerciseID, $0) }, uniquingKeysWith: { first, second in first.updatedAt >= second.updatedAt ? first : second })
         let unsupportedSets = Set(measurements.filter { !["reps", "bodyweight"].contains($0.modeRaw) }.map(\.setID))
         let feedback = try context.fetch(FetchDescriptor<SessionFeedback>())
+        let difficultSessions = Set(feedback.filter { $0.difficulty == 3 || $0.energy == 1 }.map(\.sessionID))
         let knownIDs = Set(known.map { $0.1.id })
         let finished = try context.fetch(FetchDescriptor<WorkoutSession>(
             predicate: #Predicate { $0.statusRaw == "completed" }))
@@ -120,9 +123,12 @@ enum SmartTrainingStoreError: Error, LocalizedError {
                   set.rpe.map({ $0.isFinite && (0...10).contains($0) }) ?? true,
                   let movement = movementsByID[set.sessionExerciseID],
                   let session = sessionsByID[movement.sessionID] else { return nil }
+            let convention = measurementsByID[set.id]?.conventionRaw ?? "total"
+            // Never suggest a one-dumbbell load using an old total-pair measurement.
+            if let current = preferencesByID[movement.exerciseID], current.conventionRaw != convention { return nil }
             return TrainingSetHistory(sessionID: session.id, exerciseID: movement.exerciseID,
                 date: set.completedAt ?? session.end ?? session.start, weightKg: set.weightKg,
-                reps: set.reps, rpe: feedback.contains(where: { $0.sessionID == session.id && ($0.difficulty == 3 || $0.energy == 1) }) ? max(9, set.rpe ?? 0) : set.rpe, kind: set.kindRaw, isCompleted: true)
+                reps: set.reps, rpe: difficultSessions.contains(session.id) ? max(9, set.rpe ?? 0) : set.rpe, kind: set.kindRaw, isCompleted: true)
         }.sorted {
             if $0.date != $1.date { return $0.date < $1.date }
             if $0.sessionID != $1.sessionID { return $0.sessionID.uuidString < $1.sessionID.uuidString }

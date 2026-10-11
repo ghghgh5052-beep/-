@@ -104,7 +104,7 @@ import SwiftData
                         let measurement = try TrainingEnhancementStore.measurement(set: set, exerciseID: exerciseID, context: context)
                         measurement.modeRaw = mode.rawValue; measurement.conventionRaw = convention.rawValue; measurement.updatedAt = .now
                         if mode == .timed || mode == .distance { set.weightKg = 0; set.reps = 0 }
-                        else { set.reps = max(1, set.reps); if mode == .assisted || mode == .bodyweight { set.weightKg = 0 } }
+                        else { set.reps = max(1, set.reps); if mode == .assisted { set.weightKg = 0 } }
                         set.updatedAt = .now
                     }
                 }
