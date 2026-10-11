@@ -135,6 +135,12 @@ import UIKit
     }
 }
 
+private struct ActiveExerciseGuide: Identifiable {
+    let id: UUID
+    let guide: ExerciseGuide
+    let name: String
+}
+
 @MainActor private struct ActiveWorkoutScreen: View {
     @Environment(\.modelContext) private var context
     @Environment(\.dynamicTypeSize) private var dynamicTypeSize
@@ -151,6 +157,7 @@ import UIKit
     @State private var confirmingFinish = false
     @State private var confirmingDiscard = false
     @State private var errorMessage: String?
+    @State private var selectedGuide: ActiveExerciseGuide?
     @Environment(\.scenePhase) private var scenePhase
     @AppStorage("keepScreenAwake") private var keepScreenAwake = true
 
@@ -175,7 +182,9 @@ import UIKit
                     EmptyState(title: "اختر أول تمرين", message: "أضف تمرينًا من المكتبة، ثم سجّل الأوزان والتكرارات واضغط علامة الإنجاز.", symbol: "dumbbell.fill")
                 }
                 ForEach(items) { item in
-                    WorkoutExerciseCard(exercise: item, previousSets: previousSets(for: item), paused: paused)
+                    WorkoutExerciseCard(exercise: item, previousSets: previousSets(for: item), paused: paused) { guide, name in
+                        selectedGuide = ActiveExerciseGuide(id: item.id, guide: guide, name: name)
+                    }
                 }
                 Button { addingExercise = true } label: { Label("إضافة تمرين", systemImage: "plus.circle.fill").frame(maxWidth: .infinity, minHeight: 38) }
                     .buttonStyle(.bordered).disabled(paused).accessibilityIdentifier("workout.addExercise")
@@ -217,6 +226,10 @@ import UIKit
             }
         }
         .sheet(isPresented: $showingOrder) { WorkoutOrderSheet(sessionID: session.id, paused: paused) }
+        // Present from the stable screen, not a recycling LazyVStack exercise card.
+        .sheet(item: $selectedGuide) { selection in
+            ExerciseGuideSheet(guide: selection.guide, exerciseName: selection.name)
+        }
         .sheet(isPresented: $showingCalculator) { WorkoutCalculatorSheet() }
         .sheet(isPresented: $showingNotes) {
             NavigationStack {
@@ -347,19 +360,20 @@ import UIKit
     @Query private var sets: [LoggedSet]
     let previousSets: [LoggedSet]
     let paused: Bool
+    let openGuide: (ExerciseGuide, String) -> Void
     @State private var showingDetails = false
     @State private var showingWarmup = false
-    @State private var showingGuide = false
     @State private var showingAdvice = false
     @State private var showingAlternatives = false
     @State private var showingTrainingOptions = false
     @State private var confirmingRemove = false
     @State private var errorMessage: String?
 
-    init(exercise: SessionExercise, previousSets: [LoggedSet], paused: Bool) {
+    init(exercise: SessionExercise, previousSets: [LoggedSet], paused: Bool, openGuide: @escaping (ExerciseGuide, String) -> Void) {
         self.exercise = exercise
         self.previousSets = previousSets
         self.paused = paused
+        self.openGuide = openGuide
         let id = exercise.id
         _sets = Query(filter: #Predicate<LoggedSet> { $0.sessionExerciseID == id }, sort: \LoggedSet.order)
     }
@@ -386,8 +400,8 @@ import UIKit
                 } label: { Image(systemName: "ellipsis").frame(minWidth: 44, minHeight: 44) }.disabled(paused).accessibilityLabel("خيارات \(exercise.name)")
                     .accessibilityIdentifier("workout.exercise.options.\(exercise.exerciseID.uuidString)")
             }
-            if ExerciseGuides.guide(for: exercise.exerciseID) != nil {
-                Button { showingGuide = true } label: {
+            if let guide = ExerciseGuides.guide(for: exercise.exerciseID) {
+                Button { openGuide(guide, exercise.name) } label: {
                     Label("صورة التمرين وطريقة التنفيذ", systemImage: "photo")
                         .font(.subheadline.weight(.medium))
                         .frame(maxWidth: .infinity, minHeight: 36)
@@ -417,11 +431,6 @@ import UIKit
         }
         .padding(16)
         .background(WateeraDesign.surface, in: RoundedRectangle(cornerRadius: WateeraDesign.Radius.card))
-        .sheet(isPresented: $showingGuide) {
-            if let guide = ExerciseGuides.guide(for: exercise.exerciseID) {
-                ExerciseGuideSheet(guide: guide, exerciseName: exercise.name)
-            }
-        }
         .sheet(isPresented: $showingAdvice) { NavigationStack { ExerciseAdviceView(exercise: exercise) } }
         .sheet(isPresented: $showingAlternatives) { ExerciseAlternativesView(item: exercise) }
         .sheet(isPresented: $showingTrainingOptions) { TrainingOptionsView(exerciseID: exercise.exerciseID, name: exercise.name, sessionExerciseID: exercise.id) }

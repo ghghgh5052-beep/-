@@ -18,6 +18,9 @@ TEST_SELECTION=(-only-testing:FitnessTests -only-testing:FitnessUITests)
 if [[ "${UI_TESTS_ONLY:-0}" == "1" ]]; then
   TEST_SELECTION=(-only-testing:FitnessUITests)
 fi
+if [[ -n "${TEST_ONLY_IDENTIFIER:-}" ]]; then
+  TEST_SELECTION=("-only-testing:$TEST_ONLY_IDENTIFIER")
+fi
 xcodebuild -project "$ROOT/Wateera.xcodeproj" -scheme Wateera -configuration Debug \
   -destination "$DESTINATION" -parallel-testing-enabled NO \
   -resultBundlePath "$OUTPUT/Tests.xcresult" \

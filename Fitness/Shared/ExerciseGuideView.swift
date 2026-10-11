@@ -117,7 +117,7 @@ import UIKit
             ScrollView {
                 ExerciseGuideContent(guide: guide, exerciseName: exerciseName).padding(20)
             }
-            .wateeraCanvas()
+            .background(WateeraDesign.canvas)
             .navigationTitle(exerciseName)
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
