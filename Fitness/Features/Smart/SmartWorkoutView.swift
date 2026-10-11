@@ -7,6 +7,7 @@ import SwiftData
     @Environment(AppSettings.self) private var settings
     @Environment(WorkoutCoordinator.self) private var coordinator
     @State private var preferences = TrainingPreferences()
+    @AppStorage("trainingPlace") private var placeKey = TrainingPlace.gym.rawValue
     @State private var preview: SmartWorkoutPreview?
     @State private var showingEquipment = false
     @State private var editing: PrescriptionSelection?
@@ -33,6 +34,9 @@ import SwiftData
                 }.padding(.vertical, 6)
             }
             Section {
+                Picker("مكان التدريب", selection: $placeKey) {
+                    ForEach(TrainingPlace.allCases) { Text($0.arabicName).tag($0.rawValue) }
+                }.accessibilityIdentifier("smart.place")
                 Picker("الهدف", selection: $preferences.goal) {
                     ForEach(TrainingGoal.allCases, id: \.self) { Text($0.arabicName).tag($0) }
                 }.accessibilityIdentifier("smart.goal")
@@ -103,6 +107,13 @@ import SwiftData
         }
         .task { load() }
         .onChange(of: configurationKey) { _, _ in preview = nil }
+        .onChange(of: placeKey) { previous, _ in
+            do {
+                try SmartTrainingStore.savePreferences(preferences, context: context, key: previous)
+                preferences = try SmartTrainingStore.loadPreferences(context: context, key: placeKey)
+                preview = nil
+            } catch { placeKey = previous; errorMessage = "تعذر تبديل مكان التدريب. حاول مرة أخرى." }
+        }
         .arabicError($errorMessage)
     }
 
@@ -212,7 +223,7 @@ import SwiftData
     private func load() {
         guard !loaded else { return }
         do {
-            preferences = try SmartTrainingStore.loadPreferences(context: context)
+            preferences = try SmartTrainingStore.loadPreferences(context: context, key: placeKey)
             loaded = true
         } catch {
             loaded = true
@@ -223,12 +234,17 @@ import SwiftData
     private func generate() {
         do {
             let snapshot = try SmartTrainingStore.snapshot(context: context)
-            try SmartTrainingStore.savePreferences(preferences, context: context)
+            try SmartTrainingStore.savePreferences(preferences, context: context, key: placeKey)
             unsupportedExerciseCount = snapshot.unsupportedExerciseCount
             bodyweightExerciseIDs = Set(snapshot.exercises.filter { $0.requiredEquipment.contains(.bodyweight) }.map(\.id))
-            preview = SmartTrainingEngine.generate(exercises: snapshot.exercises,
+            let generated = SmartTrainingEngine.generate(exercises: snapshot.exercises,
                 preferences: preferences, history: snapshot.history, now: .now,
                 recoveryExercises: snapshot.recoveryExercises)
+            let personalized = try generated.exercises.map { prescription -> TrainingPrescription in
+                guard let entry = snapshot.exercises.first(where: { $0.id == prescription.exerciseID }) else { return prescription }
+                return try TrainingEnhancementStore.prescription(entry: entry, preferences: preferences, snapshot: snapshot, context: context)
+            }
+            preview = SmartWorkoutPreview(exercises: personalized, estimatedMinutes: generated.estimatedMinutes, warnings: generated.warnings, titleArabic: generated.titleArabic)
         } catch {
             errorMessage = "تعذر إعداد الاقتراح أو حفظ تفضيلاتك. لم تُنشأ جلسة؛ حاول مرة أخرى."
         }

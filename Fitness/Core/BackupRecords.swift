@@ -547,3 +547,141 @@ struct TrainingProfileRecord: Codable {
         return model
     }
 }
+
+struct SessionFeedbackRecord: Codable {
+    var id: UUID
+    var sessionID: UUID
+    var difficulty: Int
+    var energy: Int
+    var fatigueRaw: String
+    var updatedAt: Date
+    init(_ model: SessionFeedback) {
+        id = model.id
+        sessionID = model.sessionID
+        difficulty = model.difficulty
+        energy = model.energy
+        fatigueRaw = model.fatigueRaw
+        updatedAt = model.updatedAt
+    }
+    func apply(to model: SessionFeedback) {
+        model.id = id
+        model.sessionID = sessionID
+        model.difficulty = difficulty
+        model.energy = energy
+        model.fatigueRaw = fatigueRaw
+        model.updatedAt = updatedAt
+    }
+    func makeModel() -> SessionFeedback {
+        let model = SessionFeedback()
+        apply(to: model)
+        return model
+    }
+}
+
+struct SetMeasurementRecord: Codable {
+    var id: UUID
+    var setID: UUID
+    var modeRaw: String
+    var seconds: Double
+    var distanceMeters: Double
+    var assistanceKg: Double
+    var conventionRaw: String
+    var updatedAt: Date
+    init(_ model: SetMeasurement) {
+        id = model.id
+        setID = model.setID
+        modeRaw = model.modeRaw
+        seconds = model.seconds
+        distanceMeters = model.distanceMeters
+        assistanceKg = model.assistanceKg
+        conventionRaw = model.conventionRaw
+        updatedAt = model.updatedAt
+    }
+    func apply(to model: SetMeasurement) {
+        model.id = id
+        model.setID = setID
+        model.modeRaw = modeRaw
+        model.seconds = seconds
+        model.distanceMeters = distanceMeters
+        model.assistanceKg = assistanceKg
+        model.conventionRaw = conventionRaw
+        model.updatedAt = updatedAt
+    }
+    func makeModel() -> SetMeasurement {
+        let model = SetMeasurement()
+        apply(to: model)
+        return model
+    }
+}
+
+struct ExercisePreferenceRecord: Codable {
+    var id: UUID
+    var exerciseID: UUID
+    var avoid: Bool
+    var modeRaw: String
+    var conventionRaw: String
+    var updatedAt: Date
+    init(_ model: ExercisePreference) {
+        id = model.id
+        exerciseID = model.exerciseID
+        avoid = model.avoid
+        modeRaw = model.modeRaw
+        conventionRaw = model.conventionRaw
+        updatedAt = model.updatedAt
+    }
+    func apply(to model: ExercisePreference) {
+        model.id = id
+        model.exerciseID = exerciseID
+        model.avoid = avoid
+        model.modeRaw = modeRaw
+        model.conventionRaw = conventionRaw
+        model.updatedAt = updatedAt
+    }
+    func makeModel() -> ExercisePreference {
+        let model = ExercisePreference()
+        apply(to: model)
+        return model
+    }
+}
+
+struct ProgressionProgramRecord: Codable {
+    var id: UUID
+    var exerciseID: UUID
+    var lowerReps: Int
+    var upperReps: Int
+    var targetSets: Int
+    var incrementKg: Double
+    var weeks: Int
+    var start: Date
+    var enabled: Bool
+    var updatedAt: Date
+    init(_ model: ProgressionProgram) {
+        id = model.id
+        exerciseID = model.exerciseID
+        lowerReps = model.lowerReps
+        upperReps = model.upperReps
+        targetSets = model.targetSets
+        incrementKg = model.incrementKg
+        weeks = model.weeks
+        start = model.start
+        enabled = model.enabled
+        updatedAt = model.updatedAt
+    }
+    func apply(to model: ProgressionProgram) {
+        model.id = id
+        model.exerciseID = exerciseID
+        model.lowerReps = lowerReps
+        model.upperReps = upperReps
+        model.targetSets = targetSets
+        model.incrementKg = incrementKg
+        model.weeks = weeks
+        model.start = start
+        model.enabled = enabled
+        model.updatedAt = updatedAt
+    }
+    func makeModel() -> ProgressionProgram {
+        let model = ProgressionProgram()
+        apply(to: model)
+        return model
+    }
+}

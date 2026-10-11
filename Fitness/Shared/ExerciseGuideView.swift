@@ -65,6 +65,9 @@ import UIKit
                     .accessibilityIdentifier("exercise.guide.image.\(index)")
                 }
             }
+            if guide.assetNames.count == 1 {
+                ExerciseMotionPreview(guide: guide, exerciseName: exerciseName)
+            }
             if !guide.cues.isEmpty {
                 VStack(alignment: .leading, spacing: 14) {
                     Text("خطوات التنفيذ").font(.headline)

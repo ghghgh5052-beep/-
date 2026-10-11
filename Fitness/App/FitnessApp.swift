@@ -71,6 +71,7 @@ import Observation
     @AppStorage("onboardingComplete") private var onboardingComplete = false
     @State private var tab = 0
     @State private var startupError: String?
+    @State private var showingWeeklyReport = false
     private var protected: Bool { settings.lockEnabled && !lock.isUnlocked }
     var body: some View {
         ZStack {
@@ -81,6 +82,7 @@ import Observation
                 ProgressDashboardView().tabItem { Label("تقدّمي", systemImage: "chart.xyaxis.line") }.tag(3)
                 SettingsView().tabItem { Label("الإعدادات", systemImage: "gearshape") }.tag(4)
             }.disabled(protected).accessibilityHidden(protected)
+                .sensoryFeedback(.selection, trigger: tab)
                 .onChange(of: workout.activeSessionID) { _, id in if id != nil { tab = 0 } }
             if protected {
                 VStack(spacing: 20) {
@@ -124,6 +126,8 @@ import Observation
             } catch { startupError = "تعذر تجهيز المكتبة أو حفظ البيانات. أعد فتح التطبيق للمحاولة." }
         }
         .onReceive(NotificationCenter.default.publisher(for: .startTodayWorkoutRequested)) { _ in consumeShortcut() }
+        .onReceive(NotificationCenter.default.publisher(for: .workoutShortcutRequested)) { _ in consumeShortcut() }
+        .sheet(isPresented: $showingWeeklyReport) { NavigationStack { WeeklyReportView().toolbar { ToolbarItem(placement: .confirmationAction) { Button("إغلاق") { showingWeeklyReport = false } } } } }
         .onReceive(NotificationCenter.default.publisher(for: .openActiveWorkout)) { _ in tab = 0 }
         .onOpenURL { url in
             guard url.scheme == "wateera" else { return }
@@ -137,7 +141,17 @@ import Observation
         .arabicError($startupError)
     }
     private func consumeShortcut() {
-        guard !protected, SharedWorkoutStorage.consumeStartToday() else { return }
+        guard !protected else { return }
+        if let action = UserDefaults.standard.string(forKey: "pendingWorkoutAction") {
+            UserDefaults.standard.removeObject(forKey: "pendingWorkoutAction")
+            switch action {
+            case "report": tab = 3; showingWeeklyReport = true
+            case "skipRest": tab = 0; workout.cancelRest()
+            case "pause": tab = 0; workout.pause(context: context)
+            default: break
+            }
+        }
+        guard SharedWorkoutStorage.consumeStartToday() else { return }
         do {
             let plans = try context.fetch(FetchDescriptor<WorkoutPlan>()).filter { $0.isActive && !$0.isArchived }.sorted { $0.updatedAt > $1.updatedAt }
             let allDays = try context.fetch(FetchDescriptor<PlanDay>())

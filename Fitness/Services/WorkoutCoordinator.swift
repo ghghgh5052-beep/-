@@ -285,7 +285,12 @@ final class WorkoutCoordinator {
             errorMessage = "استأنف التمرين قبل تسجيل المجموعة."
             return
         }
-        guard set.weightKg.isFinite, set.weightKg >= 0, set.reps > 0,
+        let validTracking: Bool
+        do {
+            let measurement = try TrainingEnhancementStore.measurement(set: set, exerciseID: exercise.exerciseID, context: context)
+            validTracking = TrainingEnhancementStore.validMeasurement(measurement, set: set)
+        } catch { errorMessage = "تعذر قراءة نوع تسجيل الجولة. أعد المحاولة."; return }
+        guard validTracking, set.weightKg.isFinite, set.weightKg >= 0,
               set.rpe.map({ $0.isFinite && (0...10).contains($0) }) ?? true else {
             errorMessage = "أدخل وزنًا صالحًا وتكرارًا واحدًا على الأقل، وجهدًا بين صفر وعشرة."
             return

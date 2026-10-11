@@ -18,6 +18,9 @@ import SwiftData
             let exercises = try context.fetch(FetchDescriptor<SessionExercise>()).filter { $0.sessionID == sessionID }
             let ids = Set(exercises.map(\.id))
             let sets = try context.fetch(FetchDescriptor<LoggedSet>()).filter { ids.contains($0.sessionExerciseID) }
+            let setIDs = Set(sets.map(\.id))
+            for value in try context.fetch(FetchDescriptor<SetMeasurement>()) where setIDs.contains(value.setID) { context.delete(value) }
+            for value in try context.fetch(FetchDescriptor<SessionFeedback>()) where value.sessionID == sessionID { context.delete(value) }
             for set in sets { context.delete(set) }
             for exercise in exercises { context.delete(exercise) }
             for session in sessions { context.delete(session) }

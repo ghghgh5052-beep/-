@@ -68,7 +68,7 @@ final class SmartPersistenceTests: XCTestCase {
             equipment: [.bodyweight, .dumbbell, .bench], durationMinutes: 30, incrementKg: 0.5), context: context)
         let data = try BackupService.encode(context: context)
         let backup = try BackupService.decode(data)
-        XCTAssertEqual(backup.formatVersion, 2)
+        XCTAssertEqual(backup.formatVersion, 3)
         XCTAssertEqual(backup.trainingProfiles.count, 1)
         let destination = try PersistenceController.makeContainer(inMemory: true).container
         let visible = ModelContext(destination)

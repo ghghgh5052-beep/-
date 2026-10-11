@@ -86,6 +86,12 @@ import Charts
                     Picker("الفترة", selection: $range) {
                         Text("شهر").tag(30); Text("ثلاثة أشهر").tag(90); Text("سنة").tag(365); Text("سنتان").tag(730)
                     }.pickerStyle(.segmented)
+                    NavigationLink { WeeklyReportView() } label: {
+                        Label("تقريرك الأسبوعي", systemImage: "chart.bar.doc.horizontal").frame(maxWidth: .infinity, minHeight: 44, alignment: .leading)
+                    }.buttonStyle(.bordered).accessibilityIdentifier("progress.weeklyReport")
+                    NavigationLink { TrackingProgressView() } label: {
+                        Label("تقدم الوقت والمسافة والمساعدة", systemImage: "stopwatch").frame(maxWidth: .infinity, minHeight: 44, alignment: .leading)
+                    }.buttonStyle(.bordered).accessibilityIdentifier("progress.tracking")
                     NavigationLink { MuscleRecoveryView() } label: {
                         Label("خريطة العضلات والتعافي التقديري", systemImage: "figure.stand")
                             .frame(maxWidth: .infinity, minHeight: 44, alignment: .leading)
@@ -180,6 +186,8 @@ func muscleName(_ raw: String) -> String {
 
 @MainActor struct SessionHistoryView: View {
     let session: WorkoutSession
+    @State private var showingEdit = false
+    @State private var showingFeedback = false
     @Environment(AppSettings.self) private var settings
     @Query private var exercises: [SessionExercise]
     @Query private var sets: [LoggedSet]
@@ -190,11 +198,17 @@ func muscleName(_ raw: String) -> String {
                 Section(exercise.name) {
                     if !exercise.notes.isEmpty { Text(exercise.notes).foregroundStyle(.secondary) }
                     ForEach(sets.filter { $0.sessionExerciseID == exercise.id && $0.isCompleted }.sorted { $0.order < $1.order }) { entry in
-                        HStack { Text(ArabicFormat.weight(entry.weightKg, settings: settings)); Spacer(); Text(ArabicFormat.integer(entry.reps, arabic: settings.useArabicDigits) + " تكرار") }
+                        SetPerformanceLabel(set: entry)
                     }
                 }
             }
+        Section {
+                Button("تعديل الجلسة أو استبعادها") { showingEdit = true }
+                Button("تقييم الجهد والطاقة") { showingFeedback = true }
+            }
         }.navigationTitle(session.title)
+            .sheet(isPresented: $showingEdit) { SessionEditorView(session: session) }
+            .sheet(isPresented: $showingFeedback) { SessionFeedbackView(sessionID: session.id) }
     }
 }
 

@@ -30,9 +30,9 @@ enum SmartTrainingStoreError: Error, LocalizedError {
         return !metadata.requiredEquipment.isDisjoint(with: loadedEquipment)
     }
 
-    static func loadPreferences(context: ModelContext) throws -> TrainingPreferences {
+    static func loadPreferences(context: ModelContext, key: String = profileKey) throws -> TrainingPreferences {
         let records = try context.fetch(FetchDescriptor<TrainingProfile>())
-        guard let profile = records.filter({ $0.key == profileKey }).sorted(by: newerProfile).first else {
+        guard let profile = records.filter({ $0.key == key }).sorted(by: newerProfile).first else {
             return TrainingPreferences()
         }
         guard validProfile(goal: profile.goalRaw, level: profile.levelRaw,
@@ -48,7 +48,7 @@ enum SmartTrainingStoreError: Error, LocalizedError {
             }), durationMinutes: profile.durationMinutes, incrementKg: profile.incrementKg)
     }
 
-    static func savePreferences(_ preferences: TrainingPreferences, context: ModelContext) throws {
+    static func savePreferences(_ preferences: TrainingPreferences, context: ModelContext, key: String = profileKey) throws {
         let equipment = preferences.equipment.map(\.rawValue).sorted().joined(separator: ",")
         guard validProfile(goal: preferences.goal.rawValue, level: preferences.level.rawValue,
                            equipment: equipment, duration: preferences.durationMinutes,
@@ -62,8 +62,8 @@ enum SmartTrainingStoreError: Error, LocalizedError {
         defer { context.autosaveEnabled = previousAutosave }
         do {
             let records = try context.fetch(FetchDescriptor<TrainingProfile>())
-                .filter { $0.key == profileKey }.sorted(by: newerProfile)
-            let profile = records.first ?? TrainingProfile()
+                .filter { $0.key == key }.sorted(by: newerProfile)
+            let profile = records.first ?? TrainingProfile(key: key)
             if records.isEmpty { context.insert(profile) }
             profile.goalRaw = preferences.goal.rawValue
             profile.levelRaw = preferences.level.rawValue
@@ -93,6 +93,11 @@ enum SmartTrainingStoreError: Error, LocalizedError {
                 requiredEquipment: metadata.requiredEquipment, movementPattern: metadata.movementPattern,
                 mode: metadata.mode, difficulty: metadata.difficulty, isFavorite: exercise.isFavorite))
         }
+        let preferences = try context.fetch(FetchDescriptor<ExercisePreference>())
+        let avoided = Set(preferences.filter(\.avoid).map(\.exerciseID))
+        let measurements = try context.fetch(FetchDescriptor<SetMeasurement>())
+        let unsupportedSets = Set(measurements.filter { !["reps", "bodyweight"].contains($0.modeRaw) }.map(\.setID))
+        let feedback = try context.fetch(FetchDescriptor<SessionFeedback>())
         let knownIDs = Set(known.map { $0.1.id })
         let finished = try context.fetch(FetchDescriptor<WorkoutSession>(
             predicate: #Predicate { $0.statusRaw == "completed" }))
@@ -110,14 +115,14 @@ enum SmartTrainingStoreError: Error, LocalizedError {
             $0.updatedAt >= $1.updatedAt ? $0 : $1
         })
         let history: [TrainingSetHistory] = setsByID.values.compactMap { set in
-            guard ["working", "drop", "failure"].contains(set.kindRaw),
+            guard !unsupportedSets.contains(set.id), ["working", "drop", "failure"].contains(set.kindRaw),
                   set.weightKg.isFinite, (0...2_000).contains(set.weightKg), (1...10_000).contains(set.reps),
                   set.rpe.map({ $0.isFinite && (0...10).contains($0) }) ?? true,
                   let movement = movementsByID[set.sessionExerciseID],
                   let session = sessionsByID[movement.sessionID] else { return nil }
             return TrainingSetHistory(sessionID: session.id, exerciseID: movement.exerciseID,
                 date: set.completedAt ?? session.end ?? session.start, weightKg: set.weightKg,
-                reps: set.reps, rpe: set.rpe, kind: set.kindRaw, isCompleted: true)
+                reps: set.reps, rpe: feedback.contains(where: { $0.sessionID == session.id && ($0.difficulty == 3 || $0.energy == 1) }) ? max(9, set.rpe ?? 0) : set.rpe, kind: set.kindRaw, isCompleted: true)
         }.sorted {
             if $0.date != $1.date { return $0.date < $1.date }
             if $0.sessionID != $1.sessionID { return $0.sessionID.uuidString < $1.sessionID.uuidString }
@@ -125,8 +130,10 @@ enum SmartTrainingStoreError: Error, LocalizedError {
             if $0.weightKg != $1.weightKg { return $0.weightKg < $1.weightKg }
             return $0.reps < $1.reps
         }
+        let recentSessionIDs = Set(finished.filter { Date.now.timeIntervalSince($0.end ?? $0.start) >= 0 && Date.now.timeIntervalSince($0.end ?? $0.start) < 48 * 3600 }.map(\.id))
+        let fatigued = Set(feedback.filter { recentSessionIDs.contains($0.sessionID) }.flatMap { $0.fatigueRaw.split(separator: ",").compactMap { MuscleRegion(rawValue: String($0)) } })
         let ordered = known.sorted { $0.1.id.uuidString < $1.1.id.uuidString }
-        return TrainingSnapshot(exercises: ordered.filter { !$0.0.isArchived }.map { $0.1 },
+        return TrainingSnapshot(exercises: ordered.filter { !$0.0.isArchived && !avoided.contains($0.0.id) && $0.1.primaryMuscles.isDisjoint(with: fatigued) }.map { $0.1 },
             recoveryExercises: ordered.map { $0.1 }, history: history,
             unsupportedExerciseCount: definitionsByID.values.filter {
                 !$0.isArchived && ($0.isCustom || !knownIDs.contains($0.id))

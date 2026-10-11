@@ -19,6 +19,9 @@ enum CSVService {
         case completedAt = "وقت إكمال المجموعة", date = "تاريخ القياس", fat = "نسبة الدهون"
         case chest = "محيط الصدر بالسم", waist = "محيط الخصر بالسم", arm = "محيط الذراع بالسم"
         case hips = "محيط الأرداف بالسم", thigh = "محيط الفخذ بالسم"
+        case tracking = "نوع التسجيل", seconds = "ثواني الجولة", meters = "مسافة الجولة بالمتر"
+        case assistance = "مساعدة بالكجم", convention = "معنى الوزن", measurementID = "معرف تفاصيل الجولة"
+        case difficulty = "صعوبة الجلسة", energy = "طاقة الجلسة", fatigue = "عضلات متعبة", feedbackID = "معرف التقييم"
     }
     private static let textEncoding = "اقتباس-١"
     private static let maximumSize = 512 * 1024 * 1024
@@ -33,6 +36,8 @@ enum CSVService {
         try context.save()
         var result = "\u{FEFF}" + Field.allCases.map { quote($0.rawValue) }.joined(separator: ",") + "\r\n"
         var byteCount = result.utf8.count
+        let measurements = Dictionary(try context.fetch(FetchDescriptor<SetMeasurement>()).map { ($0.setID, $0) }, uniquingKeysWith: { first, second in first.updatedAt >= second.updatedAt ? first : second })
+        let feedback = Dictionary(try context.fetch(FetchDescriptor<SessionFeedback>()).map { ($0.sessionID, $0) }, uniquingKeysWith: { first, second in first.updatedAt >= second.updatedAt ? first : second })
         func append(_ values: [Field: String]) throws {
             var row = values
             row[.encoding] = textEncoding
@@ -53,7 +58,9 @@ enum CSVService {
                         .planDay: item.planDayID?.uuidString ?? "", .name: item.title,
                         .start: iso(item.start), .end: iso(item.end), .paused: iso(item.pausedAt),
                         .pauseDuration: String(item.accumulatedPause), .pauseEvents: item.pauseEventsRaw,
-                        .notes: item.notes, .status: sessionLabel(item.statusRaw), .healthExported: yes(item.healthExported)])
+                        .notes: item.notes, .status: sessionLabel(item.statusRaw), .healthExported: yes(item.healthExported),
+                        .feedbackID: feedback[item.id]?.id.uuidString ?? "", .difficulty: String(feedback[item.id]?.difficulty ?? 0),
+                        .energy: String(feedback[item.id]?.energy ?? 0), .fatigue: feedback[item.id]?.fatigueRaw ?? ""])
         }
         for item in try context.fetch(FetchDescriptor<SessionExercise>()).sorted(by: { $0.id.uuidString < $1.id.uuidString }) {
             try append([.type: "حركة", .id: item.id.uuidString, .updated: iso(item.updatedAt),
@@ -66,7 +73,11 @@ enum CSVService {
                         .movement: item.sessionExerciseID.uuidString, .order: String(item.order),
                         .weight: String(item.weightKg), .reps: String(item.reps), .rpe: string(item.rpe),
                         .setKind: setLabel(item.kindRaw), .completed: yes(item.isCompleted),
-                        .completedAt: iso(item.completedAt)])
+                        .completedAt: iso(item.completedAt), .measurementID: measurements[item.id]?.id.uuidString ?? "",
+                        .tracking: measurements[item.id].map { SetTrackingMode(rawValue: $0.modeRaw)?.arabicName ?? $0.modeRaw } ?? "",
+                        .seconds: string(measurements[item.id]?.seconds), .meters: string(measurements[item.id]?.distanceMeters),
+                        .assistance: string(measurements[item.id]?.assistanceKg),
+                        .convention: measurements[item.id].map { LoadConvention(rawValue: $0.conventionRaw)?.arabicName ?? $0.conventionRaw } ?? ""])
         }
         for item in try context.fetch(FetchDescriptor<BodyMetric>()).sorted(by: { $0.date < $1.date }) {
             try append([.type: "قياس", .id: item.id.uuidString, .updated: iso(item.updatedAt), .date: iso(item.date),
@@ -146,6 +157,10 @@ enum CSVService {
                     pausedAt: try optionalDate(.paused), accumulatedPause: try number(.pauseDuration, fallback: 0) ?? 0,
                     pauseEventsRaw: value(.pauseEvents), notes: value(.notes), statusRaw: status,
                     healthExported: try boolean(.healthExported), updatedAt: updated)))
+            if !value(.feedbackID).isEmpty {
+                    envelope.feedback.append(SessionFeedbackRecord(SessionFeedback(id: try uuid(.feedbackID), sessionID: id,
+                        difficulty: try integer(.difficulty, fallback: 0), energy: try integer(.energy, fallback: 0), fatigueRaw: value(.fatigue), updatedAt: updated)))
+                }
             case "حركة":
                 let order = try integer(.order, fallback: 0), rest = try integer(.rest, fallback: 90)
                 guard order >= 0, (0...3600).contains(rest) else { throw BackupError.invalidValues }
@@ -159,6 +174,14 @@ enum CSVService {
                     order: order, weightKg: try number(.weight, fallback: 0) ?? 0, reps: try integer(.reps, fallback: 10),
                     rpe: try number(.rpe), kindRaw: try setRaw(value(.setKind).isEmpty ? "أساسية" : value(.setKind)),
                     isCompleted: try boolean(.completed), completedAt: try optionalDate(.completedAt), updatedAt: updated)))
+            if !value(.tracking).isEmpty {
+                    guard let mode = SetTrackingMode.allCases.first(where: { $0.arabicName == value(.tracking) || $0.rawValue == value(.tracking) }),
+                          let convention = LoadConvention.allCases.first(where: { $0.arabicName == value(.convention) || $0.rawValue == value(.convention) }) else { throw BackupError.invalidValues }
+                    envelope.measurements.append(SetMeasurementRecord(SetMeasurement(id: try optionalUUID(.measurementID) ?? UUID(), setID: id,
+                        modeRaw: mode.rawValue, seconds: try number(.seconds, fallback: 0) ?? 0,
+                        distanceMeters: try number(.meters, fallback: 0) ?? 0, assistanceKg: try number(.assistance, fallback: 0) ?? 0,
+                        conventionRaw: convention.rawValue, updatedAt: updated)))
+                }
             case "قياس":
                 envelope.metrics.append(BodyMetricRecord(BodyMetric(id: id, date: try requiredDate(.date),
                     weightKg: try number(.weight), fatPercent: try number(.fat), chestCm: try number(.chest),
@@ -234,10 +257,10 @@ enum CSVService {
         })
     }
     private static func sessionLabel(_ raw: String) -> String {
-        switch raw { case "active": return "جارٍ"; case "paused": return "متوقف"; case "completed": return "مكتمل"; default: return raw }
+        switch raw { case "active": return "جارٍ"; case "paused": return "متوقف"; case "completed": return "مكتمل"; case "excluded": return "تجريبية"; default: return raw }
     }
     private static func sessionRaw(_ label: String) throws -> String {
-        switch label { case "جارٍ", "active": return "active"; case "متوقف", "paused": return "paused"; case "مكتمل", "completed": return "completed"; default: throw BackupError.invalidValues }
+        switch label { case "جارٍ", "active": return "active"; case "متوقف", "paused": return "paused"; case "مكتمل", "completed": return "completed"; case "تجريبية", "excluded": return "excluded"; default: throw BackupError.invalidValues }
     }
     private static func setLabel(_ raw: String) -> String {
         switch raw { case "warmup": return "إحماء"; case "working": return "أساسية"; case "drop": return "إسقاط"; case "failure": return "فشل"; default: return raw }

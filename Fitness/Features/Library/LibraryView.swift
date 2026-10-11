@@ -189,6 +189,7 @@ import SwiftData
     @Bindable var exercise: Exercise
     @State private var showingEditor = false
     @State private var confirmingArchive = false
+    @State private var showingTrainingOptions = false
     @State private var errorMessage: String?
 
     private var mediaLink: URL? {
@@ -224,6 +225,10 @@ import SwiftData
                         .padding(.vertical, 8)
                 }
             }
+            Section {
+                Button { showingTrainingOptions = true } label: { Label("التسجيل وبرنامج التدرّج", systemImage: "slider.horizontal.3") }
+                    .accessibilityIdentifier("library.trainingOptions")
+            }
             Section("تفاصيل التمرين") {
                 LabeledContent("العضلة الأساسية", value: exercise.primaryMuscleRaw)
                 if !exercise.secondaryMusclesRaw.isEmpty {
@@ -256,6 +261,7 @@ import SwiftData
         .navigationBarTitleDisplayMode(.inline)
         .toolbar { ToolbarItem(placement: .topBarTrailing) { Button("تعديل") { showingEditor = true } } }
         .sheet(isPresented: $showingEditor) { ExerciseEditorView(exercise: exercise) }
+        .sheet(isPresented: $showingTrainingOptions) { TrainingOptionsView(exerciseID: exercise.id, name: exercise.name) }
         .confirmationDialog("إخفاء هذا التمرين؟", isPresented: $confirmingArchive, titleVisibility: .visible) {
             Button("إخفاء التمرين", role: .destructive) {
                 exercise.isArchived = true

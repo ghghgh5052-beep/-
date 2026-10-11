@@ -324,13 +324,92 @@ enum FitnessSchemaV3: VersionedSchema {
     }
 }
 
+/// V4 adds optional training detail without changing any shipped entity or store identity.
+enum FitnessSchemaV4: VersionedSchema {
+    static let versionIdentifier = Schema.Version(4, 0, 0)
+    static var models: [any PersistentModel.Type] {
+        FitnessSchemaV3.models + [SessionFeedback.self, SetMeasurement.self, ExercisePreference.self, ProgressionProgram.self]
+    }
+
+    @Model final class SessionFeedback {
+        var id: UUID = UUID()
+        var sessionID: UUID = UUID()
+        var difficulty: Int = 0
+        var energy: Int = 0
+        var fatigueRaw: String = ""
+        var updatedAt: Date = Date()
+
+        init(id: UUID = UUID(), sessionID: UUID = UUID(), difficulty: Int = 0,
+             energy: Int = 0, fatigueRaw: String = "", updatedAt: Date = Date()) {
+            self.id = id; self.sessionID = sessionID; self.difficulty = difficulty
+            self.energy = energy; self.fatigueRaw = fatigueRaw; self.updatedAt = updatedAt
+        }
+    }
+
+    @Model final class SetMeasurement {
+        var id: UUID = UUID()
+        var setID: UUID = UUID()
+        var modeRaw: String = "reps"
+        var seconds: Double = 0
+        var distanceMeters: Double = 0
+        var assistanceKg: Double = 0
+        var conventionRaw: String = "total"
+        var updatedAt: Date = Date()
+
+        init(id: UUID = UUID(), setID: UUID = UUID(), modeRaw: String = "reps", seconds: Double = 0,
+             distanceMeters: Double = 0, assistanceKg: Double = 0,
+             conventionRaw: String = "total", updatedAt: Date = Date()) {
+            self.id = id; self.setID = setID; self.modeRaw = modeRaw; self.seconds = seconds
+            self.distanceMeters = distanceMeters; self.assistanceKg = assistanceKg
+            self.conventionRaw = conventionRaw; self.updatedAt = updatedAt
+        }
+    }
+
+    @Model final class ExercisePreference {
+        var id: UUID = UUID()
+        var exerciseID: UUID = UUID()
+        var avoid: Bool = false
+        var modeRaw: String = "reps"
+        var conventionRaw: String = "total"
+        var updatedAt: Date = Date()
+
+        init(id: UUID = UUID(), exerciseID: UUID = UUID(), avoid: Bool = false,
+             modeRaw: String = "reps", conventionRaw: String = "total", updatedAt: Date = Date()) {
+            self.id = id; self.exerciseID = exerciseID; self.avoid = avoid
+            self.modeRaw = modeRaw; self.conventionRaw = conventionRaw; self.updatedAt = updatedAt
+        }
+    }
+
+    @Model final class ProgressionProgram {
+        var id: UUID = UUID()
+        var exerciseID: UUID = UUID()
+        var lowerReps: Int = 8
+        var upperReps: Int = 12
+        var targetSets: Int = 3
+        var incrementKg: Double = 2.5
+        var weeks: Int = 8
+        var start: Date = Date()
+        var enabled: Bool = true
+        var updatedAt: Date = Date()
+
+        init(id: UUID = UUID(), exerciseID: UUID = UUID(), lowerReps: Int = 8, upperReps: Int = 12,
+             targetSets: Int = 3, incrementKg: Double = 2.5, weeks: Int = 8, start: Date = Date(),
+             enabled: Bool = true, updatedAt: Date = Date()) {
+            self.id = id; self.exerciseID = exerciseID; self.lowerReps = lowerReps; self.upperReps = upperReps
+            self.targetSets = targetSets; self.incrementKg = incrementKg; self.weeks = weeks
+            self.start = start; self.enabled = enabled; self.updatedAt = updatedAt
+        }
+    }
+}
+
 enum FitnessMigrationPlan: SchemaMigrationPlan {
     static var schemas: [any VersionedSchema.Type] {
-        [FitnessSchemaV1.self, FitnessSchemaV2.self, FitnessSchemaV3.self]
+        [FitnessSchemaV1.self, FitnessSchemaV2.self, FitnessSchemaV3.self, FitnessSchemaV4.self]
     }
     static var stages: [MigrationStage] {
         [.lightweight(fromVersion: FitnessSchemaV1.self, toVersion: FitnessSchemaV2.self),
-         .lightweight(fromVersion: FitnessSchemaV2.self, toVersion: FitnessSchemaV3.self)]
+         .lightweight(fromVersion: FitnessSchemaV2.self, toVersion: FitnessSchemaV3.self),
+         .lightweight(fromVersion: FitnessSchemaV3.self, toVersion: FitnessSchemaV4.self)]
     }
 }
 
@@ -348,3 +427,7 @@ typealias WorkoutReminder = FitnessSchemaV1.WorkoutReminder
 typealias PersonalRecord = FitnessSchemaV2.PersonalRecord
 typealias UserPreferences = FitnessSchemaV1.UserPreferences
 typealias TrainingProfile = FitnessSchemaV3.TrainingProfile
+typealias SessionFeedback = FitnessSchemaV4.SessionFeedback
+typealias SetMeasurement = FitnessSchemaV4.SetMeasurement
+typealias ExercisePreference = FitnessSchemaV4.ExercisePreference
+typealias ProgressionProgram = FitnessSchemaV4.ProgressionProgram

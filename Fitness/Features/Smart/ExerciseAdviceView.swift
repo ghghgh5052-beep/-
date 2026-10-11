@@ -8,6 +8,7 @@ import UIKit
     @Environment(AppSettings.self) private var settings
     let exercise: SessionExercise
     @Query private var currentSets: [LoggedSet]
+    @AppStorage("trainingPlace") private var placeKey = TrainingPlace.gym.rawValue
     @State private var proposal: TrainingPrescription?
     @State private var weightText = ""
     @State private var errorMessage: String?
@@ -103,8 +104,8 @@ import UIKit
             guard let entry = snapshot.recoveryExercises.first(where: { $0.id == exercise.exerciseID }), entry.mode == .reps else {
                 errorMessage = "هذا التمرين لا يدعم اقتراح الأوزان والتكرارات حاليًا."; return
             }
-            let preferences = try SmartTrainingStore.loadPreferences(context: context)
-            let result = SmartTrainingEngine.prescription(for: entry, preferences: preferences, history: snapshot.history, now: .now)
+            let preferences = try SmartTrainingStore.loadPreferences(context: context, key: placeKey)
+            let result = try TrainingEnhancementStore.prescription(entry: entry, preferences: preferences, snapshot: snapshot, context: context)
             proposal = result
             weightText = result.weightKg.map { ArabicFormat.number(settings.displayWeight($0), decimals: 2, arabic: settings.useArabicDigits) } ?? ""
         } catch { errorMessage = "تعذر قراءة البيانات اللازمة للاقتراح. أعد المحاولة." }

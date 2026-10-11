@@ -16,7 +16,7 @@ import UIKit
     @State private var confirmingHistoryDelete = false
 
     private var activeSession: WorkoutSession? {
-        sessions.first { $0.id == coordinator.activeSessionID && $0.statusRaw != "completed" }
+        sessions.first { $0.id == coordinator.activeSessionID && ["active", "paused"].contains($0.statusRaw) }
     }
     private var todaysWorkout: PlanDay? {
         guard let plan = plans.filter({ $0.isActive && !$0.isArchived }).max(by: { $0.updatedAt < $1.updatedAt }) else { return nil }
@@ -46,26 +46,27 @@ import UIKit
                                     Text("تمرين اليوم: \(day.title)").font(.headline)
                                     Button { coordinator.start(day: day, context: context) } label: {
                                         Label("ابدأ تمرين اليوم", systemImage: "play.fill").frame(maxWidth: .infinity, minHeight: 32)
-                                    }.buttonStyle(.borderedProminent).accessibilityIdentifier("workout.startToday")
+                                    }.buttonStyle(WorkoutActionButtonStyle()).accessibilityIdentifier("workout.startToday")
                                 } else if todaysWorkout?.isRest == true {
                                     Label("يوم راحة في جدولك", systemImage: "moon.zzz").foregroundStyle(.secondary)
                                 }
                                 Button { coordinator.start(day: nil, context: context) } label: {
                                     Label("ابدأ تمرينًا حرًا", systemImage: "plus").frame(maxWidth: .infinity, minHeight: 32)
-                                }.buttonStyle(.bordered).accessibilityIdentifier("workout.start")
+                                }.buttonStyle(WorkoutActionButtonStyle(prominent: false)).accessibilityIdentifier("workout.start")
                                 Button { showingSmartWorkout = true } label: {
                                     Label("اقترح لي تمرينًا", systemImage: "sparkles").frame(maxWidth: .infinity, minHeight: 38)
-                                }.buttonStyle(.bordered).accessibilityIdentifier("workout.smart")
+                                }.buttonStyle(WorkoutActionButtonStyle(prominent: false)).accessibilityIdentifier("workout.smart")
                             }.padding(.vertical, 8)
                         }
-                        if sessions.contains(where: { $0.statusRaw == "completed" }) {
+                        if sessions.contains(where: { ["completed", "excluded"].contains($0.statusRaw) }) {
                             Section("جلساتك السابقة") {
-                                ForEach(sessions.filter { $0.statusRaw == "completed" }) { session in
+                                ForEach(sessions.filter { ["completed", "excluded"].contains($0.statusRaw) }) { session in
                                     Button { historySession = session } label: {
                                         HStack {
                                             Image(systemName: "checkmark.circle.fill").foregroundStyle(.green).font(.title2).accessibilityHidden(true)
                                             VStack(alignment: .leading, spacing: 5) {
                                                 Text(session.title).font(.headline).foregroundStyle(.primary)
+                                                if session.statusRaw == "excluded" { Text("تجريبية • لا تُحتسب في التقدم").font(.caption).foregroundStyle(.orange) }
                                                 Text(ArabicFormat.date(session.start)).font(.caption).foregroundStyle(.secondary)
                                             }
                                             Spacer()
@@ -161,7 +162,7 @@ import UIKit
                 Button { addingExercise = true } label: { Label("إضافة تمرين", systemImage: "plus.circle.fill").frame(maxWidth: .infinity, minHeight: 38) }
                     .buttonStyle(.bordered).disabled(paused).accessibilityIdentifier("workout.addExercise")
                 Button { confirmingFinish = true } label: { Label("إنهاء وحفظ التمرين", systemImage: "checkmark.flag.fill").frame(maxWidth: .infinity, minHeight: 38) }
-                    .buttonStyle(.borderedProminent).disabled(coordinator.isBusy).accessibilityIdentifier("workout.finish")
+                    .buttonStyle(WorkoutActionButtonStyle()).disabled(coordinator.isBusy).accessibilityIdentifier("workout.finish")
                 Text("يُحفظ كل تغيير تلقائيًا على جهازك.").font(.caption).foregroundStyle(.secondary).frame(maxWidth: .infinity)
                 Button(role: .destructive) { confirmingDiscard = true } label: {
                     Label("إلغاء التمرين دون حفظ", systemImage: "trash").frame(maxWidth: .infinity, minHeight: 44)
@@ -323,6 +324,8 @@ import UIKit
     @State private var showingWarmup = false
     @State private var showingGuide = false
     @State private var showingAdvice = false
+    @State private var showingAlternatives = false
+    @State private var showingTrainingOptions = false
     @State private var confirmingRemove = false
     @State private var errorMessage: String?
 
@@ -345,6 +348,8 @@ import UIKit
                 Spacer(minLength: 0)
                 Menu {
                     Button { showingDetails = true } label: { Label("الملاحظات والراحة", systemImage: "note.text") }
+                    Button { showingAlternatives = true } label: { Label("استبدال بتمرين بديل", systemImage: "arrow.triangle.swap") }
+                    Button { showingTrainingOptions = true } label: { Label("التسجيل وبرنامج التدرّج", systemImage: "slider.horizontal.3") }
                     Button { showingWarmup = true } label: { Label("إضافة جولات إحماء", systemImage: "flame") }
                     if SmartExerciseMetadata.forBuiltInID(exercise.exerciseID)?.mode == .reps {
                         Button { showingAdvice = true } label: { Label("اقتراح الأوزان والتكرارات", systemImage: "sparkles") }
@@ -368,8 +373,8 @@ import UIKit
             if !dynamicTypeSize.isAccessibilitySize {
                 HStack(spacing: 8) {
                     Text("جولة").frame(width: 44)
-                    Text("الوزن (\(settings.weightLabel))").frame(maxWidth: .infinity)
-                    Text("تكرار").frame(maxWidth: .infinity)
+                    Text("القيمة").frame(maxWidth: .infinity)
+                    Text("تكرار / مدة").frame(maxWidth: .infinity)
                     Text("تم").frame(width: 44)
                 }.font(.caption2.bold()).foregroundStyle(.secondary)
             }
@@ -391,6 +396,8 @@ import UIKit
             }
         }
         .sheet(isPresented: $showingAdvice) { NavigationStack { ExerciseAdviceView(exercise: exercise) } }
+        .sheet(isPresented: $showingAlternatives) { ExerciseAlternativesView(item: exercise) }
+        .sheet(isPresented: $showingTrainingOptions) { TrainingOptionsView(exerciseID: exercise.exerciseID, name: exercise.name, sessionExerciseID: exercise.id) }
         .sheet(isPresented: $showingDetails) {
             NavigationStack {
                 Form {
@@ -452,12 +459,36 @@ import UIKit
     let paused: Bool
     @State private var showingDetails = false
     @State private var errorMessage: String?
+    @Query private var measurements: [SetMeasurement]
     @State private var weightInputValid = true
     @State private var repsInputValid = true
+    private var measurement: SetMeasurement? { measurements.filter { $0.setID == set.id }.max { $0.updatedAt < $1.updatedAt } }
+    private var trackingMode: SetTrackingMode { measurement.flatMap { SetTrackingMode(rawValue: $0.modeRaw) } ?? .reps }
 
     var body: some View {
         VStack(alignment: .leading, spacing: 6) {
-            if dynamicTypeSize.isAccessibilitySize {
+            if trackingMode == .timed || trackingMode == .distance || trackingMode == .assisted {
+                VStack(alignment: .leading, spacing: 10) {
+                    HStack { indexButton; Text(trackingMode.arabicName).font(.subheadline.bold()); Spacer(); completionButton }
+                    if let measurement {
+                        if trackingMode == .timed || trackingMode == .distance {
+                            LabeledContent("ثواني") {
+                                trackingField(Binding(get: { measurement.seconds }, set: { measurement.seconds = $0; measurement.updatedAt = .now; save() }), maximum: 86_400, label: "مدة الجولة بالثواني", identifier: "set.seconds.\(set.order)")
+                            }
+                            if trackingMode == .distance {
+                                LabeledContent("متر") {
+                                    trackingField(Binding(get: { measurement.distanceMeters }, set: { measurement.distanceMeters = $0; measurement.updatedAt = .now; save() }), maximum: 1_000_000, label: "مسافة الجولة بالمتر", identifier: "set.distance.\(set.order)")
+                                }
+                            }
+                        } else {
+                            LabeledContent("المساعدة (\(settings.weightLabel))") {
+                                trackingField(Binding(get: { settings.displayWeight(measurement.assistanceKg) }, set: { measurement.assistanceKg = settings.kilograms($0); measurement.updatedAt = .now; save() }), maximum: settings.displayWeight(2_000), label: "وزن المساعدة", identifier: "set.assistance.\(set.order)")
+                            }
+                            LabeledContent("التكرارات") { repsField }
+                        }
+                    }
+                }
+            } else if dynamicTypeSize.isAccessibilitySize {
                 VStack(alignment: .leading, spacing: 12) {
                     HStack { indexButton; Spacer(); completionButton }
                     Text("الوزن (\(settings.weightLabel))").font(.subheadline)
@@ -468,9 +499,9 @@ import UIKit
             } else {
                 HStack(spacing: 8) { indexButton; weightField; repsField; completionButton }
             }
-            if let previous {
+            if let previous, trackingMode == .reps || trackingMode == .bodyweight {
                 HStack {
-                    Text("السابق: \(ArabicFormat.weight(previous.weightKg, settings: settings)) × \(ArabicFormat.integer(previous.reps, arabic: settings.useArabicDigits))")
+                    HStack(spacing: 4) { Text("السابق:"); SetPerformanceLabel(set: previous) }
                     Spacer(minLength: 4)
                     if !set.isCompleted {
                         Button {
@@ -486,7 +517,13 @@ import UIKit
         }
         .padding(.vertical, 3)
         .padding(.horizontal, 4)
-        .background(set.isCompleted ? Color.green.opacity(0.06) : Color.clear, in: RoundedRectangle(cornerRadius: 10))
+        .background(set.isCompleted ? Color.green.opacity(0.08) : Color.clear, in: RoundedRectangle(cornerRadius: 12))
+        .sensoryFeedback(.success, trigger: set.isCompleted) { previous, current in !previous && current }
+        .task {
+            guard measurement == nil, !set.isCompleted else { return }
+            do { _ = try TrainingEnhancementStore.measurement(set: set, exerciseID: exercise.exerciseID, context: context); try context.save() }
+            catch { errorMessage = "تعذر تجهيز تسجيل الجولة." }
+        }
         .sheet(isPresented: $showingDetails) {
             NavigationStack {
                 Form {
@@ -518,6 +555,11 @@ import UIKit
         } message: { Text(errorMessage ?? "أعد المحاولة.") }
     }
 
+    private func trackingField(_ value: Binding<Double>, maximum: Double, label: String, identifier: String) -> some View {
+        GymNumberField(value: value, decimals: 2, maximum: maximum, label: label, identifier: identifier,
+            onValidityChange: { weightInputValid = $0 }).disabled(paused || set.isCompleted).frame(maxWidth: 150)
+    }
+
     private var indexButton: some View {
         Button { showingDetails = true } label: {
             VStack(spacing: 3) {
@@ -545,7 +587,7 @@ import UIKit
                 set.completedAt = nil
                 save()
                 coordinator.refreshActivity()
-            } else if set.reps > 0 && set.weightKg >= 0 && set.weightKg.isFinite {
+            } else if measurement.map({ TrainingEnhancementStore.validMeasurement($0, set: set) }) ?? (set.reps > 0 && set.weightKg >= 0 && set.weightKg.isFinite) {
                 coordinator.complete(set: set, exercise: exercise, context: context)
             } else { errorMessage = "أدخل عدد تكرارات أكبر من صفر ووزنًا صحيحًا." }
         } label: {
@@ -596,7 +638,7 @@ private enum SetKindLabels {
     }
 }
 
-@MainActor private struct GymNumberField: View {
+@MainActor struct GymNumberField: View {
     @Environment(AppSettings.self) private var settings
     @Binding var value: Double
     let decimals: Int
@@ -706,6 +748,8 @@ private enum SetKindLabels {
     @Environment(WorkoutCoordinator.self) private var coordinator
     @State private var confirmingDelete = false
     @State private var deletionError: String?
+    @State private var showingEdit = false
+    @State private var showingFeedback = false
     let session: WorkoutSession
     @Query private var exercises: [SessionExercise]
     @Query private var sets: [LoggedSet]
@@ -721,13 +765,17 @@ private enum SetKindLabels {
             List {
                 Section {
                     VStack(alignment: .leading, spacing: 10) {
-                        Label("أحسنت، تمرينك محفوظ", systemImage: "checkmark.seal.fill").font(.title2.bold()).foregroundStyle(.green)
+                        Label(session.statusRaw == "excluded" ? "جلسة تجريبية محفوظة" : "أحسنت، تمرينك محفوظ", systemImage: session.statusRaw == "excluded" ? "testtube.2" : "checkmark.seal.fill").font(.title2.bold()).foregroundStyle(.green)
                         Text(session.title).font(.headline)
                         Text(ArabicFormat.date(session.start)).foregroundStyle(.secondary)
                     }.padding(.vertical, 12)
                     LabeledContent("المدة", value: ArabicFormat.duration(session.activeDuration(), arabic: settings.useArabicDigits))
                     LabeledContent("جولات مكتملة", value: ArabicFormat.integer(completed.count, arabic: settings.useArabicDigits))
                     LabeledContent("حجم التدريب", value: ArabicFormat.weight(WorkoutMath.volume(sets: completed.filter { $0.kindRaw != "warmup" }), settings: settings))
+                }
+                Section {
+                    Button { showingEdit = true } label: { Label("تعديل الجلسة أو استبعادها", systemImage: "square.and.pencil") }.accessibilityIdentifier("workout.summary.edit")
+                    Button { showingFeedback = true } label: { Label("تقييم الجهد والطاقة", systemImage: "slider.horizontal.3") }.accessibilityIdentifier("workout.summary.feedback")
                 }
                 let sessionRecords = records.filter { $0.sessionID == session.id }
                 if !sessionRecords.isEmpty {
@@ -751,7 +799,7 @@ private enum SetKindLabels {
                             HStack {
                                 Text(SetKindLabels.name(set.kindRaw)).foregroundStyle(.secondary)
                                 Spacer()
-                                Text("\(ArabicFormat.weight(set.weightKg, settings: settings)) × \(ArabicFormat.integer(set.reps, arabic: settings.useArabicDigits))").monospacedDigit()
+                                SetPerformanceLabel(set: set)
                             }
                         }
                         if !item.notes.isEmpty { Text(item.notes).font(.caption).foregroundStyle(.secondary) }
@@ -768,6 +816,8 @@ private enum SetKindLabels {
                 }
             }
             .navigationTitle("ملخص التمرين").navigationBarTitleDisplayMode(.inline)
+            .sheet(isPresented: $showingEdit) { SessionEditorView(session: session) }
+            .sheet(isPresented: $showingFeedback) { SessionFeedbackView(sessionID: session.id) }
             .toolbar { ToolbarItem(placement: .confirmationAction) { Button("تم") { dismiss() }.bold().accessibilityIdentifier("workout.summary.done") } }
             .alert("حذف الجلسة؟", isPresented: $confirmingDelete) {
                 Button("حذف الجلسة", role: .destructive) {

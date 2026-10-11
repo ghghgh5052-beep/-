@@ -21,7 +21,7 @@ enum PersistenceFailure: LocalizedError {
 
 @MainActor
 enum PersistenceController {
-    static var schema: Schema { Schema(versionedSchema: FitnessSchemaV3.self) }
+    static var schema: Schema { Schema(versionedSchema: FitnessSchemaV4.self) }
 
     static func makeContainer(useCloudKit: Bool = false, inMemory: Bool = false,
                               storeURL: URL? = nil,
@@ -142,6 +142,18 @@ enum PersistenceController {
             fingerprint([$0.id.uuidString, $0.key, $0.goalRaw, $0.levelRaw, $0.equipmentRaw,
                          String($0.durationMinutes), String($0.incrementKg)])
         }
+        removed += try deduplicate(context, type: SessionFeedback.self, key: { $0.sessionID.uuidString }, updated: { $0.updatedAt }) {
+            fingerprint([$0.id.uuidString, String($0.difficulty), String($0.energy), $0.fatigueRaw])
+        }
+        removed += try deduplicate(context, type: SetMeasurement.self, key: { $0.setID.uuidString }, updated: { $0.updatedAt }) {
+            fingerprint([$0.id.uuidString, $0.modeRaw, $0.conventionRaw, String($0.seconds), String($0.distanceMeters), String($0.assistanceKg)])
+        }
+        removed += try deduplicate(context, type: ExercisePreference.self, key: { $0.exerciseID.uuidString }, updated: { $0.updatedAt }) {
+            fingerprint([$0.id.uuidString, String($0.avoid), $0.modeRaw, $0.conventionRaw])
+        }
+        removed += try deduplicate(context, type: ProgressionProgram.self, key: { $0.exerciseID.uuidString }, updated: { $0.updatedAt }) {
+            fingerprint([$0.id.uuidString, String($0.lowerReps), String($0.upperReps), String($0.targetSets), String($0.incrementKg), String($0.weeks), date($0.start), String($0.enabled)])
+        }
         // Concurrent selection of two distinct plans must still leave one active schedule.
         let activePlans = try context.fetch(FetchDescriptor<WorkoutPlan>()).filter { $0.isActive && !$0.isArchived }
         let orderedPlans = activePlans.sorted {
@@ -193,7 +205,9 @@ enum PRService {
         let byID = Dictionary(exercises.map { ($0.id, $0) }, uniquingKeysWith: { first, second in
             first.updatedAt >= second.updatedAt ? first : second
         })
-        let sets = try context.fetch(FetchDescriptor<LoggedSet>()).filter { $0.isCompleted && byID[$0.sessionExerciseID] != nil }
+        let measurements = try context.fetch(FetchDescriptor<SetMeasurement>())
+        let unsupported = Set(measurements.filter { !["reps", "bodyweight"].contains($0.modeRaw) }.map(\.setID))
+        let sets = try context.fetch(FetchDescriptor<LoggedSet>()).filter { $0.isCompleted && byID[$0.sessionExerciseID] != nil && !unsupported.contains($0.id) }
         let grouped = Dictionary(grouping: sets, by: { byID[$0.sessionExerciseID]?.exerciseID })
         let existing = try context.fetch(FetchDescriptor<PersonalRecord>())
         var records = Dictionary(existing.map { ($0.id, $0) }, uniquingKeysWith: { first, second in

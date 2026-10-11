@@ -155,6 +155,7 @@
 				"59B5E00533FAA4704A66AE80",
 				"1E7EEC9B8188AE678C84CCEE",
 				"8F8B8473C3D9AB4C45BF88BD",
+				"A205647FF52A15DAC986827F",
 			);
 			"runOnlyForDeploymentPostprocessing" = 0;
 		};
@@ -185,6 +186,10 @@
 			"lastKnownFileType" = "sourcecode.swift";
 			"path" = "FitnessWidgets/FitnessWidgets.swift";
 			"sourceTree" = "<group>";
+		};
+		"166F4DF1C17B2BD9D76BA370" = {
+			"isa" = "PBXBuildFile";
+			"fileRef" = "FB8A7BF51482F9DDD7D00B58";
 		};
 		"1699864EFA20327B49193EB6" = {
 			"isa" = "PBXNativeTarget";
@@ -221,6 +226,10 @@
 			"lastKnownFileType" = "sourcecode.swift";
 			"path" = "Fitness/Core/CSVService.swift";
 			"sourceTree" = "<group>";
+		};
+		"1AFC36B753FE212243B8B218" = {
+			"isa" = "PBXBuildFile";
+			"fileRef" = "3D3A0425EEDDB351859B6457";
 		};
 		"1BFFF990FA8A25246CE4EAE5" = {
 			"isa" = "PBXFileReference";
@@ -312,6 +321,12 @@
 				"10D7C9A75F81669C99179D04",
 			);
 		};
+		"245DECD0C9A23AD44C2444CD" = {
+			"isa" = "PBXFileReference";
+			"lastKnownFileType" = "sourcecode.swift";
+			"path" = "Fitness/Services/TrainingEnhancementStore.swift";
+			"sourceTree" = "<group>";
+		};
 		"2540876D4A952E3A0939E511" = {
 			"isa" = "PBXFileReference";
 			"lastKnownFileType" = "sourcecode.swift";
@@ -335,6 +350,12 @@
 			);
 			"defaultConfigurationIsVisible" = 0;
 			"defaultConfigurationName" = "Release";
+		};
+		"2A8762872589FA268452CB6E" = {
+			"isa" = "PBXFileReference";
+			"lastKnownFileType" = "sourcecode.swift";
+			"path" = "Fitness/Core/TrainingEnhancements.swift";
+			"sourceTree" = "<group>";
 		};
 		"2B8FBEE9FAE200E7EB94E0FB" = {
 			"isa" = "PBXBuildFile";
@@ -360,6 +381,7 @@
 			"isa" = "PBXSourcesBuildPhase";
 			"buildActionMask" = 2147483647;
 			"files" = (
+				"EBB925B7023A1C8DF68934F0",
 				"D024F448A414587D82E64D30",
 				"2B8FBEE9FAE200E7EB94E0FB",
 				"9D8C4CB4448B1E250AA7FF45",
@@ -425,10 +447,20 @@
 			"path" = "FitnessTests/BackupTests.swift";
 			"sourceTree" = "<group>";
 		};
+		"39AF22AF1819DDA388951EFA" = {
+			"isa" = "PBXBuildFile";
+			"fileRef" = "4BC35DC8DFB1B78803FF7EEF";
+		};
 		"3CB503123BF6ABD8BB2BD7FC" = {
 			"isa" = "PBXFileReference";
 			"lastKnownFileType" = "sourcecode.swift";
 			"path" = "Fitness/Core/ExerciseGuides.swift";
+			"sourceTree" = "<group>";
+		};
+		"3D3A0425EEDDB351859B6457" = {
+			"isa" = "PBXFileReference";
+			"lastKnownFileType" = "sourcecode.swift";
+			"path" = "Fitness/Features/Workout/SessionEditorView.swift";
 			"sourceTree" = "<group>";
 		};
 		"3FEFE94428CA4EA6B06B374A" = {
@@ -478,6 +510,12 @@
 				);
 			};
 		};
+		"4BC35DC8DFB1B78803FF7EEF" = {
+			"isa" = "PBXFileReference";
+			"lastKnownFileType" = "sourcecode.swift";
+			"path" = "Fitness/Features/Progress/WeeklyReportView.swift";
+			"sourceTree" = "<group>";
+		};
 		"53F97FB6B28D89D0DF108AA0" = {
 			"isa" = "PBXFileReference";
 			"lastKnownFileType" = "sourcecode.swift";
@@ -519,6 +557,10 @@
 			"lastKnownFileType" = "text.xcconfig";
 			"path" = "Config/Identifiers.xcconfig";
 			"sourceTree" = "<group>";
+		};
+		"58EB6E261A50877A071B5722" = {
+			"isa" = "PBXBuildFile";
+			"fileRef" = "9C430F567C022424F79F7CDE";
 		};
 		"59B5E00533FAA4704A66AE80" = {
 			"isa" = "PBXBuildFile";
@@ -649,18 +691,22 @@
 				"0B4CB22FFD4047865B526E16",
 				"331F7E7A99539A441C118A4F",
 				"7B5E63657E7D9A15043D8F0E",
+				"A12B8E7B19167D761D9FB71C",
 				"0883AAE4D46827E570032B05",
 				"D537458C0EAA773DBD2BE962",
 				"FFE2F64CA25C16FD7C84D3F8",
 				"0990F8EE9A0EA70E29692D1C",
 				"6F72EEEF00E6B77B2C910A10",
 				"0BEA16C4C39E21BC49A7BD3A",
+				"39AF22AF1819DDA388951EFA",
 				"EA130D6319C884176F672524",
 				"8D183511F5B6CD570034102E",
 				"70FE23A687B6DD4F2C8BCC6E",
 				"0CFB3C430B01AA0BEA13802C",
 				"1ED9ADE4FD094EBD49C9EA89",
 				"7D61A4B5532EE76BC3332D30",
+				"EACD60FF91D19C058CFB54E1",
+				"1AFC36B753FE212243B8B218",
 				"18A938EB1F17E355D063A29B",
 				"9BF33274A547910014EDFA52",
 				"136F613483BD7B3AC1F30B9E",
@@ -669,10 +715,13 @@
 				"2F61EF5D79CC97ADC360AE43",
 				"A91B1D7C162064ABFF8E84C1",
 				"D64C8595B84FF07B0CCBEC50",
+				"A377E5EF5904191D2445CAE7",
 				"1FF230346C0F2B2926D612DE",
 				"01FCECD1A9942D74984614CF",
 				"6A8510CBE8A3263662C505C7",
 				"781D35F38FECD44C2ECE6698",
+				"58EB6E261A50877A071B5722",
+				"166F4DF1C17B2BD9D76BA370",
 				"41477369EB116BB930ACE1F3",
 			);
 			"runOnlyForDeploymentPostprocessing" = 0;
@@ -852,6 +901,12 @@
 			"isa" = "PBXBuildFile";
 			"fileRef" = "6CC7BC08993DD9AA20C57F6F";
 		};
+		"9C430F567C022424F79F7CDE" = {
+			"isa" = "PBXFileReference";
+			"lastKnownFileType" = "sourcecode.swift";
+			"path" = "Fitness/Shared/ExerciseMotionPreview.swift";
+			"sourceTree" = "<group>";
+		};
 		"9D5E9420696B537F02AD20B5" = {
 			"isa" = "PBXFileReference";
 			"lastKnownFileType" = "sourcecode.swift";
@@ -874,11 +929,23 @@
 			"path" = "Fitness/Core/SigningCapabilities.swift";
 			"sourceTree" = "<group>";
 		};
+		"A12B8E7B19167D761D9FB71C" = {
+			"isa" = "PBXBuildFile";
+			"fileRef" = "2A8762872589FA268452CB6E";
+		};
 		"A17894E9718EA370ED10C0F4" = {
 			"isa" = "PBXFileReference";
 			"lastKnownFileType" = "sourcecode.swift";
 			"path" = "Fitness/Services/HealthService.swift";
 			"sourceTree" = "<group>";
+		};
+		"A205647FF52A15DAC986827F" = {
+			"isa" = "PBXBuildFile";
+			"fileRef" = "AAF7C9E3C3F6C3892620EB6A";
+		};
+		"A377E5EF5904191D2445CAE7" = {
+			"isa" = "PBXBuildFile";
+			"fileRef" = "245DECD0C9A23AD44C2444CD";
 		};
 		"A71A5FAA8BF8CD18E840AB35" = {
 			"isa" = "PBXFileReference";
@@ -911,18 +978,22 @@
 				"38C5343769F448EBA64C70E7",
 				"9E88AFB09EEBBBB308A98BFB",
 				"3FEFE94428CA4EA6B06B374A",
+				"2A8762872589FA268452CB6E",
 				"0514190CFE0886DBA806DC45",
 				"D8EB72A485BEA14308803FDD",
 				"FC991FC71C663E216C16C3FE",
 				"2540876D4A952E3A0939E511",
 				"96140E02CA932CF7740B03F5",
 				"D75CC73EE8F13ECA77A6CDED",
+				"4BC35DC8DFB1B78803FF7EEF",
 				"E65AF423B244042ABE0D737B",
 				"6F30B9597462BC97F7C3AE8D",
 				"44AFCD9AEB6D473DE997612B",
 				"C7802CD21885F78131C8ED22",
 				"9D5E9420696B537F02AD20B5",
 				"02EC1B65C2B2B7555A8E69CF",
+				"DF9E56CC90FF80F635D121AC",
+				"3D3A0425EEDDB351859B6457",
 				"53F97FB6B28D89D0DF108AA0",
 				"31D8E6147E52899B87674B84",
 				"5D3A34575B9BA145E2F50E95",
@@ -934,10 +1005,13 @@
 				"AB2FE8479448CFB6EF8472D8",
 				"6F21F4047E5A9711F638FDB9",
 				"D0CA5E5250F4ADE5942186D6",
+				"245DECD0C9A23AD44C2444CD",
 				"1BFFF990FA8A25246CE4EAE5",
 				"7C14CE1335DA8BC756A6D586",
 				"9E5748D5F8047FB167FDAB1F",
 				"93BC7E9CE236925713C89310",
+				"9C430F567C022424F79F7CDE",
+				"FB8A7BF51482F9DDD7D00B58",
 				"F08BF740DFA7D0514C7E31DA",
 				"39628AFE920C9FB6E71C3606",
 				"3127F2DF7C5FA22F8A6DC6DC",
@@ -948,6 +1022,8 @@
 				"88E2942AE42FCDDE1F30EA67",
 				"3253D4FDF9CE1DC0B67CDFB1",
 				"ED1BA5967B62DCD25D79B387",
+				"AAF7C9E3C3F6C3892620EB6A",
+				"F9BF45DE7C813E23F47EA382",
 				"5B0C0032240DCE747BD4ACBF",
 				"55DE824D6B4556E816C97994",
 				"A71A5FAA8BF8CD18E840AB35",
@@ -955,6 +1031,12 @@
 				"985BDAB13FCED7157EEAECC5",
 				"6F7199ED7B63CDA338A0FB82",
 			);
+			"sourceTree" = "<group>";
+		};
+		"AAF7C9E3C3F6C3892620EB6A" = {
+			"isa" = "PBXFileReference";
+			"lastKnownFileType" = "sourcecode.swift";
+			"path" = "FitnessTests/TrainingEnhancementTests.swift";
 			"sourceTree" = "<group>";
 		};
 		"AB2FE8479448CFB6EF8472D8" = {
@@ -1117,6 +1199,12 @@
 			"defaultConfigurationIsVisible" = 0;
 			"defaultConfigurationName" = "Release";
 		};
+		"DF9E56CC90FF80F635D121AC" = {
+			"isa" = "PBXFileReference";
+			"lastKnownFileType" = "sourcecode.swift";
+			"path" = "Fitness/Features/Smart/TrainingOptionsView.swift";
+			"sourceTree" = "<group>";
+		};
 		"E65AF423B244042ABE0D737B" = {
 			"isa" = "PBXFileReference";
 			"lastKnownFileType" = "sourcecode.swift";
@@ -1126,6 +1214,14 @@
 		"EA130D6319C884176F672524" = {
 			"isa" = "PBXBuildFile";
 			"fileRef" = "E65AF423B244042ABE0D737B";
+		};
+		"EACD60FF91D19C058CFB54E1" = {
+			"isa" = "PBXBuildFile";
+			"fileRef" = "DF9E56CC90FF80F635D121AC";
+		};
+		"EBB925B7023A1C8DF68934F0" = {
+			"isa" = "PBXBuildFile";
+			"fileRef" = "F9BF45DE7C813E23F47EA382";
 		};
 		"EC87155D8378A230BBC35666" = {
 			"isa" = "PBXBuildFile";
@@ -1176,10 +1272,22 @@
 			"isa" = "PBXBuildFile";
 			"fileRef" = "1483C3F706351F056B0209B1";
 		};
+		"F9BF45DE7C813E23F47EA382" = {
+			"isa" = "PBXFileReference";
+			"lastKnownFileType" = "sourcecode.swift";
+			"path" = "FitnessUITests/EnhancementFlowTests.swift";
+			"sourceTree" = "<group>";
+		};
 		"FA633610CE0A78012732B83A" = {
 			"isa" = "PBXFileReference";
 			"lastKnownFileType" = "sourcecode.swift";
 			"path" = "Fitness/Core/BackupService.swift";
+			"sourceTree" = "<group>";
+		};
+		"FB8A7BF51482F9DDD7D00B58" = {
+			"isa" = "PBXFileReference";
+			"lastKnownFileType" = "sourcecode.swift";
+			"path" = "Fitness/Shared/ModernInteraction.swift";
 			"sourceTree" = "<group>";
 		};
 		"FC991FC71C663E216C16C3FE" = {
